@@ -5,6 +5,21 @@
   "main": "lib/main.js",
   "author": "Aliaksei Bialiauski <aliaksei.bialiauski@hey.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tracehubpm/reports-check-action.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tracehubpm/reports-check-action/issues"
+  },
+  "homepage": "https://github.com/tracehubpm/reports-check-action",
+  "keywords": [
+    "actions",
+    "bug-reports",
+    "quality",
+    "social-coding",
+    "chatgpt"
+  ],
   "scripts": {
     "build": "tsc",
     "package": "ncc build --source-map --license licenses.txt",
