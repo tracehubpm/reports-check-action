@@ -7,7 +7,9 @@ merge:
 release:
   script: |-
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
-    npm --no-git-tag-version version ${tag}
+    sed -i "s/0\.0\.0/${tag}/" package.json
+    npm install
+    npm run build
     git commit -am "${tag}"
 deploy:
   script:
