@@ -7,9 +7,8 @@ merge:
 release:
   script: |-
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9_]+)?$ ]] || exit -1
-#    mvn versions:set "-DnewVersion=${tag}"
+    npm version ${tag}
     git commit -am "${tag}"
-#    mvn clean install -Prelease
 deploy:
   script:
     - "There is no such thing as #deploy"
