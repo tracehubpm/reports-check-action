@@ -1,0 +1,15 @@
+architect:
+  - h1alexbel
+merge:
+  script: |
+    npm install
+    npm run build
+release:
+  script: |-
+    [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
+    npm version ${tag}
+    git commit -am "${tag}"
+deploy:
+  script:
+    - "There is no such thing as #deploy"
+    - exit -1
