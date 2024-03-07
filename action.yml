@@ -1,0 +1,20 @@
+name: 'reports-check-action'
+description: 'Bug Reports (GitHub Issues) Quality Checker'
+author: 'Aliaksei Bialiauski <aliaksei.bialiauski@hey.com>'
+branding:
+  icon: 'alert-triangle'
+  color: 'orange'
+inputs:
+  github_token:
+    description: 'GitHub token'
+    required: true
+  openai_token:
+    description: 'Open AI API key'
+    required: true
+  openai_model:
+    description: 'Open AI API model'
+    required: false
+    default: 'gpt-4'
+runs:
+  using: node20
+  main: dist/index.js
