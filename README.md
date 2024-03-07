@@ -7,7 +7,8 @@ This repository is a [Github Action](https://github.com/features/actions) that w
 on every new issue submitted, check that issue for quality problems, 
 and report them in the issue as a comment, asking bug reporter to fix the report.
 
-// status badges, action version
+[![node](https://github.com/tracehubpm/reports-check-action/actions/workflows/node.yml/badge.svg)](https://github.com/tracehubpm/reports-check-action/actions/workflows/node.yml)
+[![release](https://img.shields.io/github/v/release/tracehubpm/reports-check-action.svg?logo=github)](https://github.com/tracehubpm/reports-check-action/releases)
 
 ### How to use
 
