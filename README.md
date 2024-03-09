@@ -38,7 +38,21 @@ These are the parameters you can use/override:
 * `github_token`: GitHub token to post messages in the issue's comments.
 * `openai_model`: Open AI ChatGPT model, the default one is `gpt-4`.
 
-### Evaluation Quality Rules
+### Quality Evaluation Process
+
+Each bug report goes through quality evaluation process, where
+your report will be assessed by those criteria:
+
+* Bug report has **steps to reproduce**.
+* Bug report is saying **what is expected to see**.
+* Bug report is saying **what you saw instead**
+* Bug report **has its location**, like class, or file.
+
+If your bug report does not match at least 3 criteria, it will be **rejected automatically** by robot.
+
+Quality criteria are based on several researches, including:
+* [Painless Bug Tracking, by Joel Spolsky, 2000](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
+* [What Makes a Satisficing Bug Report? by Tommaso Dal Sasso, Andrea Mocci, and Michele Lanza, 2016](https://www.researchgate.net/publication/309151102_What_Makes_a_Satisficing_Bug_Report)
 
 ### How to contribute
 
