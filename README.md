@@ -17,7 +17,7 @@ Consider this configuration:
 name: reports-check
 on:
  issues:
-   types: [opened, edited]
+   types: opened
 jobs:
   check:
     runs-on: ubuntu-22.04
