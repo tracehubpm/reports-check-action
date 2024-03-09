@@ -26,7 +26,7 @@ jobs:
       - uses: tracehubpm/reports-check-action@latest
         with:
           openai_token: ${{ secrets.OPENAI_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_TOKEN }}
 ```
 
 ### Configurations
