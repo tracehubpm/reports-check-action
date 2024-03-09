@@ -75,12 +75,10 @@ async function run() {
         await new Comment(
           octokit,
           issue,
-          `
-          @${smart.user?.login} the issue body is empty.
-          Please provide more details.
-          `
+          "@" + smart.user?.login
+          + " the issue body is empty, please provide more details for this problem."
         ).post();
-        console.log(`Comment posted to the #${issue.number}`);
+        core.setFailed("The issue body is empty");
       }
 
     } else {
