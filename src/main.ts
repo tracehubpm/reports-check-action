@@ -23,7 +23,7 @@
  */
 import * as core from "@actions/core";
 import {Octokit} from "@octokit/rest";
-import {IssueBody} from "./issue-body";
+import {SmartIssue} from "./smart-issue";
 import {Comment} from "./comment";
 
 export let github: {
@@ -64,19 +64,19 @@ async function run() {
       const octokit = new Octokit(
         {auth: core.getInput("github_token")}
       );
-      const body = await new IssueBody(
+      const smart = await new SmartIssue(
         octokit,
         issue
       ).fetch();
-      console.log(`body: ${body}`);
       // quality analysis.
 
+      const body = smart.body;
       if (!body) {
         await new Comment(
           octokit,
           issue,
           `
-          @${issue.user.login} the issue body is empty.
+          @${smart.user?.login} the issue body is empty.
           Please provide more details.
           `
         ).post();

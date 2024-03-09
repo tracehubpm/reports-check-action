@@ -58,7 +58,7 @@ exports.github = void 0;
  */
 const core = __importStar(require("@actions/core"));
 const rest_1 = require("@octokit/rest");
-const issue_body_1 = require("./issue-body");
+const smart_issue_1 = require("./smart-issue");
 const comment_1 = require("./comment");
 if (process.env.GITHUB_ACTIONS) {
     exports.github = require("@actions/github");
@@ -79,18 +79,19 @@ else {
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a;
         console.log("Running bug report check...");
         try {
             const issue = exports.github.context.issue;
             if (issue) {
                 console.log(`Found new issue: #${issue.number}`);
                 const octokit = new rest_1.Octokit({ auth: core.getInput("github_token") });
-                const body = yield new issue_body_1.IssueBody(octokit, issue).fetch();
-                console.log(`body: ${body}`);
+                const smart = yield new smart_issue_1.SmartIssue(octokit, issue).fetch();
                 // quality analysis.
+                const body = smart.body;
                 if (!body) {
                     yield new comment_1.Comment(octokit, issue, `
-          @${issue.user.login} the issue body is empty.
+          @${(_a = smart.user) === null || _a === void 0 ? void 0 : _a.login} the issue body is empty.
           Please provide more details.
           `).post();
                     console.log(`Comment posted to the #${issue.number}`);

@@ -40,9 +40,6 @@ export class Comment {
     owner: string,
     repo: string,
     number: number,
-    user: {
-      login: string
-    }
   };
 
   /**
@@ -62,9 +59,6 @@ export class Comment {
       owner: string,
       repo: string,
       number: number,
-      user: {
-        login: string
-      }
     },
     text: string
   ) {

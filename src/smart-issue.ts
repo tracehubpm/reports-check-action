@@ -28,7 +28,7 @@ import {Octokit} from "@octokit/rest";
  *
  * @since 0.0.2
  */
-export class IssueBody {
+export class SmartIssue {
 
   /**
    * Github.
@@ -64,12 +64,12 @@ export class IssueBody {
   /**
    * Fetch issue's body.
    */
-  async fetch(): Promise<string | null | undefined> {
+  async fetch() {
     const {data: object} = await this.github.issues.get({
       owner: this.issue.owner,
       repo: this.issue.repo,
       issue_number: this.issue.number,
     });
-    return object.body;
+    return object;
   }
 }
