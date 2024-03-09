@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: tracehubpm/reports-check-action@latest
+      - uses: tracehubpm/reports-check-action@master
         with:
           openai_token: ${{ secrets.OPENAI_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
