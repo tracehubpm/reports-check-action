@@ -59,6 +59,7 @@ exports.github = void 0;
 const core = __importStar(require("@actions/core"));
 const rest_1 = require("@octokit/rest");
 const issue_body_1 = require("./issue-body");
+const comment_1 = require("./comment");
 if (process.env.GITHUB_ACTIONS) {
     exports.github = require("@actions/github");
 }
@@ -68,7 +69,10 @@ else {
             issue: {
                 owner: "test",
                 repo: "test",
-                number: 123
+                number: 123,
+                user: {
+                    login: "test"
+                }
             }
         }
     };
@@ -79,10 +83,18 @@ function run() {
         try {
             const issue = exports.github.context.issue;
             if (issue) {
-                console.log(`Found new issue: ${issue.number}`);
-                const body = yield new issue_body_1.IssueBody(new rest_1.Octokit({ auth: core.getInput("github_token") }), issue).fetch();
+                console.log(`Found new issue: #${issue.number}`);
+                const octokit = new rest_1.Octokit({ auth: core.getInput("github_token") });
+                const body = yield new issue_body_1.IssueBody(octokit, issue).fetch();
                 console.log(`body: ${body}`);
                 // quality analysis.
+                if (!body) {
+                    yield new comment_1.Comment(octokit, issue, `
+          @${issue.user.login} the issue body is empty.
+          Please provide more details.
+          `).post();
+                    console.log(`Comment posted to the #${issue.number}`);
+                }
             }
             else {
                 console.log("No opened issue found");

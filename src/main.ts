@@ -24,6 +24,7 @@
 import * as core from "@actions/core";
 import {Octokit} from "@octokit/rest";
 import {IssueBody} from "./issue-body";
+import {Comment} from "./comment";
 
 export let github: {
   context: {
@@ -31,6 +32,9 @@ export let github: {
       owner: string,
       repo: string,
       number: number
+      user: {
+        login: string
+      }
     }
   }
 };
@@ -42,7 +46,10 @@ if (process.env.GITHUB_ACTIONS) {
       issue: {
         owner: "test",
         repo: "test",
-        number: 123
+        number: 123,
+        user: {
+          login: "test"
+        }
       }
     }
   };
@@ -53,15 +60,28 @@ async function run() {
   try {
     const issue = github.context.issue;
     if (issue) {
-      console.log(`Found new issue: ${issue.number}`);
+      console.log(`Found new issue: #${issue.number}`);
+      const octokit = new Octokit(
+        {auth: core.getInput("github_token")}
+      );
       const body = await new IssueBody(
-        new Octokit(
-          {auth: core.getInput("github_token")}
-        ),
+        octokit,
         issue
       ).fetch();
       console.log(`body: ${body}`);
       // quality analysis.
+
+      if (!body) {
+        await new Comment(
+          octokit,
+          issue,
+          `
+          @${issue.user.login} the issue body is empty.
+          Please provide more details.
+          `
+        ).post();
+        console.log(`Comment posted to the #${issue.number}`);
+      }
 
     } else {
       console.log("No opened issue found");

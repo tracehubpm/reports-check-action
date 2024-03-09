@@ -1,6 +1,57 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 4761:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Comment = void 0;
+/**
+ * Comment.
+ */
+class Comment {
+    /**
+     * Ctor.
+     * @param github Github
+     * @param issue Issue
+     * @param text Text
+     */
+    constructor(github, issue, text) {
+        this.github = github;
+        this.issue = issue;
+        this.text = text;
+    }
+    /**
+     * Post a comment.
+     */
+    post() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.github.issues.createComment({
+                owner: this.issue.owner,
+                repo: this.issue.repo,
+                issue_number: this.issue.number,
+                body: this.text
+            });
+        });
+    }
+    ;
+}
+exports.Comment = Comment;
+
+
+/***/ }),
+
 /***/ 9324:
 /***/ (function(__unused_webpack_module, exports) {
 
@@ -116,6 +167,7 @@ exports.github = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const rest_1 = __nccwpck_require__(5375);
 const issue_body_1 = __nccwpck_require__(9324);
+const comment_1 = __nccwpck_require__(4761);
 if (process.env.GITHUB_ACTIONS) {
     exports.github = __nccwpck_require__(5438);
 }
@@ -125,7 +177,10 @@ else {
             issue: {
                 owner: "test",
                 repo: "test",
-                number: 123
+                number: 123,
+                user: {
+                    login: "test"
+                }
             }
         }
     };
@@ -136,10 +191,18 @@ function run() {
         try {
             const issue = exports.github.context.issue;
             if (issue) {
-                console.log(`Found new issue: ${issue.number}`);
-                const body = yield new issue_body_1.IssueBody(new rest_1.Octokit({ auth: core.getInput("github_token") }), issue).fetch();
+                console.log(`Found new issue: #${issue.number}`);
+                const octokit = new rest_1.Octokit({ auth: core.getInput("github_token") });
+                const body = yield new issue_body_1.IssueBody(octokit, issue).fetch();
                 console.log(`body: ${body}`);
                 // quality analysis.
+                if (!body) {
+                    yield new comment_1.Comment(octokit, issue, `
+          @${issue.user.login} the issue body is empty.
+          Please provide more details.
+          `).post();
+                    console.log(`Comment posted to the #${issue.number}`);
+                }
             }
             else {
                 console.log("No opened issue found");
