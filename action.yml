@@ -17,4 +17,4 @@ inputs:
     default: 'gpt-4'
 runs:
   using: node20
-  main: dist/main.js
+  main: dist/index.js
