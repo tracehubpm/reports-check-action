@@ -21,40 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import * as core from "@actions/core";
-import github from "@actions/github";
 import {Octokit} from "@octokit/rest";
-import {IssueBody} from "./issue-body";
 
-async function run() {
-  console.log("Running bug report check...");
-  try {
-    const issue = github.context.issue;
-    if (issue) {
-      console.log(`Found new issue: ${issue.number}`);
-      const body = await new IssueBody(
-        new Octokit(
-          {auth: core.getInput("github_token")}
-        ),
-        issue
-      ).fetch();
-      console.log(`body: ${body}`);
-      // quality analysis.
+/**
+ * Issue body.
+ *
+ * @since 0.0.2
+ */
+export class IssueBody {
 
-    } else {
-      console.log("No opened issue found");
+  /**
+   * Github.
+   */
+  private readonly github: Octokit;
+
+  /**
+   * Issue.
+   */
+  private readonly issue: {
+    owner: string,
+    repo: string,
+    number: number
+  };
+
+  /**
+   * Ctor.
+   * @param github Github
+   * @param issue Issue
+   */
+  constructor(
+    github: Octokit,
+    issue: {
+      owner: string,
+      repo: string,
+      number: number
     }
-  } catch (error) {
-    if (error instanceof Error) {
-      core.setFailed(error.message);
-    } else {
-      core.setFailed(
-        `An unknown error occurred.
-         Please report it here:
-         https://github.com/tracehubpm/reports-check-action/issues`
-      );
-    }
+  ) {
+    this.github = github;
+    this.issue = issue;
+  }
+
+  /**
+   * Fetch issue's body.
+   */
+  async fetch(): Promise<string | null | undefined> {
+    const {data: object} = await this.github.issues.get({
+      owner: this.issue.owner,
+      repo: this.issue.repo,
+      issue_number: this.issue.number,
+    });
+    return object.body;
   }
 }
-
-run();
