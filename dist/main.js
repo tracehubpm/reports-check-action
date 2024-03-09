@@ -90,11 +90,9 @@ function run() {
                 // quality analysis.
                 const body = smart.body;
                 if (!body) {
-                    yield new comment_1.Comment(octokit, issue, `
-          @${(_a = smart.user) === null || _a === void 0 ? void 0 : _a.login} the issue body is empty.
-          Please provide more details.
-          `).post();
-                    console.log(`Comment posted to the #${issue.number}`);
+                    yield new comment_1.Comment(octokit, issue, "@" + ((_a = smart.user) === null || _a === void 0 ? void 0 : _a.login)
+                        + " the issue body is empty, please provide more details for this problem.").post();
+                    core.setFailed("The issue body is empty");
                 }
             }
             else {
