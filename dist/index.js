@@ -88,10 +88,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.github = void 0;
 /*
  * The MIT License (MIT)
  *
@@ -116,14 +114,27 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
  * SOFTWARE.
  */
 const core = __importStar(__nccwpck_require__(2186));
-const github_1 = __importDefault(__nccwpck_require__(5438));
 const rest_1 = __nccwpck_require__(5375);
 const issue_body_1 = __nccwpck_require__(9324);
+if (process.env.GITHUB_ACTIONS) {
+    exports.github = __nccwpck_require__(5438);
+}
+else {
+    exports.github = {
+        context: {
+            issue: {
+                owner: "test",
+                repo: "test",
+                number: 123
+            }
+        }
+    };
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Running bug report check...");
         try {
-            const issue = github_1.default.context.issue;
+            const issue = exports.github.context.issue;
             if (issue) {
                 console.log(`Found new issue: ${issue.number}`);
                 const body = yield new issue_body_1.IssueBody(new rest_1.Octokit({ auth: core.getInput("github_token") }), issue).fetch();

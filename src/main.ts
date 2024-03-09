@@ -22,9 +22,31 @@
  * SOFTWARE.
  */
 import * as core from "@actions/core";
-import github from "@actions/github";
 import {Octokit} from "@octokit/rest";
 import {IssueBody} from "./issue-body";
+
+export let github: {
+  context: {
+    issue: {
+      owner: string,
+      repo: string,
+      number: number
+    }
+  }
+};
+if (process.env.GITHUB_ACTIONS) {
+  github = require("@actions/github");
+} else {
+  github = {
+    context: {
+      issue: {
+        owner: "test",
+        repo: "test",
+        number: 123
+      }
+    }
+  };
+}
 
 async function run() {
   console.log("Running bug report check...");
