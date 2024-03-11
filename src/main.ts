@@ -25,6 +25,12 @@ import * as core from "@actions/core";
 import {Octokit} from "@octokit/rest";
 import {SmartIssue} from "./smart-issue";
 import {Comment} from "./comment";
+import OpenAI from "openai";
+import {QualityExpert} from "./quality-expert";
+import {UserPrompt} from "./user-prompt";
+import {Example} from "./example";
+import {Rules} from "./rules";
+import {Covered} from "./covered";
 
 export let github: {
   context: {
@@ -68,8 +74,6 @@ async function run() {
         octokit,
         issue
       ).fetch();
-      // quality analysis.
-
       const body = smart.body;
       if (!body) {
         await new Comment(
@@ -80,7 +84,34 @@ async function run() {
         ).post();
         core.setFailed("The issue body is empty");
       }
-
+      const open = new OpenAI({apiKey: core.getInput("openai_token")});
+      const response = await open.chat.completions.create({
+        model: core.getInput("openai_model"),
+        temperature: 0.1,
+        messages: [
+          {
+            role: "system",
+            content: new QualityExpert().value()
+          },
+          {
+            role: "user",
+            content: new UserPrompt(
+              new Example(),
+              new Rules(),
+              body
+            ).value()
+          }
+        ]
+      });
+      const summary = response.choices[0].message.content?.trim();
+      await new Comment(
+        octokit,
+        issue,
+        new Covered(
+          smart.user?.login,
+          summary
+        ).value()
+      ).post();
     } else {
       console.log("No opened issue found");
     }

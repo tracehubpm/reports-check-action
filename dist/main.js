@@ -31,6 +31,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.github = void 0;
 /*
@@ -60,6 +63,12 @@ const core = __importStar(require("@actions/core"));
 const rest_1 = require("@octokit/rest");
 const smart_issue_1 = require("./smart-issue");
 const comment_1 = require("./comment");
+const openai_1 = __importDefault(require("openai"));
+const quality_expert_1 = require("./quality-expert");
+const user_prompt_1 = require("./user-prompt");
+const example_1 = require("./example");
+const rules_1 = require("./rules");
+const covered_1 = require("./covered");
 if (process.env.GITHUB_ACTIONS) {
     exports.github = require("@actions/github");
 }
@@ -79,7 +88,7 @@ else {
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        var _a;
+        var _a, _b, _c;
         console.log("Running bug report check...");
         try {
             const issue = exports.github.context.issue;
@@ -87,13 +96,29 @@ function run() {
                 console.log(`Found new issue: #${issue.number}`);
                 const octokit = new rest_1.Octokit({ auth: core.getInput("github_token") });
                 const smart = yield new smart_issue_1.SmartIssue(octokit, issue).fetch();
-                // quality analysis.
                 const body = smart.body;
                 if (!body) {
                     yield new comment_1.Comment(octokit, issue, "@" + ((_a = smart.user) === null || _a === void 0 ? void 0 : _a.login)
                         + " the issue body is empty, please provide more details for this problem.").post();
                     core.setFailed("The issue body is empty");
                 }
+                const open = new openai_1.default({ apiKey: core.getInput("openai_token") });
+                const response = yield open.chat.completions.create({
+                    model: core.getInput("openai_model"),
+                    temperature: 0.1,
+                    messages: [
+                        {
+                            role: "system",
+                            content: new quality_expert_1.QualityExpert().value()
+                        },
+                        {
+                            role: "user",
+                            content: new user_prompt_1.UserPrompt(new example_1.Example(), new rules_1.Rules(), body).value()
+                        }
+                    ]
+                });
+                const summary = (_b = response.choices[0].message.content) === null || _b === void 0 ? void 0 : _b.trim();
+                yield new comment_1.Comment(octokit, issue, new covered_1.Covered((_c = smart.user) === null || _c === void 0 ? void 0 : _c.login, summary).value()).post();
             }
             else {
                 console.log("No opened issue found");
