@@ -25,7 +25,7 @@
 /**
  * Example of analysis summary.
  */
-class Example {
+export class Example {
 
   /**
    * Example of analysis summary as string.
