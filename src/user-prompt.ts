@@ -67,6 +67,7 @@ export class UserPrompt {
     If bug report does follow all the rules, please rate such bug report as "awesome" by answering just "Quality is awesome".
     Otherwise, please say what needs to be improved, this must contain only 1-2 sentence bullet points, mainly focusing on the context of the bug report, as well as the rules.
     Each bullet point should link the bug report context with rules.
+    Bullet point should contain comments that are context-specific.
     Print only the statements, without any other info.
     Please strictly adhere to the example template provided.
     Example of analysis summary:
