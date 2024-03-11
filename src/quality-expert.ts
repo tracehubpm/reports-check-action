@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-export class SystemPrompt {
+export class QualityExpert {
 
   value(): string {
     return "You are a software quality analysis expert tasked with reviewing incoming bug reports that developers are submit."

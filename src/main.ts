@@ -25,6 +25,12 @@ import * as core from "@actions/core";
 import {Octokit} from "@octokit/rest";
 import {SmartIssue} from "./smart-issue";
 import {Comment} from "./comment";
+import OpenAI from "openai";
+import {QualityExpert} from "./quality-expert";
+import {UserPrompt} from "./user-prompt";
+import {Example} from "./example";
+import {Rules} from "./rules";
+import {Covered} from "./covered";
 
 export let github: {
   context: {
@@ -78,34 +84,34 @@ async function run() {
         ).post();
         core.setFailed("The issue body is empty");
       }
-
-      // role: system
-      // content:
-      // You are a software quality analysis expert tasked with
-      // reviewing incoming bug reports that developers are submit.
-
-      // role: user
-      // content:
-      // Please review the quality of following bug report.
-      // If it does not look like a bug report, then just say "Not a bug report".
-      // If bug report does follow all the rules, please rate such bug report as "awesome"
-      // by answering just "Quality is awesome".
-      // Otherwise, please say what needs to be improved,
-      // this must contain only 1-2 sentence bullet points, mainly focusing on the context of the bug report, as well as the rules.
-      // Each bullet point should link the bug report context with rules.
-      // Print only the statements, without any other info.
-      // Please strictly adhere to the example template provided.
-      // Example of analysis summary: ${example}
-      // Rules=[
-      // Bug report has steps to reproduce,
-      // Bug report is saying what is expected to see,
-      // Bug report is saying what you saw instead,
-      // Bug report has its location, like class, file, or simple example
-      // ]
-      // Bug report: ${body}.
-
-      // temperature: 0.1
-
+      const open = new OpenAI({apiKey: core.getInput("openai_token")});
+      const response = await open.chat.completions.create({
+        model: core.getInput("openai_model"),
+        temperature: 0.1,
+        messages: [
+          {
+            role: "system",
+            content: new QualityExpert().value()
+          },
+          {
+            role: "user",
+            content: new UserPrompt(
+              new Example(),
+              new Rules(),
+              body
+            ).value()
+          }
+        ]
+      });
+      const summary = response.choices[0].message.content?.trim();
+      await new Comment(
+        octokit,
+        issue,
+        new Covered(
+          smart.user?.login,
+          summary
+        ).value()
+      ).post();
     } else {
       console.log("No opened issue found");
     }
