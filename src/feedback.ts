@@ -81,7 +81,7 @@ export class Feedback {
           "thanks for detailed and disciplined report."
         ).value()
       ).post();
-    } else {
+    } else if(!this.summary?.includes("Not a bug report")) {
       await new Comment(
         this.github,
         this.issue,
@@ -95,7 +95,7 @@ export class Feedback {
       ).post();
       core.setFailed(
         `
-          Quality analysis found errors:
+          Quality analysis found the following errors:
           ${this.summary}
           `
       );

@@ -413,14 +413,14 @@ class Feedback {
     }
     post() {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
+            var _a, _b;
             if ((_a = this.summary) === null || _a === void 0 ? void 0 : _a.includes("awesome")) {
                 yield new comment_1.Comment(this.github, this.issue, new covered_1.Covered(this.username, "thanks for detailed and disciplined report.").value()).post();
             }
-            else {
+            else if (!((_b = this.summary) === null || _b === void 0 ? void 0 : _b.includes("Not a bug report"))) {
                 yield new comment_1.Comment(this.github, this.issue, new with_summary_1.WithSummary(new covered_1.Covered(this.username, "thanks for the report, quality analysis of this issue:"), this.summary).value()).post();
                 core.setFailed(`
-          Quality analysis found errors:
+          Quality analysis found the following errors:
           ${this.summary}
           `);
             }
