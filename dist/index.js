@@ -86,18 +86,17 @@ class Covered {
     /**
      * Ctor.
      * @param username Username
-     * @param summary Summary
+     * @param message Message
      */
-    constructor(username, summary) {
+    constructor(username, message) {
         this.username = username;
-        this.summary = summary;
+        this.message = message;
     }
     /**
      * Covered summary as string.
      */
     value() {
-        return `@${this.username} thanks for the report, quality analysis of this issue:
-    ${this.summary}
+        return `@${this.username} ${this.message}
     `;
     }
 }
@@ -232,6 +231,7 @@ const user_prompt_1 = __nccwpck_require__(227);
 const example_1 = __nccwpck_require__(8830);
 const rules_1 = __nccwpck_require__(2389);
 const covered_1 = __nccwpck_require__(361);
+const with_summary_1 = __nccwpck_require__(9492);
 if (process.env.GITHUB_ACTIONS) {
     exports.github = __nccwpck_require__(5438);
 }
@@ -251,13 +251,17 @@ else {
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         console.log("Running bug report check...");
         try {
+            const ghToken = core.getInput("github_token");
+            if (!ghToken) {
+                core.setFailed("github_token was not provided");
+            }
             const issue = exports.github.context.issue;
             if (issue) {
                 console.log(`Found new issue: #${issue.number}`);
-                const octokit = new rest_1.Octokit({ auth: core.getInput("github_token") });
+                const octokit = new rest_1.Octokit({ auth: ghToken });
                 const smart = yield new smart_issue_1.SmartIssue(octokit, issue).fetch();
                 const body = smart.body;
                 if (!body) {
@@ -281,7 +285,16 @@ function run() {
                     ]
                 });
                 const summary = (_b = response.choices[0].message.content) === null || _b === void 0 ? void 0 : _b.trim();
-                yield new comment_1.Comment(octokit, issue, new covered_1.Covered((_c = smart.user) === null || _c === void 0 ? void 0 : _c.login, summary).value()).post();
+                if (summary === null || summary === void 0 ? void 0 : summary.includes("awesome")) {
+                    yield new comment_1.Comment(octokit, issue, new covered_1.Covered((_c = smart.user) === null || _c === void 0 ? void 0 : _c.login, "thanks for detailed and disciplined report.").value()).post();
+                }
+                else {
+                    yield new comment_1.Comment(octokit, issue, new with_summary_1.WithSummary(new covered_1.Covered((_d = smart.user) === null || _d === void 0 ? void 0 : _d.login, "thanks for the report, quality analysis of this issue:"), summary).value()).post();
+                    core.setFailed(`
+          Quality analysis found errors:
+          ${summary}
+          `);
+                }
             }
             else {
                 console.log("No opened issue found");
@@ -489,6 +502,41 @@ class UserPrompt {
     }
 }
 exports.UserPrompt = UserPrompt;
+
+
+/***/ }),
+
+/***/ 9492:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WithSummary = void 0;
+/**
+ * With summary.
+ */
+class WithSummary {
+    /**
+     * Ctor.
+     * @param origin Origin
+     * @param summary Summary
+     */
+    constructor(origin, summary) {
+        this.origin = origin;
+        this.summary = summary;
+    }
+    /**
+     * Print with summary attached.
+     */
+    value() {
+        return `
+    ${this.origin}
+    ${this.summary}
+    `;
+    }
+}
+exports.WithSummary = WithSummary;
 
 
 /***/ }),

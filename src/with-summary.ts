@@ -21,36 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-export class Covered {
+import {Covered} from "./covered";
+
+/**
+ * With summary.
+ */
+export class WithSummary {
 
   /**
-   * Username.
+   * Origin.
    */
-  private readonly username;
+  private readonly origin: Covered;
 
   /**
-   * Message.
+   * Summary.
    */
-  private readonly message: string;
+  private readonly summary: string | undefined;
 
   /**
    * Ctor.
-   * @param username Username
-   * @param message Message
+   * @param origin Origin
+   * @param summary Summary
    */
-  constructor(
-    username: string | undefined,
-    message: string
-  ) {
-    this.username = username;
-    this.message = message;
+  constructor(origin: Covered, summary: string | undefined) {
+    this.origin = origin;
+    this.summary = summary;
   }
 
   /**
-   * Covered summary as string.
+   * Print with summary attached.
    */
   value(): string {
-    return `@${this.username} ${this.message}
+    return `
+    ${this.origin}
+    ${this.summary}
     `;
   }
 }
