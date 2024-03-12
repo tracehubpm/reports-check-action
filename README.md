@@ -1,16 +1,21 @@
+[![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
+[![DevOps By Rultor.com](http://www.rultor.com/b/trarcehubpm/reports-check-action)](http://www.rultor.com/p/tracehubpm/reports-check-action)
+[![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
+
+[![node](https://github.com/tracehubpm/reports-check-action/actions/workflows/node.yml/badge.svg)](https://github.com/tracehubpm/reports-check-action/actions/workflows/node.yml)
+[![release](https://img.shields.io/github/v/release/tracehubpm/reports-check-action.svg?logo=github)](https://github.com/tracehubpm/reports-check-action/releases)
+[![Hits-of-Code](https://hitsofcode.com/github/tracehubpm/reports-check-action)](https://hitsofcode.com/view/github/tracehubpm/reports-check-action)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/tracehubpm/reports-check-action/blob/master/LICENSE.txt)
+
 Bug Reports (GitHub Issues) Quality Checker.
 
+**Motivation**.
 The quality of bug reports is paramount for the overall quality of a software project:
 [poorly formulated bug reports](https://www.yegor256.com/2018/04/24/right-way-to-report-bugs.html) often lead to wasted time,
 programmers frustration, and delays.
 This repository is a [Github Action](https://github.com/features/actions) that would trigger
 on every new issue submitted, check that issue for quality problems, 
 and report them in the issue as a comment, asking bug reporter to fix the report.
-
-[![node](https://github.com/tracehubpm/reports-check-action/actions/workflows/node.yml/badge.svg)](https://github.com/tracehubpm/reports-check-action/actions/workflows/node.yml)
-[![Hits-of-Code](https://hitsofcode.com/github/tracehubpm/reports-check-action)](https://hitsofcode.com/view/github/tracehubpm/reports-check-action)
-[![release](https://img.shields.io/github/v/release/tracehubpm/reports-check-action.svg?logo=github)](https://github.com/tracehubpm/reports-check-action/releases)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/tracehubpm/reports-check-action/blob/master/LICENSE.txt)
 
 ### How to use
 
