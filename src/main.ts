@@ -31,6 +31,7 @@ import {UserPrompt} from "./user-prompt";
 import {Example} from "./example";
 import {Rules} from "./rules";
 import {Covered} from "./covered";
+import {WithSummary} from "./with-summary";
 
 export let github: {
   context: {
@@ -64,11 +65,15 @@ if (process.env.GITHUB_ACTIONS) {
 async function run() {
   console.log("Running bug report check...");
   try {
+    const ghToken = core.getInput("github_token");
+    if (!ghToken) {
+      core.setFailed("github_token was not provided");
+    }
     const issue = github.context.issue;
     if (issue) {
       console.log(`Found new issue: #${issue.number}`);
       const octokit = new Octokit(
-        {auth: core.getInput("github_token")}
+        {auth: ghToken}
       );
       const smart = await new SmartIssue(
         octokit,
@@ -104,14 +109,34 @@ async function run() {
         ]
       });
       const summary = response.choices[0].message.content?.trim();
-      await new Comment(
-        octokit,
-        issue,
-        new Covered(
-          smart.user?.login,
-          summary
-        ).value()
-      ).post();
+      if (summary?.includes("awesome")) {
+        await new Comment(
+          octokit,
+          issue,
+          new Covered(
+            smart.user?.login,
+            "thanks for detailed and disciplined report."
+          ).value()
+        ).post();
+      } else {
+        await new Comment(
+          octokit,
+          issue,
+          new WithSummary(
+            new Covered(
+              smart.user?.login,
+              "thanks for the report, quality analysis of this issue:",
+            ),
+            summary
+          ).value()
+        ).post();
+        core.setFailed(
+          `
+          Quality analysis found errors:
+          ${summary}
+          `
+        );
+      }
     } else {
       console.log("No opened issue found");
     }
