@@ -84,7 +84,9 @@ async function run() {
           "@" + smart.user?.login
           + " the issue body is empty, please provide more details for this problem."
         ).post();
-        core.setFailed("The issue body is empty");
+        const reason = "The issue body is empty";
+        core.setFailed(reason);
+        throw new Error(reason);
       }
       const openai = core.getInput("openai_token");
       if (openai) {
