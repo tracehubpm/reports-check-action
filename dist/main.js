@@ -70,6 +70,7 @@ const example_1 = require("./example");
 const rules_1 = require("./rules");
 const covered_1 = require("./covered");
 const with_summary_1 = require("./with-summary");
+const deep_infra_1 = require("./deep-infra");
 if (process.env.GITHUB_ACTIONS) {
     exports.github = require("@actions/github");
 }
@@ -107,31 +108,41 @@ function run() {
                         + " the issue body is empty, please provide more details for this problem.").post();
                     core.setFailed("The issue body is empty");
                 }
-                const open = new openai_1.default({ apiKey: core.getInput("openai_token") });
-                const response = yield open.chat.completions.create({
-                    model: core.getInput("openai_model"),
-                    temperature: 0.1,
-                    messages: [
-                        {
-                            role: "system",
-                            content: new quality_expert_1.QualityExpert().value()
-                        },
-                        {
-                            role: "user",
-                            content: new user_prompt_1.UserPrompt(new example_1.Example(), new rules_1.Rules(), body).value()
-                        }
-                    ]
-                });
-                const summary = (_b = response.choices[0].message.content) === null || _b === void 0 ? void 0 : _b.trim();
-                if (summary === null || summary === void 0 ? void 0 : summary.includes("awesome")) {
-                    yield new comment_1.Comment(octokit, issue, new covered_1.Covered((_c = smart.user) === null || _c === void 0 ? void 0 : _c.login, "thanks for detailed and disciplined report.").value()).post();
-                }
-                else {
-                    yield new comment_1.Comment(octokit, issue, new with_summary_1.WithSummary(new covered_1.Covered((_d = smart.user) === null || _d === void 0 ? void 0 : _d.login, "thanks for the report, quality analysis of this issue:"), summary).value()).post();
-                    core.setFailed(`
+                const openai = core.getInput("openai_token");
+                if (openai) {
+                    const open = new openai_1.default({ apiKey: core.getInput("openai_token") });
+                    const response = yield open.chat.completions.create({
+                        model: core.getInput("openai_model"),
+                        temperature: 0.1,
+                        messages: [
+                            {
+                                role: "system",
+                                content: new quality_expert_1.QualityExpert().value()
+                            },
+                            {
+                                role: "user",
+                                content: new user_prompt_1.UserPrompt(new example_1.Example(), new rules_1.Rules(), body).value()
+                            }
+                        ]
+                    });
+                    const summary = (_b = response.choices[0].message.content) === null || _b === void 0 ? void 0 : _b.trim();
+                    if (summary === null || summary === void 0 ? void 0 : summary.includes("awesome")) {
+                        yield new comment_1.Comment(octokit, issue, new covered_1.Covered((_c = smart.user) === null || _c === void 0 ? void 0 : _c.login, "thanks for detailed and disciplined report.").value()).post();
+                    }
+                    else {
+                        yield new comment_1.Comment(octokit, issue, new with_summary_1.WithSummary(new covered_1.Covered((_d = smart.user) === null || _d === void 0 ? void 0 : _d.login, "thanks for the report, quality analysis of this issue:"), summary).value()).post();
+                        core.setFailed(`
           Quality analysis found errors:
           ${summary}
           `);
+                    }
+                }
+                else {
+                    const deepinfra = core.getInput("deepinfra_token");
+                    const model = core.getInput("deepinfra_model");
+                    const answer = yield new deep_infra_1.DeepInfra(deepinfra, model)
+                        .analyze(body);
+                    console.log(answer);
                 }
             }
             else {

@@ -32,6 +32,7 @@ import {Example} from "./example";
 import {Rules} from "./rules";
 import {Covered} from "./covered";
 import {WithSummary} from "./with-summary";
+import {DeepInfra} from "./deep-infra";
 
 export let github: {
   context: {
@@ -89,53 +90,63 @@ async function run() {
         ).post();
         core.setFailed("The issue body is empty");
       }
-      const open = new OpenAI({apiKey: core.getInput("openai_token")});
-      const response = await open.chat.completions.create({
-        model: core.getInput("openai_model"),
-        temperature: 0.1,
-        messages: [
-          {
-            role: "system",
-            content: new QualityExpert().value()
-          },
-          {
-            role: "user",
-            content: new UserPrompt(
-              new Example(),
-              new Rules(),
-              body
-            ).value()
-          }
-        ]
-      });
-      const summary = response.choices[0].message.content?.trim();
-      if (summary?.includes("awesome")) {
-        await new Comment(
-          octokit,
-          issue,
-          new Covered(
-            smart.user?.login,
-            "thanks for detailed and disciplined report."
-          ).value()
-        ).post();
-      } else {
-        await new Comment(
-          octokit,
-          issue,
-          new WithSummary(
+      const openai = core.getInput("openai_token");
+      if (openai) {
+        const open = new OpenAI({apiKey: core.getInput("openai_token")});
+        const response = await open.chat.completions.create({
+          model: core.getInput("openai_model"),
+          temperature: 0.1,
+          messages: [
+            {
+              role: "system",
+              content: new QualityExpert().value()
+            },
+            {
+              role: "user",
+              content: new UserPrompt(
+                new Example(),
+                new Rules(),
+                body
+              ).value()
+            }
+          ]
+        });
+        const summary = response.choices[0].message.content?.trim();
+        if (summary?.includes("awesome")) {
+          await new Comment(
+            octokit,
+            issue,
             new Covered(
               smart.user?.login,
-              "thanks for the report, quality analysis of this issue:",
-            ),
-            summary
-          ).value()
-        ).post();
-        core.setFailed(
-          `
+              "thanks for detailed and disciplined report."
+            ).value()
+          ).post();
+        } else {
+          await new Comment(
+            octokit,
+            issue,
+            new WithSummary(
+              new Covered(
+                smart.user?.login,
+                "thanks for the report, quality analysis of this issue:",
+              ),
+              summary
+            ).value()
+          ).post();
+          core.setFailed(
+            `
           Quality analysis found errors:
           ${summary}
           `
-        );
+          );
+        }
+      } else {
+        const deepinfra = core.getInput("deepinfra_token");
+        const model = core.getInput("deepinfra_model");
+        const answer = await new DeepInfra(deepinfra, model)
+          .analyze(body);
+
+        console.log(answer);
       }
     } else {
       console.log("No opened issue found");

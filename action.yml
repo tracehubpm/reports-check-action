@@ -15,6 +15,13 @@ inputs:
     description: 'Open AI API model'
     required: false
     default: 'gpt-4'
+  deepinfra_token:
+    description: 'Deep Infra API key'
+    required: false
+  deepinfra_model:
+    description: 'Deep Infra API model'
+    required: false
+    default: 'Phind/Phind-CodeLlama-34B-v2'
 runs:
   using: node20
   main: dist/index.js
