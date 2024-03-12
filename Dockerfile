@@ -25,16 +25,16 @@
 FROM node:20-alpine AS builder
 WORKDIR /action
 COPY package*.json ./
-RUN npm run build
-RUN npm run package
+RUN npm install
 COPY tsconfig*.json ./
 COPY src/ src/
 RUN npm run build \
+  && npm run package \
   && npm prune --production
 
 FROM node:20-alpine
 RUN apk add --no-cache tini
 COPY --from=builder action/package.json .
-COPY --from=builder action/lib lib/
+COPY --from=builder action/dist dist/
 COPY --from=builder action/node_modules node_modules/
-ENTRYPOINT [ "/sbin/tini", "--", "node", "/lib/index.js" ]
+ENTRYPOINT [ "/sbin/tini", "--", "node", "/dist/index.js" ]
