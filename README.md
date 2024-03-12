@@ -41,7 +41,7 @@ These are the parameters you can use/override:
 * `openai_model`: Open AI ChatGPT model, the default one is `gpt-4`.
 * `deepinfra_token`: Deep Infra API key, you can obtain it [here](https://deepinfra.com/dash/api_keys).
 * `deepinfra_model`: Deep Infra API model, the default one is `Phind/Phind-CodeLlama-34B-v2`,
-check [all available models](https://deepinfra.com/models/text-generation).
+check out [all available models](https://deepinfra.com/models/text-generation).
 
 ### Quality Evaluation Process
 
