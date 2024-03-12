@@ -32,10 +32,10 @@ export class Example {
    */
   value(): string {
     return `
-    * <...context notes> (Bug report does not describe what is expected to see). Consider more examples/tests that show what is the expected to see instead.
-    * <...context notes> (Bug report does not have location). Please provide either where this issue is located (class, file) or runnable examples that shows the problem.
-    * <...context notes> (Bug report does not have steps to reproduce). Craft steps on how to reproduce this issue.
-    * <...context notes> (Bug report does not say what you saw instead of expected). Provide what is the result you saw that against your expectations.
+    * It's not clear what is the expected value \`xyz\` variable should have (Bug report does not describe what is expected to see). Consider more examples/tests that show what is the expected to see instead.
+    * It's not clear where IOException has been thrown (Bug report does not have location). Please provide either where this issue is located (class, file) or runnable examples that shows the problem.
+    * It's not clear how to reproduce \`email\` sending (Bug report does not have steps to reproduce). Craft steps on how to reproduce this issue.
+    * It's not clear what are the values in \`words\` that are failing the WordsTest (Bug report does not say what you saw instead of expected). Provide what is the result you saw that against your expectations.
     `;
   }
 }
