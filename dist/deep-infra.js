@@ -60,7 +60,7 @@ class DeepInfra {
                 method: 'POST',
                 body: JSON.stringify({
                     model: this.model,
-                    temperature: 0.1,
+                    temperature: 0.2,
                     messages: [
                         {
                             role: "system",
