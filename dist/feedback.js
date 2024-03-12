@@ -84,7 +84,7 @@ class Feedback {
                 yield new comment_1.Comment(this.github, this.issue, new covered_1.Covered(this.username, "thanks for detailed and disciplined report.").value()).post();
             }
             else if (!((_b = this.summary) === null || _b === void 0 ? void 0 : _b.includes("Not a bug report"))) {
-                yield new comment_1.Comment(this.github, this.issue, new with_summary_1.WithSummary(new covered_1.Covered(this.username, "thanks for the report, quality analysis of this issue:"), this.summary).value()).post();
+                yield new comment_1.Comment(this.github, this.issue, new with_summary_1.WithSummary(new covered_1.Covered(this.username, "thanks for the report, quality analysis of this report:"), this.summary).value()).post();
                 core.setFailed(`
           Quality analysis found the following errors:
           ${this.summary}

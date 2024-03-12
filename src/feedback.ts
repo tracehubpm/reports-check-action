@@ -88,7 +88,7 @@ export class Feedback {
         new WithSummary(
           new Covered(
             this.username,
-            "thanks for the report, quality analysis of this issue:",
+            "thanks for the report, quality analysis of this report:",
           ),
           this.summary
         ).value()
