@@ -104,8 +104,8 @@ async function run() {
         const answer = await new DeepInfra(deepinfra, model)
           .analyze(
             `
-            ${smart.title}
-            ${body}
+            Title: ${smart.title}
+            Report body: ${body}
             `
           );
         await new Feedback(
