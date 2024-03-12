@@ -1,6 +1,88 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 8028:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ChatGpt = void 0;
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2023-2024 Tracehub.git
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+const quality_expert_1 = __nccwpck_require__(955);
+const user_prompt_1 = __nccwpck_require__(227);
+const example_1 = __nccwpck_require__(8830);
+const rules_1 = __nccwpck_require__(2389);
+/**
+ * ChatGPT model.
+ */
+class ChatGpt {
+    /**
+     * Ctor.
+     * @param open Open AI
+     * @param model Model name
+     */
+    constructor(open, model) {
+        this.open = open;
+        this.model = model;
+    }
+    analyze(report) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            const response = yield this.open.chat.completions.create({
+                model: this.model,
+                temperature: 0.1,
+                messages: [
+                    {
+                        role: "system",
+                        content: new quality_expert_1.QualityExpert().value()
+                    },
+                    {
+                        role: "user",
+                        content: new user_prompt_1.UserPrompt(new example_1.Example(), new rules_1.Rules(), report).value()
+                    }
+                ]
+            });
+            return (_a = response.choices[0].message.content) === null || _a === void 0 ? void 0 : _a.trim();
+        });
+    }
+}
+exports.ChatGpt = ChatGpt;
+
+
+/***/ }),
+
 /***/ 4761:
 /***/ (function(__unused_webpack_module, exports) {
 
@@ -161,10 +243,6 @@ class DeepInfra {
         this.token = token;
         this.model = model;
     }
-    /**
-     * Analyze bug report
-     * @param report Report
-     */
     analyze(report) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield fetch('https://api.deepinfra.com/v1/openai/chat/completions', {
@@ -242,13 +320,117 @@ class Example {
     value() {
         return `
     * It's not clear what is the expected value \`xyz\` variable should have (Bug report does not describe what is expected to see). Consider more examples/tests that show what is the expected to see instead.
-    * It's not clear where IOException has been thrown (Bug report does not have location). Please provide either where this issue is located (class, file) or runnable examples that shows the problem.
+    * It's not clear where exactly in the code IOException has been thrown (Bug report does not have location). Please provide either where this issue is located (class, file) or runnable examples that shows the problem.
     * It's not clear how to reproduce \`email\` sending (Bug report does not have steps to reproduce). Craft steps on how to reproduce this issue.
     * It's not clear what are the values in \`words\` that are failing the WordsTest (Bug report does not say what you saw instead of expected). Provide what is the result you saw that against your expectations.
     `;
     }
 }
 exports.Example = Example;
+
+
+/***/ }),
+
+/***/ 6040:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Feedback = void 0;
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2023-2024 Tracehub.git
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+const comment_1 = __nccwpck_require__(4761);
+const covered_1 = __nccwpck_require__(361);
+const with_summary_1 = __nccwpck_require__(9492);
+const core = __importStar(__nccwpck_require__(2186));
+/**
+ * Feedback.
+ */
+class Feedback {
+    /**
+     * Ctor.
+     * @param summary Summary
+     * @param github Github
+     * @param issue Issue
+     * @param username Username
+     */
+    constructor(summary, github, issue, username) {
+        this.summary = summary;
+        this.github = github;
+        this.issue = issue;
+        this.username = username;
+    }
+    post() {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            if ((_a = this.summary) === null || _a === void 0 ? void 0 : _a.includes("awesome")) {
+                yield new comment_1.Comment(this.github, this.issue, new covered_1.Covered(this.username, "thanks for detailed and disciplined report.").value()).post();
+            }
+            else {
+                yield new comment_1.Comment(this.github, this.issue, new with_summary_1.WithSummary(new covered_1.Covered(this.username, "thanks for the report, quality analysis of this issue:"), this.summary).value()).post();
+                core.setFailed(`
+          Quality analysis found errors:
+          ${this.summary}
+          `);
+            }
+        });
+    }
+}
+exports.Feedback = Feedback;
 
 
 /***/ }),
@@ -323,13 +505,9 @@ const rest_1 = __nccwpck_require__(5375);
 const smart_issue_1 = __nccwpck_require__(2096);
 const comment_1 = __nccwpck_require__(4761);
 const openai_1 = __importDefault(__nccwpck_require__(47));
-const quality_expert_1 = __nccwpck_require__(955);
-const user_prompt_1 = __nccwpck_require__(227);
-const example_1 = __nccwpck_require__(8830);
-const rules_1 = __nccwpck_require__(2389);
-const covered_1 = __nccwpck_require__(361);
-const with_summary_1 = __nccwpck_require__(9492);
 const deep_infra_1 = __nccwpck_require__(351);
+const chat_gpt_1 = __nccwpck_require__(8028);
+const feedback_1 = __nccwpck_require__(6040);
 if (process.env.GITHUB_ACTIONS) {
     exports.github = __nccwpck_require__(5438);
 }
@@ -349,12 +527,12 @@ else {
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        var _a, _b, _c, _d;
+        var _a, _b, _c;
         console.log("Running bug report check...");
         try {
             const ghToken = core.getInput("github_token");
             if (!ghToken) {
-                core.setFailed("github_token was not provided");
+                core.setFailed("`github_token` was not provided");
             }
             const issue = exports.github.context.issue;
             if (issue) {
@@ -369,39 +547,19 @@ function run() {
                 }
                 const openai = core.getInput("openai_token");
                 if (openai) {
-                    const open = new openai_1.default({ apiKey: core.getInput("openai_token") });
-                    const response = yield open.chat.completions.create({
-                        model: core.getInput("openai_model"),
-                        temperature: 0.1,
-                        messages: [
-                            {
-                                role: "system",
-                                content: new quality_expert_1.QualityExpert().value()
-                            },
-                            {
-                                role: "user",
-                                content: new user_prompt_1.UserPrompt(new example_1.Example(), new rules_1.Rules(), body).value()
-                            }
-                        ]
-                    });
-                    const summary = (_b = response.choices[0].message.content) === null || _b === void 0 ? void 0 : _b.trim();
-                    if (summary === null || summary === void 0 ? void 0 : summary.includes("awesome")) {
-                        yield new comment_1.Comment(octokit, issue, new covered_1.Covered((_c = smart.user) === null || _c === void 0 ? void 0 : _c.login, "thanks for detailed and disciplined report.").value()).post();
-                    }
-                    else {
-                        yield new comment_1.Comment(octokit, issue, new with_summary_1.WithSummary(new covered_1.Covered((_d = smart.user) === null || _d === void 0 ? void 0 : _d.login, "thanks for the report, quality analysis of this issue:"), summary).value()).post();
-                        core.setFailed(`
-          Quality analysis found errors:
-          ${summary}
-          `);
-                    }
+                    const model = core.getInput("openai_model");
+                    yield new feedback_1.Feedback(yield new chat_gpt_1.ChatGpt(new openai_1.default({ apiKey: core.getInput("openai_token") }), model).analyze(body), octokit, issue, (_b = smart.user) === null || _b === void 0 ? void 0 : _b.login).post();
                 }
-                else {
+                else if (core.getInput("deepinfra_token")) {
                     const deepinfra = core.getInput("deepinfra_token");
                     const model = core.getInput("deepinfra_model");
                     const answer = yield new deep_infra_1.DeepInfra(deepinfra, model)
                         .analyze(body);
                     console.log(answer);
+                    yield new feedback_1.Feedback(answer, octokit, issue, (_c = smart.user) === null || _c === void 0 ? void 0 : _c.login).post();
+                }
+                else {
+                    core.setFailed("Neither `openai_token` nor `deepinfra_token` was not provided");
                 }
             }
             else {

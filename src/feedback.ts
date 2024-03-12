@@ -21,15 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {Comment} from "./comment";
+import {Covered} from "./covered";
+import {WithSummary} from "./with-summary";
+import * as core from "@actions/core";
 import {Octokit} from "@octokit/rest";
 
 /**
- * Comment.
+ * Feedback.
  */
-export class Comment {
+export class Feedback {
 
   /**
-   * Github.
+   * Summary.
+   */
+  private readonly summary: string | undefined;
+
+  /**
+   * GitHub.
    */
   private readonly github: Octokit;
 
@@ -39,35 +48,57 @@ export class Comment {
   private readonly issue: Issue;
 
   /**
-   * Text to post.
+   * Username.
    */
-  private readonly text: string;
+  private readonly username: string | undefined;
 
   /**
    * Ctor.
+   * @param summary Summary
    * @param github Github
    * @param issue Issue
-   * @param text Text
+   * @param username Username
    */
   constructor(
+    summary: string | undefined,
     github: Octokit,
     issue: Issue,
-    text: string
+    username: string | undefined
   ) {
+    this.summary = summary;
     this.github = github;
     this.issue = issue;
-    this.text = text;
+    this.username = username;
   }
 
-  /**
-   * Post a comment.
-   */
   async post() {
-    await this.github.issues.createComment({
-      owner: this.issue.owner,
-      repo: this.issue.repo,
-      issue_number: this.issue.number,
-      body: this.text
-    });
-  };
+    if (this.summary?.includes("awesome")) {
+      await new Comment(
+        this.github,
+        this.issue,
+        new Covered(
+          this.username,
+          "thanks for detailed and disciplined report."
+        ).value()
+      ).post();
+    } else {
+      await new Comment(
+        this.github,
+        this.issue,
+        new WithSummary(
+          new Covered(
+            this.username,
+            "thanks for the report, quality analysis of this issue:",
+          ),
+          this.summary
+        ).value()
+      ).post();
+      core.setFailed(
+        `
+          Quality analysis found errors:
+          ${this.summary}
+          `
+      );
+    }
+  }
 }

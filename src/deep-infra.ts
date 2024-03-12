@@ -29,7 +29,7 @@ import {Rules} from "./rules";
 /**
  * Deep Infra.
  */
-export class DeepInfra {
+export class DeepInfra implements Model {
 
   /**
    * API Key.
@@ -51,10 +51,6 @@ export class DeepInfra {
     this.model = model;
   }
 
-  /**
-   * Analyze bug report
-   * @param report Report
-   */
   async analyze(report: string | null | undefined) {
     const response = await fetch(
       'https://api.deepinfra.com/v1/openai/chat/completions', {

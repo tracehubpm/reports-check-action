@@ -50,10 +50,6 @@ class DeepInfra {
         this.token = token;
         this.model = model;
     }
-    /**
-     * Analyze bug report
-     * @param report Report
-     */
     analyze(report) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield fetch('https://api.deepinfra.com/v1/openai/chat/completions', {
