@@ -28,18 +28,17 @@ class Covered {
     /**
      * Ctor.
      * @param username Username
-     * @param summary Summary
+     * @param message Message
      */
-    constructor(username, summary) {
+    constructor(username, message) {
         this.username = username;
-        this.summary = summary;
+        this.message = message;
     }
     /**
      * Covered summary as string.
      */
     value() {
-        return `@${this.username} thanks for the report, quality analysis of this issue:
-    ${this.summary}
+        return `@${this.username} ${this.message}
     `;
     }
 }
