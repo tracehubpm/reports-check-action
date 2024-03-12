@@ -87,7 +87,7 @@ class Feedback {
                 console.log("Not a bug report");
             }
             else {
-                yield new comment_1.Comment(this.github, this.issue, new with_summary_1.WithSummary(new covered_1.Covered(this.username, "thanks for the report, quality analysis of this report:"), this.summary).value()).post();
+                yield new comment_1.Comment(this.github, this.issue, new with_summary_1.WithSummary(new covered_1.Covered(this.username, "thanks for the report, but here some unclear moments:"), this.summary).value()).post();
                 core.setFailed(`
           Quality analysis found the following errors:
           ${this.summary}
