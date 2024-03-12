@@ -23,5 +23,11 @@ inputs:
     required: false
     default: 'Phind/Phind-CodeLlama-34B-v2'
 runs:
-  using: node20
-  main: dist/index.js
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.github_token }}
+    - ${{ inputs.openai_token }}
+    - ${{ inputs.openai_model }}
+    - ${{ inputs.deepinfra_token }}
+    - ${{ inputs.deepinfra_model }}
