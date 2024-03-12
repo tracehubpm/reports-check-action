@@ -267,10 +267,7 @@ class DeepInfra {
                 }
             });
             const answer = yield response.json();
-            console.log(`Tokens usage:
-prompt: ${answer.usage.prompt_tokens}
-completion: ${answer.usage.completion_tokens}
-       `);
+            console.log(`Tokens usage: prompt: ${answer.usage.prompt_tokens}, completion: ${answer.usage.completion_tokens}`);
             return answer.choices[0].message.content;
         });
     }
@@ -795,8 +792,8 @@ class WithSummary {
      * Print with summary attached.
      */
     value() {
-        return `
-    ${this.origin.value()}
+        return this.origin.value() +
+            `
     ${this.summary}
     `;
     }
