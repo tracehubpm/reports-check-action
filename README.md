@@ -26,6 +26,8 @@ jobs:
       - uses: tracehubpm/reports-check-action@latest
         with:
           openai_token: ${{ secrets.OPENAI_TOKEN }}
+          # or you can use Deep Infra models:
+          # deepinfra_token: ${{ secrets.DEEPINFRA_TOKEN }}
           github_token: ${{ secrets.GH_TOKEN }}
 ```
 
@@ -37,6 +39,9 @@ These are the parameters you can use/override:
 * `openai_token`: Open AI API key, you can obtain it [here](https://platform.openai.com/api-keys).
 * `github_token`: GitHub token to post messages in the issue's comments.
 * `openai_model`: Open AI ChatGPT model, the default one is `gpt-4`.
+* `deepinfra_token`: Deep Infra API key, you can obtain it [here](https://deepinfra.com/dash/api_keys).
+* `deepinfra_model`: Deep Infra API model, the default one is `Phind/Phind-CodeLlama-34B-v2`,
+check [all available models](https://deepinfra.com/models/text-generation).
 
 ### Quality Evaluation Process
 
