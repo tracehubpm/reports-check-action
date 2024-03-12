@@ -19,7 +19,7 @@ class WithSummary {
      */
     value() {
         return `
-    ${this.origin}
+    ${this.origin.value()}
     ${this.summary}
     `;
     }

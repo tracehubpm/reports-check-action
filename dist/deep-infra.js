@@ -75,8 +75,8 @@ class DeepInfra {
             });
             const answer = yield response.json();
             console.log(`Tokens usage:
-       prompt: ${answer.usage.prompt_tokens}
-       completion: ${answer.usage.completion_tokens}
+prompt: ${answer.usage.prompt_tokens}
+completion: ${answer.usage.completion_tokens}
        `);
             return answer.choices[0].message.content;
         });

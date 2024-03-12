@@ -53,7 +53,7 @@ export class WithSummary {
    */
   value(): string {
     return `
-    ${this.origin}
+    ${this.origin.value()}
     ${this.summary}
     `;
   }

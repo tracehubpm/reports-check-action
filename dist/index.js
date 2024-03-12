@@ -268,8 +268,8 @@ class DeepInfra {
             });
             const answer = yield response.json();
             console.log(`Tokens usage:
-       prompt: ${answer.usage.prompt_tokens}
-       completion: ${answer.usage.completion_tokens}
+prompt: ${answer.usage.prompt_tokens}
+completion: ${answer.usage.completion_tokens}
        `);
             return answer.choices[0].message.content;
         });
@@ -555,7 +555,6 @@ function run() {
                     const model = core.getInput("deepinfra_model");
                     const answer = yield new deep_infra_1.DeepInfra(deepinfra, model)
                         .analyze(body);
-                    console.log(answer);
                     yield new feedback_1.Feedback(answer, octokit, issue, (_c = smart.user) === null || _c === void 0 ? void 0 : _c.login).post();
                 }
                 else {
@@ -797,7 +796,7 @@ class WithSummary {
      */
     value() {
         return `
-    ${this.origin}
+    ${this.origin.value()}
     ${this.summary}
     `;
     }

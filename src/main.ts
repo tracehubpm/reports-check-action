@@ -103,7 +103,6 @@ async function run() {
         const model = core.getInput("deepinfra_model");
         const answer = await new DeepInfra(deepinfra, model)
           .analyze(body);
-        console.log(answer);
         await new Feedback(
           answer,
           octokit,

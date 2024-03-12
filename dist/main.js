@@ -114,7 +114,6 @@ function run() {
                     const model = core.getInput("deepinfra_model");
                     const answer = yield new deep_infra_1.DeepInfra(deepinfra, model)
                         .analyze(body);
-                    console.log(answer);
                     yield new feedback_1.Feedback(answer, octokit, issue, (_c = smart.user) === null || _c === void 0 ? void 0 : _c.login).post();
                 }
                 else {
