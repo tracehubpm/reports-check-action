@@ -21,53 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Octokit} from "@octokit/rest";
 
 /**
- * Comment.
+ * GitHub Issue type.
  */
-export class Comment {
-
-  /**
-   * Github.
-   */
-  private readonly github: Octokit;
-
-  /**
-   * Issue.
-   */
-  private readonly issue: Issue;
-
-  /**
-   * Text to post.
-   */
-  private readonly text: string;
-
-  /**
-   * Ctor.
-   * @param github Github
-   * @param issue Issue
-   * @param text Text
-   */
-  constructor(
-    github: Octokit,
-    issue: Issue,
-    text: string
-  ) {
-    this.github = github;
-    this.issue = issue;
-    this.text = text;
-  }
-
-  /**
-   * Post a comment.
-   */
-  async post() {
-    await this.github.issues.createComment({
-      owner: this.issue.owner,
-      repo: this.issue.repo,
-      issue_number: this.issue.number,
-      body: this.text
-    });
-  };
+type Issue = {
+  owner: string,
+  repo: string,
+  number: number,
 }

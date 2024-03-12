@@ -21,53 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Octokit} from "@octokit/rest";
+import {QualityExpert} from "./quality-expert";
+import {UserPrompt} from "./user-prompt";
+import {Example} from "./example";
+import {Rules} from "./rules";
+import OpenAI from "openai";
 
 /**
- * Comment.
+ * ChatGPT model.
  */
-export class Comment {
+export class ChatGpt implements Model {
 
   /**
-   * Github.
+   * Open AI.
    */
-  private readonly github: Octokit;
+  private readonly open: OpenAI;
 
   /**
-   * Issue.
+   * Model name.
    */
-  private readonly issue: Issue;
-
-  /**
-   * Text to post.
-   */
-  private readonly text: string;
+  private readonly model: string;
 
   /**
    * Ctor.
-   * @param github Github
-   * @param issue Issue
-   * @param text Text
+   * @param open Open AI
+   * @param model Model name
    */
-  constructor(
-    github: Octokit,
-    issue: Issue,
-    text: string
-  ) {
-    this.github = github;
-    this.issue = issue;
-    this.text = text;
+  constructor(open: OpenAI, model: string) {
+    this.open = open;
+    this.model = model;
   }
 
-  /**
-   * Post a comment.
-   */
-  async post() {
-    await this.github.issues.createComment({
-      owner: this.issue.owner,
-      repo: this.issue.repo,
-      issue_number: this.issue.number,
-      body: this.text
+  async analyze(report: string | null | undefined) {
+    const response = await this.open.chat.completions.create({
+      model: this.model,
+      temperature: 0.1,
+      messages: [
+        {
+          role: "system",
+          content: new QualityExpert().value()
+        },
+        {
+          role: "user",
+          content: new UserPrompt(
+            new Example(),
+            new Rules(),
+            report
+          ).value()
+        }
+      ]
     });
-  };
+    return response.choices[0].message.content?.trim();
+  }
 }

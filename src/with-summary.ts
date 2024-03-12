@@ -52,8 +52,8 @@ export class WithSummary {
    * Print with summary attached.
    */
   value(): string {
-    return `
-    ${this.origin}
+    return this.origin.value() +
+    `
     ${this.summary}
     `;
   }

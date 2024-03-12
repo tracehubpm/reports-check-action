@@ -21,53 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Octokit} from "@octokit/rest";
 
 /**
- * Comment.
+ * Large Language Model.
  */
-export class Comment {
+interface Model {
 
   /**
-   * Github.
+   * Analyze report.
+   * @param report Bug report to analyze
+   * @returns Promise<any>
    */
-  private readonly github: Octokit;
-
-  /**
-   * Issue.
-   */
-  private readonly issue: Issue;
-
-  /**
-   * Text to post.
-   */
-  private readonly text: string;
-
-  /**
-   * Ctor.
-   * @param github Github
-   * @param issue Issue
-   * @param text Text
-   */
-  constructor(
-    github: Octokit,
-    issue: Issue,
-    text: string
-  ) {
-    this.github = github;
-    this.issue = issue;
-    this.text = text;
-  }
-
-  /**
-   * Post a comment.
-   */
-  async post() {
-    await this.github.issues.createComment({
-      owner: this.issue.owner,
-      repo: this.issue.repo,
-      issue_number: this.issue.number,
-      body: this.text
-    });
-  };
+  analyze(report: string | undefined): Promise<any>;
 }

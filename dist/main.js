@@ -64,12 +64,9 @@ const rest_1 = require("@octokit/rest");
 const smart_issue_1 = require("./smart-issue");
 const comment_1 = require("./comment");
 const openai_1 = __importDefault(require("openai"));
-const quality_expert_1 = require("./quality-expert");
-const user_prompt_1 = require("./user-prompt");
-const example_1 = require("./example");
-const rules_1 = require("./rules");
-const covered_1 = require("./covered");
-const with_summary_1 = require("./with-summary");
+const deep_infra_1 = require("./deep-infra");
+const chat_gpt_1 = require("./chat-gpt");
+const feedback_1 = require("./feedback");
 if (process.env.GITHUB_ACTIONS) {
     exports.github = require("@actions/github");
 }
@@ -89,12 +86,12 @@ else {
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        var _a, _b, _c, _d;
+        var _a, _b, _c;
         console.log("Running bug report check...");
         try {
             const ghToken = core.getInput("github_token");
             if (!ghToken) {
-                core.setFailed("github_token was not provided");
+                core.setFailed("`github_token` was not provided");
             }
             const issue = exports.github.context.issue;
             if (issue) {
@@ -107,31 +104,23 @@ function run() {
                         + " the issue body is empty, please provide more details for this problem.").post();
                     core.setFailed("The issue body is empty");
                 }
-                const open = new openai_1.default({ apiKey: core.getInput("openai_token") });
-                const response = yield open.chat.completions.create({
-                    model: core.getInput("openai_model"),
-                    temperature: 0.1,
-                    messages: [
-                        {
-                            role: "system",
-                            content: new quality_expert_1.QualityExpert().value()
-                        },
-                        {
-                            role: "user",
-                            content: new user_prompt_1.UserPrompt(new example_1.Example(), new rules_1.Rules(), body).value()
-                        }
-                    ]
-                });
-                const summary = (_b = response.choices[0].message.content) === null || _b === void 0 ? void 0 : _b.trim();
-                if (summary === null || summary === void 0 ? void 0 : summary.includes("awesome")) {
-                    yield new comment_1.Comment(octokit, issue, new covered_1.Covered((_c = smart.user) === null || _c === void 0 ? void 0 : _c.login, "thanks for detailed and disciplined report.").value()).post();
+                const openai = core.getInput("openai_token");
+                if (openai) {
+                    const model = core.getInput("openai_model");
+                    yield new feedback_1.Feedback(yield new chat_gpt_1.ChatGpt(new openai_1.default({ apiKey: core.getInput("openai_token") }), model).analyze(body), octokit, issue, (_b = smart.user) === null || _b === void 0 ? void 0 : _b.login).post();
+                }
+                else if (core.getInput("deepinfra_token")) {
+                    const deepinfra = core.getInput("deepinfra_token");
+                    const model = core.getInput("deepinfra_model");
+                    const answer = yield new deep_infra_1.DeepInfra(deepinfra, model)
+                        .analyze(`
+            Title: ${smart.title}
+            Report body: ${body}
+            `);
+                    yield new feedback_1.Feedback(answer, octokit, issue, (_c = smart.user) === null || _c === void 0 ? void 0 : _c.login).post();
                 }
                 else {
-                    yield new comment_1.Comment(octokit, issue, new with_summary_1.WithSummary(new covered_1.Covered((_d = smart.user) === null || _d === void 0 ? void 0 : _d.login, "thanks for the report, quality analysis of this issue:"), summary).value()).post();
-                    core.setFailed(`
-          Quality analysis found errors:
-          ${summary}
-          `);
+                    core.setFailed("Neither `openai_token` nor `deepinfra_token` was not provided");
                 }
             }
             else {

@@ -18,8 +18,8 @@ class WithSummary {
      * Print with summary attached.
      */
     value() {
-        return `
-    ${this.origin}
+        return this.origin.value() +
+            `
     ${this.summary}
     `;
     }

@@ -10,5 +10,5 @@ jobs:
       - uses: actions/checkout@v4
       - uses: tracehubpm/reports-check-action@master
         with:
-          openai_token: ${{ secrets.OPENAI_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          deepinfra_token: ${{ secrets.DEEPINFRA_TOKEN }}
