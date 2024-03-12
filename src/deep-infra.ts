@@ -80,7 +80,7 @@ export class DeepInfra implements Model {
       });
     const answer = await response.json();
     console.log(
-      `Tokens usage: prompt: ${answer.usage.prompt_tokens}, completion: ${answer.usage.completion_tokens}`
+      `Tokens usage: prompt: ${answer.usage.prompt_tokens}, completion: ${answer.usage.completion_tokens}, total: ${answer.usage.total_tokens}`
     );
     return answer.choices[0].message.content;
   }
