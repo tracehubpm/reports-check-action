@@ -81,7 +81,9 @@ export class Feedback {
           "thanks for detailed and disciplined report."
         ).value()
       ).post();
-    } else if(!this.summary?.includes("Not a bug report")) {
+    } else if(this.summary?.includes("Not a bug report")) {
+      console.log("Not a bug report");
+    } else {
       await new Comment(
         this.github,
         this.issue,
