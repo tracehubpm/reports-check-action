@@ -8,7 +8,9 @@ on every new issue submitted, check that issue for quality problems,
 and report them in the issue as a comment, asking bug reporter to fix the report.
 
 [![node](https://github.com/tracehubpm/reports-check-action/actions/workflows/node.yml/badge.svg)](https://github.com/tracehubpm/reports-check-action/actions/workflows/node.yml)
+[![Hits-of-Code](https://hitsofcode.com/github/tracehubpm/reports-check-action)](https://hitsofcode.com/view/github/tracehubpm/reports-check-action)
 [![release](https://img.shields.io/github/v/release/tracehubpm/reports-check-action.svg?logo=github)](https://github.com/tracehubpm/reports-check-action/releases)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/tracehubpm/reports-check-action/blob/master/LICENSE.txt)
 
 ### How to use
 
@@ -50,8 +52,8 @@ your report will be assessed by those criteria:
 
 * Bug report has **steps to reproduce**.
 * Bug report is saying **what is expected to see**.
-* Bug report is saying **what you saw instead**
-* Bug report **has its location**, like class, or file.
+* Bug report is saying **what you saw instead**.
+* Bug report **has its location**, like class, file, or simple runnable example.
 
 If your bug report does not match at least 3 criteria, it will be **rejected automatically** by robot.
 
