@@ -105,6 +105,103 @@ exports.Covered = Covered;
 
 /***/ }),
 
+/***/ 351:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DeepInfra = void 0;
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2023-2024 Tracehub.git
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+const quality_expert_1 = __nccwpck_require__(955);
+const user_prompt_1 = __nccwpck_require__(227);
+const example_1 = __nccwpck_require__(8830);
+const rules_1 = __nccwpck_require__(2389);
+/**
+ * Deep Infra.
+ */
+class DeepInfra {
+    /**
+     * Ctor.
+     * @param token Token
+     * @param model Model
+     */
+    constructor(token, model) {
+        this.token = token;
+        this.model = model;
+    }
+    /**
+     * Analyze bug report
+     * @param report Report
+     */
+    analyze(report) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch('https://api.deepinfra.com/v1/openai/chat/completions', {
+                method: 'POST',
+                body: JSON.stringify({
+                    model: this.model,
+                    temperature: 0.1,
+                    messages: [
+                        {
+                            role: "system",
+                            content: new quality_expert_1.QualityExpert().value()
+                        },
+                        {
+                            role: "user",
+                            content: new user_prompt_1.UserPrompt(new example_1.Example(), new rules_1.Rules(), report).value()
+                        }
+                    ],
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: `Bearer ${this.token}`,
+                }
+            });
+            const answer = yield response.json();
+            console.log(`Tokens usage:
+       prompt: ${answer.usage.prompt_tokens}
+       completion: ${answer.usage.completion_tokens}
+       `);
+            return answer.choices[0].message.content;
+        });
+    }
+}
+exports.DeepInfra = DeepInfra;
+
+
+/***/ }),
+
 /***/ 8830:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -232,6 +329,7 @@ const example_1 = __nccwpck_require__(8830);
 const rules_1 = __nccwpck_require__(2389);
 const covered_1 = __nccwpck_require__(361);
 const with_summary_1 = __nccwpck_require__(9492);
+const deep_infra_1 = __nccwpck_require__(351);
 if (process.env.GITHUB_ACTIONS) {
     exports.github = __nccwpck_require__(5438);
 }
@@ -269,31 +367,41 @@ function run() {
                         + " the issue body is empty, please provide more details for this problem.").post();
                     core.setFailed("The issue body is empty");
                 }
-                const open = new openai_1.default({ apiKey: core.getInput("openai_token") });
-                const response = yield open.chat.completions.create({
-                    model: core.getInput("openai_model"),
-                    temperature: 0.1,
-                    messages: [
-                        {
-                            role: "system",
-                            content: new quality_expert_1.QualityExpert().value()
-                        },
-                        {
-                            role: "user",
-                            content: new user_prompt_1.UserPrompt(new example_1.Example(), new rules_1.Rules(), body).value()
-                        }
-                    ]
-                });
-                const summary = (_b = response.choices[0].message.content) === null || _b === void 0 ? void 0 : _b.trim();
-                if (summary === null || summary === void 0 ? void 0 : summary.includes("awesome")) {
-                    yield new comment_1.Comment(octokit, issue, new covered_1.Covered((_c = smart.user) === null || _c === void 0 ? void 0 : _c.login, "thanks for detailed and disciplined report.").value()).post();
-                }
-                else {
-                    yield new comment_1.Comment(octokit, issue, new with_summary_1.WithSummary(new covered_1.Covered((_d = smart.user) === null || _d === void 0 ? void 0 : _d.login, "thanks for the report, quality analysis of this issue:"), summary).value()).post();
-                    core.setFailed(`
+                const openai = core.getInput("openai_token");
+                if (openai) {
+                    const open = new openai_1.default({ apiKey: core.getInput("openai_token") });
+                    const response = yield open.chat.completions.create({
+                        model: core.getInput("openai_model"),
+                        temperature: 0.1,
+                        messages: [
+                            {
+                                role: "system",
+                                content: new quality_expert_1.QualityExpert().value()
+                            },
+                            {
+                                role: "user",
+                                content: new user_prompt_1.UserPrompt(new example_1.Example(), new rules_1.Rules(), body).value()
+                            }
+                        ]
+                    });
+                    const summary = (_b = response.choices[0].message.content) === null || _b === void 0 ? void 0 : _b.trim();
+                    if (summary === null || summary === void 0 ? void 0 : summary.includes("awesome")) {
+                        yield new comment_1.Comment(octokit, issue, new covered_1.Covered((_c = smart.user) === null || _c === void 0 ? void 0 : _c.login, "thanks for detailed and disciplined report.").value()).post();
+                    }
+                    else {
+                        yield new comment_1.Comment(octokit, issue, new with_summary_1.WithSummary(new covered_1.Covered((_d = smart.user) === null || _d === void 0 ? void 0 : _d.login, "thanks for the report, quality analysis of this issue:"), summary).value()).post();
+                        core.setFailed(`
           Quality analysis found errors:
           ${summary}
           `);
+                    }
+                }
+                else {
+                    const deepinfra = core.getInput("deepinfra_token");
+                    const model = core.getInput("deepinfra_model");
+                    const answer = yield new deep_infra_1.DeepInfra(deepinfra, model)
+                        .analyze(body);
+                    console.log(answer);
                 }
             }
             else {
