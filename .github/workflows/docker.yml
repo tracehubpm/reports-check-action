@@ -1,0 +1,29 @@
+---
+name: Push Docker image
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'v20.10.0'
+      - name: Install and Test
+        run: |
+          npm install
+          npm run build
+          npm run package
+      - name: Build and Push to Docker Hub
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: tracehub/reports-check-action
+          tags: 0.0.$GITHUB_RUN_NUMBER, latest
+          dockerfile: Dockerfile
+          registry: docker.io
+          username: tracehub
+          password: ${{ secrets.DOCKER_PASSWORD }}
