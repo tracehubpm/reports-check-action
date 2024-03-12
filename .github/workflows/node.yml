@@ -23,6 +23,7 @@ jobs:
         run: | 
           npm install
           npm run build
+          npm run package
   build:
     runs-on: ubuntu-20.04
     steps:
@@ -35,6 +36,7 @@ jobs:
         run: |
           npm install
           npm run build
+          npm run package
           npm install --production
           ls node_modules
       - name: Upload Artifacts
