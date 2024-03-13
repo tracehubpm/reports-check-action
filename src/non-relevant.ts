@@ -68,7 +68,7 @@ export class NonRelevant {
       this.github,
       this.issue,
       "@" + this.creator
-      + " this issue is not relevant to " + this.issue.owner + "/" + this.issue.repo + "."
+      + " this issue is not relevant to " + "\`" + this.issue.owner + "/" + this.issue.repo + "\`" + "."
       + " We should close it."
     ).post();
     await this.github.issues.addLabels(
