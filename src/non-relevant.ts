@@ -84,7 +84,8 @@ export class NonRelevant {
         owner: this.issue.owner,
         repo: this.issue.repo,
         issue_number: this.issue.number,
-        state: "closed"
+        state: "closed",
+        state_reason: "not_planned"
       }
     );
   }
