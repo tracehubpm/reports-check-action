@@ -71,6 +71,14 @@ export class NonRelevant {
       + " this issue is not relevant to " + this.issue.owner + "/" + this.issue.repo + "."
       + " We should close it."
     ).post();
+    await this.github.issues.addLabels(
+      {
+        owner: this.issue.owner,
+        repo: this.issue.repo,
+        issue_number: this.issue.number,
+        labels: ["invalid"]
+      }
+    );
     await this.github.issues.update(
       {
         owner: this.issue.owner,
