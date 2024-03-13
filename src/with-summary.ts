@@ -49,7 +49,7 @@ export class WithSummary {
     `
     ${this.summary}
     
-    Generated with ${this.model}
+Generated with \`${this.model}\`
     `;
   }
 }
