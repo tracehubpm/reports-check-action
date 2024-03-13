@@ -29,30 +29,15 @@ import {Octokit} from "@octokit/rest";
 export class Comment {
 
   /**
-   * Github.
-   */
-  private readonly github: Octokit;
-
-  /**
-   * Issue.
-   */
-  private readonly issue: Issue;
-
-  /**
-   * Text to post.
-   */
-  private readonly text: string;
-
-  /**
    * Ctor.
-   * @param github Github
+   * @param github GitHub
    * @param issue Issue
    * @param text Text
    */
   constructor(
-    github: Octokit,
-    issue: Issue,
-    text: string
+    private readonly github: Octokit,
+    private readonly issue: Issue,
+    private readonly text: string
   ) {
     this.github = github;
     this.issue = issue;

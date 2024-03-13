@@ -31,27 +31,13 @@ import {Octokit} from "@octokit/rest";
 export class SmartIssue {
 
   /**
-   * Github.
-   */
-  private readonly github: Octokit;
-
-  /**
-   * Issue.
-   */
-  private readonly issue: {
-    owner: string,
-    repo: string,
-    number: number
-  };
-
-  /**
    * Ctor.
-   * @param github Github
+   * @param github GitHub
    * @param issue Issue
    */
   constructor(
-    github: Octokit,
-    issue: {
+    private readonly github: Octokit,
+    private readonly issue: {
       owner: string,
       repo: string,
       number: number

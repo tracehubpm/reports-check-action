@@ -29,21 +29,14 @@ import {Covered} from "./covered";
 export class WithSummary {
 
   /**
-   * Origin.
-   */
-  private readonly origin: Covered;
-
-  /**
-   * Summary.
-   */
-  private readonly summary: string | undefined;
-
-  /**
    * Ctor.
    * @param origin Origin
    * @param summary Summary
    */
-  constructor(origin: Covered, summary: string | undefined) {
+  constructor(
+    private readonly origin: Covered,
+    private readonly summary: string | undefined
+  ) {
     this.origin = origin;
     this.summary = summary;
   }

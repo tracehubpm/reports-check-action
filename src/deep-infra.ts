@@ -32,21 +32,14 @@ import {Rules} from "./rules";
 export class DeepInfra implements Model {
 
   /**
-   * API Key.
-   */
-  private readonly token: string;
-
-  /**
-   * Model.
-   */
-  private readonly model: string;
-
-  /**
    * Ctor.
    * @param token Token
    * @param model Model
    */
-  constructor(token: string, model: string) {
+  constructor(
+    private readonly token: string,
+    private readonly model: string
+  ) {
     this.token = token;
     this.model = model;
   }

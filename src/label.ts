@@ -22,49 +22,34 @@
  * SOFTWARE.
  */
 import {Octokit} from "@octokit/rest";
-import {Comment} from "./comment";
-import {Label} from "./label";
 
 /**
- * Non Relevant bug report.
+ * GitHub label.
  */
-export class NonRelevant {
+export class Label {
 
   /**
    * Ctor.
-   * @param github Github
+   * @param github GitHub
    * @param issue Issue
-   * @param creator Creator
+   * @param label Label
    */
   constructor(
     private readonly github: Octokit,
     private readonly issue: Issue,
-    private readonly creator: string | undefined
-  ) {
-    this.github = github;
-    this.issue = issue;
-    this.creator = creator;
+    private readonly label: string) {
   }
 
   /**
-   * Close non relevant issue.
+   * Attach label.
    */
-  async close() {
-    await new Comment(
-      this.github,
-      this.issue,
-      "@" + this.creator
-      + " this issue is not relevant to " + "\`" + this.issue.owner + "/" + this.issue.repo + "\`" + "."
-      + " We should close it."
-    ).post();
-    await new Label(this.github, this.issue, "invalid").attach();
-    await this.github.issues.update(
+  async attach() {
+    await this.github.issues.addLabels(
       {
         owner: this.issue.owner,
         repo: this.issue.repo,
         issue_number: this.issue.number,
-        state: "closed",
-        state_reason: "not_planned"
+        labels: [this.label]
       }
     );
   }

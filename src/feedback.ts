@@ -34,37 +34,17 @@ import {NonRelevant} from "./non-relevant";
 export class Feedback {
 
   /**
-   * Summary.
-   */
-  private readonly summary: string | undefined;
-
-  /**
-   * GitHub.
-   */
-  private readonly github: Octokit;
-
-  /**
-   * Issue.
-   */
-  private readonly issue: Issue;
-
-  /**
-   * Username.
-   */
-  private readonly username: string | undefined;
-
-  /**
    * Ctor.
    * @param summary Summary
-   * @param github Github
+   * @param github GitHub
    * @param issue Issue
    * @param username Username
    */
   constructor(
-    summary: string | undefined,
-    github: Octokit,
-    issue: Issue,
-    username: string | undefined
+    private readonly summary: string | undefined,
+    private readonly github: Octokit,
+    private readonly issue: Issue,
+    private readonly username: string | undefined
   ) {
     this.summary = summary;
     this.github = github;

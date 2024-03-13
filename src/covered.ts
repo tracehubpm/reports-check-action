@@ -24,23 +24,13 @@
 export class Covered {
 
   /**
-   * Username.
-   */
-  private readonly username;
-
-  /**
-   * Message.
-   */
-  private readonly message: string;
-
-  /**
    * Ctor.
    * @param username Username
    * @param message Message
    */
   constructor(
-    username: string | undefined,
-    message: string
+    private readonly username: string | undefined,
+    private readonly message: string
   ) {
     this.username = username;
     this.message = message;

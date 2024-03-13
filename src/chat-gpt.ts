@@ -33,21 +33,14 @@ import OpenAI from "openai";
 export class ChatGpt implements Model {
 
   /**
-   * Open AI.
-   */
-  private readonly open: OpenAI;
-
-  /**
-   * Model name.
-   */
-  private readonly model: string;
-
-  /**
    * Ctor.
    * @param open Open AI
    * @param model Model name
    */
-  constructor(open: OpenAI, model: string) {
+  constructor(
+    private readonly open: OpenAI,
+    private readonly model: string
+  ) {
     this.open = open;
     this.model = model;
   }

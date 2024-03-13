@@ -30,28 +30,17 @@ import {Rules} from "./rules";
 export class UserPrompt {
 
   /**
-   * Example.
-   */
-  private readonly example: Example;
-
-  /**
-   * Rules.
-   */
-  private readonly rules: Rules;
-
-  /**
-   * Bug report.
-   */
-  private readonly report: string | null | undefined;
-
-  /**
    * Ctor.
    *
    * @param example Example
    * @param rules Rules
    * @param report Bug report
    */
-  constructor(example: Example, rules: Rules, report: string | null | undefined) {
+  constructor(
+    private readonly example: Example,
+    private readonly rules: Rules,
+    private readonly report: string | null | undefined
+  ) {
     this.example = example;
     this.rules = rules;
     this.report = report;
