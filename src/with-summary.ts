@@ -32,13 +32,13 @@ export class WithSummary {
    * Ctor.
    * @param origin Origin
    * @param summary Summary
+   * @param model LLM Model
    */
   constructor(
     private readonly origin: Covered,
-    private readonly summary: string | undefined
+    private readonly summary: string | undefined,
+    private readonly model: string
   ) {
-    this.origin = origin;
-    this.summary = summary;
   }
 
   /**
@@ -48,6 +48,8 @@ export class WithSummary {
     return this.origin.value() +
     `
     ${this.summary}
+    
+    Generated with ${this.model}
     `;
   }
 }

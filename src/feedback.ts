@@ -39,17 +39,15 @@ export class Feedback {
    * @param github GitHub
    * @param issue Issue
    * @param username Username
+   * @param model LLM Model
    */
   constructor(
     private readonly summary: string | undefined,
     private readonly github: Octokit,
     private readonly issue: Issue,
-    private readonly username: string | undefined
+    private readonly username: string | undefined,
+    private readonly model: string
   ) {
-    this.summary = summary;
-    this.github = github;
-    this.issue = issue;
-    this.username = username;
   }
 
   async post() {
@@ -74,7 +72,8 @@ export class Feedback {
             this.username,
             "thanks for the report, but here some unclear moments:",
           ),
-          this.summary
+          this.summary,
+          this.model
         ).value()
       ).post();
       core.setFailed(

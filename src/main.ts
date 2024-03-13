@@ -101,7 +101,8 @@ async function run() {
           ),
           octokit,
           issue,
-          smart.user?.login
+          smart.user?.login,
+          model
         ).post();
       } else if (core.getInput("deepinfra_token")) {
         const deepinfra = core.getInput("deepinfra_token");
@@ -114,7 +115,8 @@ async function run() {
           answer,
           octokit,
           issue,
-          smart.user?.login
+          smart.user?.login,
+          model
         ).post();
       } else {
         core.setFailed(
