@@ -29,6 +29,7 @@ import OpenAI from "openai";
 import {DeepInfra} from "./deep-infra";
 import {ChatGpt} from "./chat-gpt";
 import {Feedback} from "./feedback";
+import {Titled} from "./titled";
 
 export let github: {
   context: {
@@ -95,7 +96,9 @@ async function run() {
           await new ChatGpt(
             new OpenAI({apiKey: core.getInput("openai_token")}),
             model
-          ).analyze(body),
+          ).analyze(
+            new Titled(smart.title, body).asString()
+          ),
           octokit,
           issue,
           smart.user?.login
@@ -105,10 +108,7 @@ async function run() {
         const model = core.getInput("deepinfra_model");
         const answer = await new DeepInfra(deepinfra, model)
           .analyze(
-            `
-            Title: ${smart.title}
-            Report body: ${body}
-            `
+            new Titled(smart.title, body).asString()
           );
         await new Feedback(
           answer,
