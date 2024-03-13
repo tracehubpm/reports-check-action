@@ -21,25 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Comment} from "./comment";
-import {Covered} from "./covered";
-import {WithSummary} from "./with-summary";
-import * as core from "@actions/core";
 import {Octokit} from "@octokit/rest";
-import {NonRelevant} from "./non-relevant";
+import {Comment} from "./comment";
 
 /**
- * Feedback.
+ * Non Relevant bug report.
  */
-export class Feedback {
+export class NonRelevant {
 
   /**
-   * Summary.
-   */
-  private readonly summary: string | undefined;
-
-  /**
-   * GitHub.
+   * Github.
    */
   private readonly github: Octokit;
 
@@ -49,60 +40,44 @@ export class Feedback {
   private readonly issue: Issue;
 
   /**
-   * Username.
+   * Creator.
    */
-  private readonly username: string | undefined;
+  private readonly creator: string | undefined;
 
   /**
    * Ctor.
-   * @param summary Summary
    * @param github Github
    * @param issue Issue
-   * @param username Username
+   * @param creator Creator
    */
   constructor(
-    summary: string | undefined,
     github: Octokit,
     issue: Issue,
-    username: string | undefined
+    creator: string | undefined
   ) {
-    this.summary = summary;
     this.github = github;
     this.issue = issue;
-    this.username = username;
+    this.creator = creator;
   }
 
-  async post() {
-    if (this.summary?.includes("awesome")) {
-      await new Comment(
-        this.github,
-        this.issue,
-        new Covered(
-          this.username,
-          "thanks for detailed and disciplined report."
-        ).value()
-      ).post();
-    } else if (this.summary?.includes("Not a bug report")) {
-      console.log("Not a bug report");
-      await new NonRelevant(this.github, this.issue, this.username).close();
-    } else {
-      await new Comment(
-        this.github,
-        this.issue,
-        new WithSummary(
-          new Covered(
-            this.username,
-            "thanks for the report, but here some unclear moments:",
-          ),
-          this.summary
-        ).value()
-      ).post();
-      core.setFailed(
-        `
-          Quality analysis found the following errors:
-          ${this.summary}
-          `
-      );
-    }
+  /**
+   * Close non relevant issue.
+   */
+  async close() {
+    await new Comment(
+      this.github,
+      this.issue,
+      "@" + this.creator
+      + " this issue is not relevant to " + this.issue.owner + "/" + this.issue.repo + "."
+      + " We should close it."
+    ).post();
+    await this.github.issues.update(
+      {
+        owner: this.issue.owner,
+        repo: this.issue.repo,
+        issue_number: this.issue.number,
+        state: "closed"
+      }
+    );
   }
 }
