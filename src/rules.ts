@@ -32,7 +32,7 @@ export class Rules {
     Bug report has steps to reproduce,
     Bug report is saying what is expected to see,
     Bug report is saying what you saw instead,
-    Bug report has its location, like class, file, or simple runnable example
+    Bug report has its location, like class, file, simple runnable example, or class/file reference
     `;
   }
 }
