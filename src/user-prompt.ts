@@ -52,7 +52,7 @@ export class UserPrompt {
   value(): string {
     return `
     Please review the quality of following bug report and generate analysis summary.
-    If it is not relevant to the codebase, then just say "Not relevant".
+    If it is not relevant to the repository, then just say "Not relevant".
     If it is relevant, but does not have a clear problem statement, then say "Not a bug report".
     If bug report does follow all the rules, please rate such bug report as "awesome" by answering just "Quality is awesome".
     Otherwise, please say what needs to be improved, this must contain only 1-2 sentence bullet points, mainly focusing on the context of the bug report, as well as the rules.
