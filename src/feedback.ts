@@ -60,8 +60,8 @@ export class Feedback {
           "thanks for detailed and disciplined report."
         ).value()
       ).post();
-    } else if (this.summary?.includes("Not a bug report")) {
-      console.log("Not a bug report");
+    } else if (this.summary?.includes("Not relevant")) {
+      console.log("Not relevant");
       await new NonRelevant(this.github, this.issue, this.username).close();
     } else {
       await new Comment(
