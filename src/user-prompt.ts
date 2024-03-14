@@ -49,8 +49,17 @@ export class UserPrompt {
   value(): string {
     return `
     Please review following bug report.
+    Pay attention to a problem statement that can be:
+    1. Something is broken
+    2. Lack of functionality
+    3. Lack of tests
+    4. Lack of documentation
+    5. Suboptimal implementation
+    6. Design inconsistency
+    7. Naming is weird
+    8. Unstable test
+    And everything that "doesn't look right".
     If it does not have a clear problem statement, then just say "Not a bug report".
-    This one must be precise.
     Please tell if bug report has some quality problems according to our rules,
     summarize them into bullet points sentences filled with context semantics and what needs to be fixed.
     If bug report fits all the rules, don't generate summary, instead, rate such bug report as "awesome" by answering just "Quality is awesome".
