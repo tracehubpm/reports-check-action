@@ -58,6 +58,7 @@ export class UserPrompt {
     6. Design inconsistency
     7. Naming is weird
     8. Unstable test
+    9. Typos
     And everything that "doesn't look right".
     If it does not have a clear problem statement, then just say "Not a bug report".
     Please tell if bug report has some quality problems according to our rules,
