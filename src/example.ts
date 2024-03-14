@@ -32,10 +32,9 @@ export class Example {
    */
   value(): string {
     return `
-    * <context notes, rule reference>
-    * <context notes, rule reference>
-    * <context notes, rule reference>
-    * <context notes, rule reference>
+    * <...>
+    * <...>
+    * <...>
     `;
   }
 }
