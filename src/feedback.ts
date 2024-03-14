@@ -63,6 +63,8 @@ export class Feedback {
     } else if (this.summary?.includes("Not relevant")) {
       console.log("Not relevant");
       await new NonRelevant(this.github, this.issue, this.username).close();
+    } else if (this.summary?.includes("Not a bug report")) {
+      console.log("Not a bug report");
     } else {
       await new Comment(
         this.github,
