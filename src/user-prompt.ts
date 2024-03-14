@@ -50,7 +50,7 @@ export class UserPrompt {
     return `
     Please review following bug report.
     Pay attention to a problem statement that can be:
-    1. Something is broken
+    1. Something is broken/doesn't work
     2. Lack of functionality
     3. Lack of tests
     4. Lack of documentation
