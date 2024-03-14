@@ -27,6 +27,7 @@ import {WithSummary} from "./with-summary";
 import * as core from "@actions/core";
 import {Octokit} from "@octokit/rest";
 import {NonRelevant} from "./non-relevant";
+import {summary} from "@actions/core";
 
 /**
  * Feedback.
@@ -51,6 +52,7 @@ export class Feedback {
   }
 
   async post() {
+    console.log(summary);
     if (this.summary?.includes("awesome")) {
       await new Comment(
         this.github,
