@@ -32,16 +32,13 @@ export class UserPrompt {
   /**
    * Ctor.
    *
-   * @param example Example
    * @param rules Rules
    * @param report Bug report
    */
   constructor(
-    private readonly example: Example,
     private readonly rules: Rules,
     private readonly report: string | null | undefined
   ) {
-    this.example = example;
     this.rules = rules;
     this.report = report;
   }
@@ -54,7 +51,7 @@ export class UserPrompt {
     Please review following bug report.
     If it does not have a clear problem statement, then just say "Not a bug report".
     Please tell if bug report has some quality problems according to our rules,
-    summarize them into bullet points sentences filled with context semantics and what needs to be fixed.
+    summarize them into bullet points sentences filled with context semantics and what needs to be fixed, tell only missing things.
     If bug report fits all the rules, don't generate summary, instead, rate such bug report as "awesome" by answering just "Quality is awesome".
     Even it does not look like a bug report still don't copy the example.
     Rules=[

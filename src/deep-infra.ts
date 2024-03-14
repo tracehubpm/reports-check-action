@@ -59,7 +59,6 @@ export class DeepInfra implements Model {
             {
               role: "user",
               content: new UserPrompt(
-                new Example(),
                 new Rules(),
                 report
               ).value()

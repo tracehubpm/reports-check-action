@@ -52,7 +52,6 @@ export class Feedback {
   }
 
   async post() {
-    console.log(summary);
     if (this.summary?.includes("awesome")) {
       await new Comment(
         this.github,
