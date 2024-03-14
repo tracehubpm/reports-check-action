@@ -58,6 +58,8 @@ export class UserPrompt {
     Each bullet point should start with a context-specific comments, please pay attention to a possible examples in the bug report itself.
     Each bullet point should link the bug report context with the violated rule.
     Print only the bullet points, without any other info.
+    Please adhere to the example template provided, but don't ever copy it, adjust this template to the issue context instead.
+    Again, if it does not look as bug report just reject with a "Not a bug report" answer.
     Example of analysis summary:
     ${this.example.value()}.
     Rules=[
