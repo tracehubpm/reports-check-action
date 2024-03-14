@@ -59,7 +59,7 @@ export class UserPrompt {
     Each bullet point should link the bug report context with the violated rule.
     Print only the bullet points, without any other info.
     Please adhere to the example template provided, but don't ever copy it, adjust this template to the issue context instead.
-    Again, if it does not look as bug report just reject with a "Not a bug report" answer.
+    Even it does not look like a bug report still don't copy the example.
     Example of analysis summary:
     ${this.example.value()}.
     Rules=[
