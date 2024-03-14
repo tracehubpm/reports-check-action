@@ -61,11 +61,10 @@ export class UserPrompt {
     9. Typos
     And everything that "doesn't look right".
     If it does not have a clear problem statement, then just say "Not a bug report".
-    Please tell if bug report has some quality problems with it formulation (according to our rules),
+    Please tell if bug report has some quality problems with its formulation (according to our rules),
     summarize them into bullet-points-only sentences filled with context semantics and what needs to be fixed.
     Tell only negative things.
     If bug report fits all the rules, don't generate summary, instead, rate such bug report as "awesome" by answering just "Quality is awesome".
-    Even it does not look like a bug report still don't copy the example.
     Rules=[
     ${this.rules.value()}
     ]
