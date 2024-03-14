@@ -53,7 +53,7 @@ export class UserPrompt {
     return `
     Please review the quality of following bug report and generate analysis summary.
     If it does not look like a bug report, then just say "Not a bug report".
-    If it does not have a problem statement, then just say "Not a bug report".
+    If it does not have a problem statement, then reject it too by just saying "Not a bug report".
     If bug report does follow all the rules, please rate such bug report as "awesome" by answering just "Quality is awesome".
     Otherwise, please say what needs to be improved, this must contain only 1-2 sentence bullet points, mainly focusing on the context of the bug report, as well as the rules.
     Each bullet point should start with a context-specific comments, please pay attention to a possible examples in the bug report itself.
