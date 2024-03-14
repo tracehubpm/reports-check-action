@@ -51,13 +51,12 @@ export class UserPrompt {
    */
   value(): string {
     return `
-    Please review the quality of following bug report and generate analysis summary.
+    Please review the quality of following bug report and generate an analysis summary.
     If it does not have a clear problem statement, then just say "Not a bug report".
-    If bug report does follow all the rules, please rate such bug report as "awesome" by answering just "Quality is awesome".
-    Otherwise, please say what needs to be improved, this must contain only 1-2 sentence bullet points, mainly focusing on the context of the bug report, as well as the rules.
-    Each bullet point should start with a context-specific comments, please pay attention to a possible examples in the bug report itself.
-    Each bullet point should link the bug report context with the violated rule.
+    Please tell if bug report has some quality problems according to our rules,
+    summarize them into bullet points sentences filled with context semantics and what needs to be fixed.
     Print only the bullet points, without any other info.
+    If bug report does follow all the rules, please rate such bug report as "awesome" by answering just "Quality is awesome".
     Please adhere to the example template provided, but don't ever copy it, adjust this template to the issue context instead.
     Even it does not look like a bug report still don't copy the example.
     Example of analysis summary:
