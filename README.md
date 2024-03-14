@@ -25,6 +25,9 @@ name: reports-check
 on:
  issues:
    types: opened
+permissions:
+  issues: write
+  contents: read
 jobs:
   check:
     runs-on: ubuntu-22.04
