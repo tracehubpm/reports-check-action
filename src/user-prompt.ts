@@ -56,7 +56,7 @@ export class UserPrompt {
     Please tell if bug report has some quality problems according to our rules,
     summarize them into bullet points sentences filled with context semantics and what needs to be fixed.
     Print only the bullet points, without any other info.
-    If bug report does follow all the rules, please rate such bug report as "awesome" by answering just "Quality is awesome".
+    If bug report does follow all the rules, don't formulate summary, instead, rate such bug report as "awesome" by answering just "Quality is awesome".
     Please adhere to the example template provided, but don't ever copy it, adjust this template to the issue context instead.
     Even it does not look like a bug report still don't copy the example.
     Example of analysis summary:
