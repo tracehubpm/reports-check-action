@@ -54,9 +54,12 @@ export class UserPrompt {
     The information and rule match must be precise.
     Don't generate any other information.
     If bug report does only match all the rules, then please don't generate summary, instead, just say "Quality is awesome".
-    Rules=[
-    ${this.rules.value()}
-    ]
+    Rules can include: 
+    1. steps to reproduce
+    2. clear problem statement
+    3. what is expected to see
+    4. have its context, like class, file, code snippet, example, or class/file reference
+    Its very important to adjust rules accordingly to the bug report itself.
     Bug report:
     ${this.report}
     `;
