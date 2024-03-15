@@ -50,7 +50,7 @@ export class UserPrompt {
     It's very important to have enough context information related to the bug report in the bullet points, so the author of the report can understand your summary better.
     The information and rule match must be precise.
     Don't generate any other information besides context-rich bullet points.
-    If bug report does only match all the rules, then please don't generate summary, instead, just say "Quality is awesome".
+    If bug report does match most of the rules and looks reasonable, then please don't generate summary, instead, just say "Quality is awesome".
     Rules can include things like:
     1. steps to reproduce
     2. clear problem statement
