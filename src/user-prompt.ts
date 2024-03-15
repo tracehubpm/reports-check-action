@@ -50,7 +50,7 @@ export class UserPrompt {
     return `
     Please review following bug report.
     If bug report formulation does not match the rules, then please generate summary
-    to the report author how to fix violated rules, so this report will match the rules better.
+    to the report author about what to fix in this report, so this report will match the rules better.
     Please include in your summary only bullet points sentences, supplied with useful context information, and rule reference.
     This information must be precise.
     If bug report does match the rules, then please don't generate summary, instead, just say "Quality is awesome".
