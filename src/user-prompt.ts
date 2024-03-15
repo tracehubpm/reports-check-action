@@ -48,12 +48,16 @@ export class UserPrompt {
     If bug report formulation does not match the rules, then please generate a summary to the bug report author.
     The summary must include only violated rules and the report context information that can help to fix the report.
     Don't include any other information in your summary.
+    Please strictly adhere the example template provided.
     If bug report does only match all the rules, then please don't generate summary, instead, just say "Quality is awesome".
     Rules=[
     Bug report should have problem statement, examples: any problem statement essential formulation, so it clear that "there is a problem";
     Bug report should have what is expected to see, examples: expected behavior or expected values in which system archives desired state;
     Bug report should have it's context, examples: provided code snippet or reference to class or file like EmailsTest.java
     ]
+    Summary Example:
+    * <violated rule, context>
+    * ...
     Bug report:
     ${this.report}
     `;
