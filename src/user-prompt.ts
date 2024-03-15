@@ -47,17 +47,16 @@ export class UserPrompt {
     If bug report formulation does not match the rules, then please generate summary
     to the report author about what to fix in this report, so author can fix it using this summary.
     Please include in your summary only star (*) bullet point sentences about rules that bug report violates, supplied with useful context-rich information.
-    It's very important to have enough context information related to the bug report in the bullet points, so the author of the report can understand your summary better.
+    It's very important to have enough context information in the bullet points, so the author of the report can understand your summary better.
     The information and rule match must be precise.
-    Don't generate any other information besides context-rich bullet points.
-    If bug report does match most of the rules and looks reasonable, then please don't generate summary, instead, just say "Quality is awesome".
-    Rules can include things like:
+    Don't generate any other information.
+    If bug report does only match all the rules, then please don't generate summary, instead, just say "Quality is awesome".
+    Rules can include: 
     1. steps to reproduce
     2. clear problem statement
     3. what is expected to see
     4. have its context, like class, file, code snippet, example, or class/file reference
-    It's very important to adjust rules accordingly to the bug report itself in a flexible manner.
-    You can remove some of the rules if their are not needed for the context of the bug report.
+    It's very important to adjust rules accordingly to the bug report itself.
     Bug report:
     ${this.report}
     `;
