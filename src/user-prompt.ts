@@ -54,6 +54,7 @@ export class UserPrompt {
     Bug report should have what is expected to see,
     Bug report should have it's context, like class, file, code snippet, example, or class/file reference
     ]
+    Bug report can be formulated in different ways, so it's very important to look deeply in its context to identify does report matches or not to the specific rule.
     It's very important to adjust rules accordingly to the bug report itself, so some rules can be omitted due to its irrelevance to the issue.
     Bug report:
     ${this.report}
