@@ -44,13 +44,14 @@ export class UserPrompt {
   value(): string {
     return `
     Please review following bug report.
-    If bug report formulation does not match the rules, then please generate summary
+    If bug report formulation does not match the rules, then please generate a summary
     to the report author about what to fix in this report, so author can fix it using this summary.
     Please include in your summary only bullet point sentences about rules that bug report violates, supplied with useful context-rich information.
     The information and rule match must be precise.
     Don't generate any other information.
+    It's very important to say what is not clear in the bug report formulation.
     If bug report does only match all the rules, then please don't generate summary, instead, just say "Quality is awesome".
-    Rules can include: 
+    Rules can include:
     1. steps to reproduce
     2. clear problem statement
     3. what is expected to see
