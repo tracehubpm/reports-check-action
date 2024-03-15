@@ -51,9 +51,9 @@ export class UserPrompt {
     Don't include any other information in your summary.
     If bug report does only match all the rules, then please don't generate summary, instead, just say "Quality is awesome".
     Rules=[
-    Bug report should have problem statement (Expected to see: problem statement formulation, so it clear that "there is a problem"),
-    Bug report should have what is expected to see (Expected to see: expected behavior or expected values in which system archives desired state),
-    Bug report should have it's context, like class, file, code snippet, example, or class/file reference (Expected to see: provided code snippet or reference like EmailsTest.java)
+    Bug report should have problem statement (Enough to pass: problem statement essential formulation, so it clear that "there is a problem"),
+    Bug report should have what is expected to see (Enough to pass: expected behavior or expected values in which system archives desired state),
+    Bug report should have it's context, like class, file, code snippet, example, or class/file reference (Enough to pass: provided code snippet or reference like EmailsTest.java)
     ]
     It's very important to adjust rules accordingly to the bug report itself, so some rules can be omitted due to its irrelevance to the issue.
     Bug report:
