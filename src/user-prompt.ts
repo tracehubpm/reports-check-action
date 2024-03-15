@@ -51,7 +51,8 @@ export class UserPrompt {
     Please review following bug report.
     If it looks like feature request, then just say "Not a bug report".
     If bug report formulation does not match the rules, then please generate summary
-    to the report author what to fix, so this report will match the rules.
+    to the report author how to fix violated rules, so this report will look better.
+    Please include in your summary only bullet points sentences, supplied with useful context information, and rule reference.
     If bug report does match the rules, then please don't generate summary, instead, just say "Quality is awesome".
     Rules=[
     ${this.rules.value()}
