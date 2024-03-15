@@ -30,7 +30,7 @@ export class Rules {
   value(): string {
     return `
     Bug report should have steps to reproduce,
-    Bug report should have what is wrong,
+    Bug report should have clear problem statement, what is wrong,
     Bug report should have what is expected to see,
     Bug report should have its context, like class, file, code snippet, example, or class/file reference
     `;
