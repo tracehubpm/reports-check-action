@@ -50,10 +50,10 @@ export class UserPrompt {
     Please review following bug report.
     If bug report formulation does not match the rules, then please generate summary
     to the report author about what to fix in this report, so it will match the violated rules better.
-    Please include in your summary only bullet points sentences about rules that bug report violates, supplied with useful context information.
-    This information must be precise.
+    Please include in your summary only bullet point sentences about rules that bug report violates, supplied with useful context information.
+    The information and rule match must be precise.
+    Don't generate any other information.
     If bug report does only match all the rules, then please don't generate summary, instead, just say "Quality is awesome".
-    Rules match must be precise.
     Rules=[
     ${this.rules.value()}
     ]
