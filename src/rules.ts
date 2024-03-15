@@ -29,10 +29,10 @@ export class Rules {
    */
   value(): string {
     return `
-    Bug report has steps to reproduce,
-    Bug report is saying what is expected to see,
-    Bug report is saying what you saw instead,
-    Bug report has its location, like class, file, simple runnable example, or class/file reference
+    Bug report should have steps to reproduce,
+    Bug report should have what is wrong,
+    Bug report should have what is expected to see,
+    Bug report should have its location, like class, file, code snippet, example, or class/file reference
     `;
   }
 }
