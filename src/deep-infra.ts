@@ -23,8 +23,6 @@
  */
 import {QualityExpert} from "./quality-expert";
 import {UserPrompt} from "./user-prompt";
-import {Example} from "./example";
-import {Rules} from "./rules";
 
 /**
  * Deep Infra.
@@ -59,7 +57,6 @@ export class DeepInfra implements Model {
             {
               role: "user",
               content: new UserPrompt(
-                new Rules(),
                 report
               ).value()
             }

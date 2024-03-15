@@ -23,8 +23,6 @@
  */
 import {QualityExpert} from "./quality-expert";
 import {UserPrompt} from "./user-prompt";
-import {Example} from "./example";
-import {Rules} from "./rules";
 import OpenAI from "openai";
 
 /**
@@ -57,7 +55,6 @@ export class ChatGpt implements Model {
         {
           role: "user",
           content: new UserPrompt(
-            new Rules(),
             report
           ).value()
         }

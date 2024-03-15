@@ -75,7 +75,7 @@ export class Feedback {
             this.username,
             "thanks for the report, but here some unclear moments:",
           ),
-          this.summary,
+          this.summary?.toString(),
           this.model
         ).value()
       ).post();

@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Rules} from "./rules";
 
 /**
  * User prompt.
@@ -31,14 +30,11 @@ export class UserPrompt {
   /**
    * Ctor.
    *
-   * @param rules Rules
    * @param report Bug report
    */
   constructor(
-    private readonly rules: Rules,
     private readonly report: string | null | undefined
   ) {
-    this.rules = rules;
     this.report = report;
   }
 

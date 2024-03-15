@@ -48,7 +48,7 @@ export class WithSummary {
     return this.origin.value() +
     `
     ${this.summary}
-    
+Please fix the bug report in order it to get resolved faster.    
 Generated with \`${this.model}\`
     `;
   }
