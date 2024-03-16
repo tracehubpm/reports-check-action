@@ -43,10 +43,10 @@ export class UserPrompt {
    */
   value(): string {
     return `
-    Please strictly review following bug report.
-    If bug report has any quality problem with its formulation, confusion, or uncertainties, then please generate a summary to the bug report author.
-    The summary must include only quality problems with the report and how to fix them, so author can formulate the report better.
-    If bug report is clean, then please don't generate summary, instead, just say "Quality is awesome".
+    Please strictly review the following bug report and generate a summary with quality problems related to this report formulation.
+    The summary must include only star bullet points (*) with quality problems report has and how to fix them, so author of this report can formulate it better.
+    If you see that bug report don't have quality problems with it's formulation, then just say "Quality is awesome".
+    Don't generate any other info.
     Bug report:
     ${this.report}
     `;
