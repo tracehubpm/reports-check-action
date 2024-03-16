@@ -40,8 +40,8 @@ export class Titled {
    */
   asString(): string {
     return `
-    Title: ${this.title}
-    Report body: ${this.body}
+    ${this.title}
+    ${this.body}
     `
   }
 }
