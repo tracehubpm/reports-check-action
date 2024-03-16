@@ -44,7 +44,7 @@ export class UserPrompt {
   value(): string {
     return `
     Please strictly review the following bug report and generate a summary with quality problems related to this report formulation.
-    The summary must include only star bullet points (*) with quality problems report has and how to fix them, so author of this report can formulate it better.
+    The summary must include only star bullet points (*) with quality problems that only this report has and tips on how to fix them, so author of this report can improve it.
     If you see that bug report don't have quality problems with it's formulation, then just say "Quality is awesome".
     Don't generate any other info.
     Bug report:
