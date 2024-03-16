@@ -50,10 +50,10 @@ export class DeepInfra implements Model {
           model: this.model,
           temperature: 0.2,
           messages: [
-            {
-              role: "system",
-              content: new QualityExpert().value()
-            },
+            // {
+            //   role: "system",
+            //   content: new QualityExpert().value()
+            // },
             {
               role: "user",
               content: new UserPrompt(
