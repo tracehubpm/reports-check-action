@@ -44,7 +44,7 @@ export class UserPrompt {
   value(): string {
     return `
     Please review following bug report.
-    If bug report formulation has quality problems, then please generate a summary to the bug report
+    If bug report formulation has quality problems, confusion, or uncertainties, then please generate a summary to the bug report
     author. The summary must include only quality problems with the report and how to fix them, so
     author can formulate the report better.
     If bug report is clean, then please don't generate summary, instead, just say "Quality is awesome".
