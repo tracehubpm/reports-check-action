@@ -46,10 +46,10 @@ export class WithSummary {
    * Print with summary attached.
    */
   value(): string {
-    console.log(this.summary);
+    const remove = "   ";
     return this.origin.value() +
 `
-${this.summary}
+${this.summary?.split('\n').map(line => line.replace(new RegExp(`${remove}`), '')).join('\n')}
 
 Please fix the bug report in order it to get resolved faster.
 Analyzed with \`${this.model}\`
