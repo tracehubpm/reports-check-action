@@ -47,7 +47,8 @@ export class WithSummary {
   value(): string {
     return this.origin.value() +
     `
-    ${this.summary}
+${this.summary}
+
 Please fix the bug report in order it to get resolved faster.
 Analyzed with \`${this.model}\`
     `;
