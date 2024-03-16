@@ -46,7 +46,7 @@ export class ChatGpt implements Model {
   async analyze(report: string | null | undefined) {
     const response = await this.open.chat.completions.create({
       model: this.model,
-      temperature: 0.1,
+      temperature: 0.5,
       messages: [
         {
           role: "system",
