@@ -48,7 +48,7 @@ export class DeepInfra implements Model {
         method: 'POST',
         body: JSON.stringify({
           model: this.model,
-          temperature: 0.7,
+          temperature: 0.5,
           messages: [
             {
               role: "system",
