@@ -48,12 +48,12 @@ export class DeepInfra implements Model {
         method: 'POST',
         body: JSON.stringify({
           model: this.model,
-          temperature: 0.2,
+          temperature: 0.4,
           messages: [
-            // {
-            //   role: "system",
-            //   content: new QualityExpert().value()
-            // },
+            {
+              role: "system",
+              content: new QualityExpert().value()
+            },
             {
               role: "user",
               content: new UserPrompt(
