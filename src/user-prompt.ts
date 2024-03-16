@@ -48,6 +48,10 @@ export class UserPrompt {
     Don't suggest how to fix the bug, instead focus only on problems with bug report formulation.
     If you see that bug report don't have quality problems with it's formulation, then just say "Quality is awesome".
     Don't generate any other info.
+    Summary example:
+    * <>
+    * <>
+    * <>
     Bug report:
     ${this.report}
     `;

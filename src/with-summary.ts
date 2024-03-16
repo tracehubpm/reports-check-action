@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 import {Covered} from "./covered";
+import {summary} from "@actions/core";
 
 /**
  * With summary.
@@ -45,6 +46,7 @@ export class WithSummary {
    * Print with summary attached.
    */
   value(): string {
+    console.log(this.summary);
     return this.origin.value() +
 `
 ${this.summary}
