@@ -13,10 +13,11 @@ export class Blob {
       ref: 'master', // read default branch
       path: 'src/main/java/git/tracehub/tk/TkGitHub.java' // file path after deterministic parsing
     });
-    const data = response.toString();
+    const data = response.data.toString();
     if (data) {
-      const decoded = Base64.decode(JSON.parse(data).data.content);
-      console.log(decoded);
+      console.log(JSON.parse(data))
+      // const decoded = Base64.decode(JSON.parse(data));
+      // console.log(decoded);
     }
   }
 }
