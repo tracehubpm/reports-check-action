@@ -31,6 +31,8 @@ import {ChatGpt} from "./chat-gpt";
 import {Feedback} from "./feedback";
 import {Titled} from "./titled";
 import {Excluded} from "./excluded";
+import {Ranged} from "./ranged";
+import {Blob} from "./blob";
 
 export let github: {
   context: {
@@ -105,6 +107,12 @@ async function run() {
         //   "150-156"
         // ).asText();
         // console.log(puzzle);
+
+        const puzzle = new Ranged(
+          await new Blob(octokit).asText(),
+          "150-156"
+        ).asText();
+        console.log(puzzle);
 
         const openai = core.getInput("openai_token");
         if (openai) {
