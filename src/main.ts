@@ -103,11 +103,11 @@ async function run() {
         // if (new Puzzled(body).value()) {
         //   // run pdd.ts
         // }
-        const puzzle = new Ranged(
-          await new Blob(octokit).asText(),
-          "150-156"
-        ).asText();
-        console.log(puzzle);
+        // const puzzle = new Ranged(
+        //   await new Blob(octokit).asText(),
+        //   "150-156"
+        // ).asText();
+        // console.log(puzzle);
         
         const openai = core.getInput("openai_token");
         if (openai) {
