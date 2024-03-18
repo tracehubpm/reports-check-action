@@ -31,6 +31,7 @@ import {ChatGpt} from "./chat-gpt";
 import {Feedback} from "./feedback";
 import {Titled} from "./titled";
 import {Excluded} from "./excluded";
+import {Blob} from "./blob";
 
 export let github: {
   context: {
@@ -86,9 +87,6 @@ async function run() {
         );
       } else {
         const body = smart.body;
-
-        console.log(body);
-        
         if (!body) {
           await new Comment(
             octokit,
@@ -100,6 +98,8 @@ async function run() {
           core.setFailed(reason);
           throw new Error(reason);
         }
+        await new Blob(octokit).asText();
+
         const openai = core.getInput("openai_token");
         if (openai) {
           const model = core.getInput("openai_model");
