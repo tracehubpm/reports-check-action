@@ -1,4 +1,5 @@
 import {Octokit} from "@octokit/rest";
+import {Base64} from "js-base64";
 
 export class Blob {
 
@@ -6,12 +7,16 @@ export class Blob {
   }
 
   async asText() {
-    const content = await this.github.repos.getContent({
+    const response = await this.github.repos.getContent({
       owner: 'tracehubpm', // issue.owner
       repo: 'tracehub', // issue.repo
       ref: 'master', // read default branch
       path: 'src/main/java/git/tracehub/tk/TkGitHub.java' // file path after deterministic parsing
     });
-    console.log(content);
+    const data = response.data;
+    if (data) {
+      const decoded = Base64.decode(data.toString());
+      console.log(decoded);
+    }
   }
 }
