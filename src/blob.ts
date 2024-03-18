@@ -15,7 +15,7 @@ export class Blob {
     });
     const data = response.data;
     if (data) {
-      const decoded = Base64.decode(data.toString());
+      const decoded = Base64.decode(JSON.parse(data.toString()).content);
       console.log(decoded);
     }
   }
