@@ -3,6 +3,9 @@ name: reports-check
 on:
   issues:
     types: [opened]
+permissions:
+  issues: write
+  contents: read
 jobs:
   check:
     runs-on: ubuntu-22.04
@@ -12,3 +15,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           deepinfra_token: ${{ secrets.DEEPINFRA_TOKEN }}
+          exclude: '["^We should*.+$"]'
