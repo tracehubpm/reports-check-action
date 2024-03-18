@@ -36,8 +36,6 @@ jobs:
       - uses: tracehubpm/reports-check-action@latest
         with:
           openai_token: ${{ secrets.OPENAI_TOKEN }}
-          # or you can use Deep Infra models:
-          # deepinfra_token: ${{ secrets.DEEPINFRA_TOKEN }}
           github_token: ${{ secrets.GH_TOKEN }}
 ```
 
@@ -58,12 +56,9 @@ check out [all available models](https://deepinfra.com/models/text-generation).
 Each bug report goes through quality evaluation process, where
 your report will be assessed by those criteria:
 
-* Bug report has **steps to reproduce**.
-* Bug report is saying **what is expected to see**.
-* Bug report is saying **what you saw instead**.
-* Bug report **has its location**, like class, file, or simple runnable example.
+TBD..
 
-If your bug report does not match at least 3 criteria, it will be **rejected automatically** by robot.
+If your bug report does not match these criteria, it will be **rejected automatically** by robot.
 
 Quality criteria are based on several researches, including:
 * [Painless Bug Tracking, by Joel Spolsky, 2000](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
