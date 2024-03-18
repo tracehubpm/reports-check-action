@@ -12,7 +12,7 @@ export class Blob {
       ref: 'master', // read default branch
       path: 'src/main/java/git/tracehub/tk/TkGitHub.java' // file path after deterministic parsing
     });
-    console.log(response.data);
+    console.log(JSON.parse(JSON.stringify(response.data)).content);
     // const data = response.data.toString();
     // if (data) {
     //   console.log(JSON.parse(data))
