@@ -25,6 +25,7 @@ inputs:
   exclude:
     description: 'Issue titles to exclude from checking'
     required: false
+    default: '[]'
 runs:
   using: 'docker'
   image: 'Dockerfile'
