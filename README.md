@@ -51,10 +51,37 @@ These are the parameters you can use/override:
 * `deepinfra_model`: Deep Infra API model, the default one is `Phind/Phind-CodeLlama-34B-v2`,
 check out [all available models](https://deepinfra.com/models/text-generation).
 
+### Issues to ignore
+
+You can configure this action to ignore some incoming issues.
+They can be feature requests or just questions.
+To do so, you can use `exclude` and pass to it an array of regular expressions.
+Consider this configuration:
+
+```yml
+name: reports-check
+on:
+ issues:
+   types: opened
+permissions:
+  issues: write
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: tracehubpm/reports-check-action@latest
+        with:
+          openai_token: ${{ secrets.OPENAI_TOKEN }}
+          github_token: ${{ secrets.GH_TOKEN }}
+          exclude: ["^I have a question*.+$", "^I want to request new feature*.+$"]
+```
+
 ### Quality Evaluation Process
 
 Each bug report goes through quality evaluation process, where
-your report will be assessed by those criteria:
+your report will be assessed by those configured criteria using `.rules.yml` placed in the root of the repo:
 
 TBD..
 

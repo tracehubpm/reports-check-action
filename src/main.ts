@@ -30,6 +30,7 @@ import {DeepInfra} from "./deep-infra";
 import {ChatGpt} from "./chat-gpt";
 import {Feedback} from "./feedback";
 import {Titled} from "./titled";
+import {Excluded} from "./excluded";
 
 export let github: {
   context: {
@@ -77,51 +78,59 @@ async function run() {
         octokit,
         issue
       ).fetch();
-      const body = smart.body;
-      if (!body) {
-        await new Comment(
-          octokit,
-          issue,
-          "@" + smart.user?.login
-          + " the issue body is empty, please provide more details for this problem."
-        ).post();
-        const reason = "The issue body is empty";
-        core.setFailed(reason);
-        throw new Error(reason);
-      }
-      const openai = core.getInput("openai_token");
-      if (openai) {
-        const model = core.getInput("openai_model");
-        await new Feedback(
-          await new ChatGpt(
-            new OpenAI({apiKey: core.getInput("openai_token")}),
-            model
-          ).analyze(
-            new Titled(smart.title, body).asString()
-          ),
-          octokit,
-          issue,
-          smart.user?.login,
-          model
-        ).post();
-      } else if (core.getInput("deepinfra_token")) {
-        const deepinfra = core.getInput("deepinfra_token");
-        const model = core.getInput("deepinfra_model");
-        const answer = await new DeepInfra(deepinfra, model)
-          .analyze(
-            new Titled(smart.title, body).asString()
-          );
-        await new Feedback(
-          answer,
-          octokit,
-          issue,
-          smart.user?.login,
-          model
-        ).post();
-      } else {
-        core.setFailed(
-          "Neither `openai_token` nor `deepinfra_token` was not provided"
+      const excluded = JSON.parse(core.getInput("exclude"));
+      const skip = new Excluded(excluded, smart).value();
+      if (skip) {
+        console.log(
+          `Issue #${issue.number} (${smart.title}) skipped, excluded titles: ${excluded}`
         );
+      } else {
+        const body = smart.body;
+        if (!body) {
+          await new Comment(
+            octokit,
+            issue,
+            "@" + smart.user?.login
+            + " the issue body is empty, please provide more details for this problem."
+          ).post();
+          const reason = "The issue body is empty";
+          core.setFailed(reason);
+          throw new Error(reason);
+        }
+        const openai = core.getInput("openai_token");
+        if (openai) {
+          const model = core.getInput("openai_model");
+          await new Feedback(
+            await new ChatGpt(
+              new OpenAI({apiKey: core.getInput("openai_token")}),
+              model
+            ).analyze(
+              new Titled(smart.title, body).asString()
+            ),
+            octokit,
+            issue,
+            smart.user?.login,
+            model
+          ).post();
+        } else if (core.getInput("deepinfra_token")) {
+          const deepinfra = core.getInput("deepinfra_token");
+          const model = core.getInput("deepinfra_model");
+          const answer = await new DeepInfra(deepinfra, model)
+            .analyze(
+              new Titled(smart.title, body).asString()
+            );
+          await new Feedback(
+            answer,
+            octokit,
+            issue,
+            smart.user?.login,
+            model
+          ).post();
+        } else {
+          core.setFailed(
+            "Neither `openai_token` nor `deepinfra_token` was not provided"
+          );
+        }
       }
     } else {
       console.log("No opened issue found");

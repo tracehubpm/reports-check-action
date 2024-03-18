@@ -22,6 +22,9 @@ inputs:
     description: 'Deep Infra API model'
     required: false
     default: 'Phind/Phind-CodeLlama-34B-v2'
+  exclude:
+    description: 'Issue titles to exclude from checking'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
