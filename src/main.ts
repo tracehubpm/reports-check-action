@@ -82,7 +82,7 @@ async function run() {
       const skip = new Excluded(excluded, smart).value();
       if (skip) {
         console.log(
-          `Issue #${issue.number} (${smart.title}) skipped, excluded titles: ${excluded}`
+          `Issue #${issue.number} (${smart.title}) was skipped, all excluded titles: ${excluded}`
         );
       } else {
         const body = smart.body;
