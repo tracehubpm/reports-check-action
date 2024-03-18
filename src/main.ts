@@ -86,6 +86,9 @@ async function run() {
         );
       } else {
         const body = smart.body;
+
+        console.log(body);
+        
         if (!body) {
           await new Comment(
             octokit,
