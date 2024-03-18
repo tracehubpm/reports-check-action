@@ -31,9 +31,6 @@ import {ChatGpt} from "./chat-gpt";
 import {Feedback} from "./feedback";
 import {Titled} from "./titled";
 import {Excluded} from "./excluded";
-import {Blob} from "./blob";
-import {Puzzled} from "./puzzled";
-import {Ranged} from "./ranged";
 
 export let github: {
   context: {
@@ -108,7 +105,7 @@ async function run() {
         //   "150-156"
         // ).asText();
         // console.log(puzzle);
-        
+
         const openai = core.getInput("openai_token");
         if (openai) {
           const model = core.getInput("openai_model");
