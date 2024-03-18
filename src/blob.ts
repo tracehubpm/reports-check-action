@@ -1,5 +1,4 @@
 import {Octokit} from "@octokit/rest";
-import {Base64} from "js-base64";
 
 export class Blob {
 
@@ -16,8 +15,8 @@ export class Blob {
     const data = response.data.toString();
     if (data) {
       console.log(JSON.parse(data))
-      const decoded = Base64.decode(JSON.parse(data));
-      console.log(decoded);
+      // const decoded = Base64.decode(JSON.parse(data));
+      // console.log(decoded);
     }
   }
 }
