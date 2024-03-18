@@ -75,7 +75,7 @@ jobs:
         with:
           openai_token: ${{ secrets.OPENAI_TOKEN }}
           github_token: ${{ secrets.GH_TOKEN }}
-          exclude: ["^I have a question*.+$", "^I want to request new feature*.+$"]
+          exclude: '["^I have a question*.+$", "^I want to request new feature*.+$"]'
 ```
 
 ### Quality Evaluation Process
