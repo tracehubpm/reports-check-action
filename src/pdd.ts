@@ -47,6 +47,5 @@ export class Pdd {
       // /https://github.com/tracehubpm/tracehub/blob/8d2aca048e33a5c9d83a49af4246c9ad7fde9998/src/main/java/git/tracehub/tk/TkGitHub.java#L150-L156
     ).asText();
     console.log(puzzle);
-    console.log(puzzle);
   }
 }
