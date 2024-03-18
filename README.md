@@ -54,7 +54,6 @@ check out [all available models](https://deepinfra.com/models/text-generation).
 ### Issues to ignore
 
 You can configure this action to ignore some incoming issues.
-They can be feature requests or just questions.
 To do so, you can use `exclude` and pass to it an array of regular expressions.
 Consider this configuration:
 
@@ -77,6 +76,8 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
           exclude: '["^I have a question*.+$", "^I want to request new feature*.+$"]'
 ```
+
+In this case we are preventing all issues with titles `I have a question...` and `I want to request new feature...` to be analyzed by the reports checker.
 
 ### Quality Evaluation Process
 
