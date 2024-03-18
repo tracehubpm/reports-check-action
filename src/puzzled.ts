@@ -38,6 +38,7 @@ export class Puzzled {
    * Is it puzzled or not.
    */
   value(): boolean {
+    console.log(this.report);
     return new RegExp(
       "The puzzle `*.+` from #\d+ has to be resolved*.+"
     ).test(this.report);
