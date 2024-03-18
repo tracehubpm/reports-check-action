@@ -1,4 +1,5 @@
 import {Octokit} from "@octokit/rest";
+import {Base64} from "js-base64";
 
 export class Blob {
 
@@ -12,7 +13,8 @@ export class Blob {
       ref: 'master', // read default branch
       path: 'src/main/java/git/tracehub/tk/TkGitHub.java' // file path after deterministic parsing
     });
-    console.log(JSON.parse(JSON.stringify(response.data)).content);
+    const encoded = JSON.parse(JSON.stringify(response.data)).content;
+    console.log(Base64.decode(encoded));
     // const data = response.data.toString();
     // if (data) {
     //   console.log(JSON.parse(data))
