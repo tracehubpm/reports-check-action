@@ -39,8 +39,9 @@ export class Puzzled {
    */
   value(): boolean {
     console.log(this.report);
+
     return new RegExp(
-      "The puzzle `*.+` from #\d+ has to be resolved*.+"
+      "/The puzzle `(.+)` from #(\d+) has to be resolved:.+/"
     ).test(this.report);
   }
 }
