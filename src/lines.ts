@@ -29,12 +29,18 @@ export class Lines implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param body Report body
+   * @param path Full path
    */
-  constructor(private readonly body: string | undefined) {
+  constructor(private readonly path: string | undefined) {
   }
 
   value(): string {
-    return "1-5";
+    const lines = this.path?.split("#")[1].split("-");
+    const start = lines!![0].split("L");
+    const end = lines!![1].split("L");
+    console.log(start);
+    console.log(end);
+
+    return start + "-" + end;
   }
 }
