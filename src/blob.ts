@@ -32,8 +32,12 @@ export class Blob implements Scalar<Promise<string[]>> {
   /**
    * Ctor.
    * @param github GitHub
+   * @param issue Issue
    */
-  constructor(private readonly github: Octokit) {
+  constructor(
+    private readonly github: Octokit,
+    private readonly issue: any
+  ) {
   }
 
   /**
@@ -42,14 +46,17 @@ export class Blob implements Scalar<Promise<string[]>> {
   async value(): Promise<string[]> {
     const {data} = await this.github.repos.get(
       {
-        owner: 'tracehubpm',
-        repo: 'tracehub'
+        owner: this.issue.owner,
+        repo: this.issue.repo
       }
     );
-
+    const pattern = /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/(.+)/;
+    const match = this.issue.body.match(pattern);
+    console.log(match[1]);
+    
     const response = await this.github.repos.getContent({
-      owner: 'tracehubpm', // issue.owner
-      repo: 'tracehub', // issue.repo
+      owner: this.issue.owner,
+      repo: this.issue.repo,
       ref: data.default_branch,
       path: 'src/main/java/git/tracehub/tk/TkGitHub.java' // file path after deterministic parsing
     });

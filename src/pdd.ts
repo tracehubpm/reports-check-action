@@ -24,6 +24,7 @@
 import {Ranged} from "./ranged";
 import {Blob} from "./blob";
 import {Octokit} from "@octokit/rest";
+import {blob} from "node:stream/consumers";
 
 /**
  * PDD routine.
@@ -33,8 +34,12 @@ export class Pdd {
   /**
    * Ctor.
    * @param github GitHub
+   * @param issue Issue
    */
-  constructor(private readonly github: Octokit) {
+  constructor(
+    private readonly github: Octokit,
+    private readonly issue: any
+  ) {
   }
 
   /**
@@ -42,7 +47,7 @@ export class Pdd {
    */
   async run() {
     const puzzle = await new Ranged(
-      new Blob(this.github),
+      new Blob(this.github, this.issue),
       "150-156" // from parsed link
       // /https://github.com/tracehubpm/tracehub/blob/8d2aca048e33a5c9d83a49af4246c9ad7fde9998/src/main/java/git/tracehub/tk/TkGitHub.java#L150-L156
     ).value();
