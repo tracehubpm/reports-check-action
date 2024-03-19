@@ -56,25 +56,14 @@ export class Blob implements Scalar<Promise<string[]>> {
     const match = this.body?.match(pattern);
     if (match) {
       const full = match[1];
-      console.log(full);
-      const lines = /(.+?)(?:#L(\d+)-(\d+))?/;
-      const lined = full.match(lines);
-      if (lined) {
-        const filePath = lined[1]; // File path
-        console.log(filePath);
-        if (lined[2] && lined[3]) {
-          const lines = lined[2] + '-' + lined[3]; // Line numbers
-          console.log(lines);
-        } else {
-          console.log('Line numbers not specified');
-        }
-      }
+      const path = full.split("#")[0];
+
 
       const response = await this.github.repos.getContent({
         owner: this.issue.owner,
         repo: this.issue.repo,
         ref: data.default_branch,
-        path: '.trace/project.yml' // file path after deterministic parsing
+        path: path
       });
       const encoded = JSON.parse(JSON.stringify(response.data)).content;
       const decoded = Base64.decode(encoded);
