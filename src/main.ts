@@ -105,40 +105,41 @@ async function run() {
              ${body}`
           );
           await new Pdd(octokit, issue, body).run();
-        }
-        const openai = core.getInput("openai_token");
-        if (openai) {
-          const model = core.getInput("openai_model");
-          await new Feedback(
-            await new ChatGpt(
-              new OpenAI({apiKey: core.getInput("openai_token")}),
-              model
-            ).analyze(
-              new Titled(smart.title, body).asString()
-            ),
-            octokit,
-            issue,
-            smart.user?.login,
-            model
-          ).post();
-        } else if (core.getInput("deepinfra_token")) {
-          const deepinfra = core.getInput("deepinfra_token");
-          const model = core.getInput("deepinfra_model");
-          const answer = await new DeepInfra(deepinfra, model)
-            .analyze(
-              new Titled(smart.title, body).asString()
-            );
-          await new Feedback(
-            answer,
-            octokit,
-            issue,
-            smart.user?.login,
-            model
-          ).post();
         } else {
-          core.setFailed(
-            "Neither `openai_token` nor `deepinfra_token` was not provided"
-          );
+          const openai = core.getInput("openai_token");
+          if (openai) {
+            const model = core.getInput("openai_model");
+            await new Feedback(
+              await new ChatGpt(
+                new OpenAI({apiKey: core.getInput("openai_token")}),
+                model
+              ).analyze(
+                new Titled(smart.title, body).asString()
+              ),
+              octokit,
+              issue,
+              smart.user?.login,
+              model
+            ).post();
+          } else if (core.getInput("deepinfra_token")) {
+            const deepinfra = core.getInput("deepinfra_token");
+            const model = core.getInput("deepinfra_model");
+            const answer = await new DeepInfra(deepinfra, model)
+              .analyze(
+                new Titled(smart.title, body).asString()
+              );
+            await new Feedback(
+              answer,
+              octokit,
+              issue,
+              smart.user?.login,
+              model
+            ).post();
+          } else {
+            core.setFailed(
+              "Neither `openai_token` nor `deepinfra_token` was not provided"
+            );
+          }
         }
       }
     } else {
