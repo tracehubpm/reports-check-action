@@ -23,29 +23,33 @@
  */
 
 /**
- * Ranged blob.
+ * Ranged content.
  */
-export class Ranged {
+export class Ranged implements Scalar<Promise<any>> {
 
   /**
    * Ctor.
-   * @param content Content
+   * @param origin Origin content
    * @param range Range
    */
-  constructor(private readonly content: string[], private readonly range: any) {
+  constructor(
+    private readonly origin: Scalar<Promise<string[]>>,
+    private readonly range: any
+  ) {
   }
 
   /**
    * Blob as text.
    */
-  asText() {
+  async value() {
     let result;
+    const content = await this.origin.value();
     if (this.range.includes('-')) {
       const start = this.range.split("-")[0] - 1;
       const end = this.range.split("-")[1];
-      result = this.content.splice(start, end).join("\r\n");
+      result = content.splice(start, end).join("\r\n");
     } else if (parseInt(this.range)) {
-      result = this.content[parseInt(this.range) - 1];
+      result = content[parseInt(this.range) - 1];
     }
     return result;
   }

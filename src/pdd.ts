@@ -42,10 +42,10 @@ export class Pdd {
    */
   async run() {
     const puzzle = new Ranged(
-      await new Blob(this.github).asText(), // async -> await
+      new Blob(this.github),
       "150-156" // from parsed link
       // /https://github.com/tracehubpm/tracehub/blob/8d2aca048e33a5c9d83a49af4246c9ad7fde9998/src/main/java/git/tracehub/tk/TkGitHub.java#L150-L156
-    ).asText();
+    ).value();
     console.log(puzzle);
   }
 }

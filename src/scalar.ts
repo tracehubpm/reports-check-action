@@ -21,40 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Octokit} from "@octokit/rest";
-import {Base64} from "js-base64";
 
 /**
- * Code tree GitHub blob.
+ * Scalar.
  */
-export class Blob implements Scalar<Promise<string[]>> {
+type Scalar<T> = {
 
   /**
-   * Ctor.
-   * @param github GitHub
+   * Value of it.
    */
-  constructor(private readonly github: Octokit) {
-  }
-
-  /**
-   * As text.
-   */
-  async value(): Promise<string[]> {
-    const {data} = await this.github.repos.get(
-      {
-        owner: 'tracehubpm',
-        repo: 'tracehub'
-      }
-    );
-
-    const response = await this.github.repos.getContent({
-      owner: 'tracehubpm', // issue.owner
-      repo: 'tracehub', // issue.repo
-      ref: data.default_branch,
-      path: 'src/main/java/git/tracehub/tk/TkGitHub.java' // file path after deterministic parsing
-    });
-    const encoded = JSON.parse(JSON.stringify(response.data)).content;
-    const decoded = Base64.decode(encoded);
-    return decoded.split('\n');
-  }
+  value(): T;
 }
