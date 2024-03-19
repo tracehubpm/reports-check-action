@@ -54,15 +54,21 @@ export class Blob implements Scalar<Promise<string[]>> {
     );
     const pattern = /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/(.+)/;
     const match = this.body?.match(pattern);
+    let path: string = "";
     if (match) {
-      console.log(match[1]);
+      const lineless = /(.+?)(?:#L(\d+)-(\d+))?/;
+      const line = match[1];
+      const pathLineMatch = line.match(lineless);
+      if (pathLineMatch) {
+        path = pathLineMatch[1];
+      }
     }
 
     const response = await this.github.repos.getContent({
       owner: this.issue.owner,
       repo: this.issue.repo,
       ref: data.default_branch,
-      path: '.trace/project.yml' // file path after deterministic parsing
+      path: path
     });
     const encoded = JSON.parse(JSON.stringify(response.data)).content;
     const decoded = Base64.decode(encoded);
