@@ -44,15 +44,12 @@ export class Blob implements Scalar<Promise<string[]>> {
    * As text.
    */
   async value(): Promise<string[]> {
-    console.log(this.issue.owner);
-    console.log(this.issue.repo);
     const {data} = await this.github.repos.get(
       {
-        owner: this.issue.owner,
-        repo: this.issue.repo
+        owner: this.issue.repository.owner,
+        repo: this.issue.repository.name
       }
     );
-    console.log(data);
 
     const pattern = /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/(.+)/;
     const match = this.issue.body.match(pattern);
