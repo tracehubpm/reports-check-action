@@ -100,8 +100,7 @@ async function run() {
           throw new Error(reason);
         }
         if (new Puzzled(body).value()) {
-          console.log("pdd");
-          await new Pdd(octokit, smart).run();
+          await new Pdd(octokit, issue, body).run();
         }
         const openai = core.getInput("openai_token");
         if (openai) {

@@ -35,10 +35,12 @@ export class Pdd {
    * Ctor.
    * @param github GitHub
    * @param issue Issue
+   * @param body Report body
    */
   constructor(
     private readonly github: Octokit,
-    private readonly issue: any
+    private readonly issue: Issue,
+    private readonly body: string | undefined
   ) {
   }
 
@@ -47,7 +49,7 @@ export class Pdd {
    */
   async run() {
     const puzzle = await new Ranged(
-      new Blob(this.github, this.issue),
+      new Blob(this.github, this.issue, this.body),
       "1-5" // from parsed link
       // /https://github.com/tracehubpm/tracehub/blob/8d2aca048e33a5c9d83a49af4246c9ad7fde9998/src/main/java/git/tracehub/tk/TkGitHub.java#L150-L156
     ).value();

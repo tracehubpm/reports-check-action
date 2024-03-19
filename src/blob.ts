@@ -33,10 +33,12 @@ export class Blob implements Scalar<Promise<string[]>> {
    * Ctor.
    * @param github GitHub
    * @param issue Issue
+   * @param body Report body
    */
   constructor(
     private readonly github: Octokit,
-    private readonly issue: any
+    private readonly issue: Issue,
+    private readonly body: string | undefined
   ) {
   }
 
@@ -44,17 +46,18 @@ export class Blob implements Scalar<Promise<string[]>> {
    * As text.
    */
   async value(): Promise<string[]> {
-    console.log(this.issue);
     const {data} = await this.github.repos.get(
       {
-        owner: this.issue.repository.owner,
-        repo: this.issue.repository.name
+        owner: this.issue.owner,
+        repo: this.issue.repo
       }
     );
 
     const pattern = /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/(.+)/;
-    const match = this.issue.body.match(pattern);
-    console.log(match[1]);
+    const match = this.body?.match(pattern);
+    if (match) {
+      console.log(match[1]);
+    }
 
     const response = await this.github.repos.getContent({
       owner: this.issue.owner,
