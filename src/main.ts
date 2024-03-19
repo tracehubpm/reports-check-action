@@ -80,9 +80,6 @@ async function run() {
         octokit,
         issue
       ).fetch();
-
-      console.log(smart);
-
       const excluded = JSON.parse(core.getInput("exclude"));
       const skip = new Excluded(excluded, smart).value();
       if (skip) {
@@ -103,6 +100,7 @@ async function run() {
           throw new Error(reason);
         }
         if (new Puzzled(body).value()) {
+          console.log("pdd");
           await new Pdd(octokit, smart).run();
         }
         const openai = core.getInput("openai_token");
