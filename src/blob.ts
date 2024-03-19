@@ -27,7 +27,7 @@ import {Base64} from "js-base64";
 /**
  * Code tree GitHub blob.
  */
-export class Blob implements Scalar<Promise<string[]>> {
+export class Blob implements Scalar<Promise<string[] | undefined>> {
 
   /**
    * Ctor.
@@ -45,7 +45,7 @@ export class Blob implements Scalar<Promise<string[]>> {
   /**
    * As text.
    */
-  async value(): Promise<string[]> {
+  async value(): Promise<string[] | undefined> {
     const {data} = await this.github.repos.get(
       {
         owner: this.issue.owner,
