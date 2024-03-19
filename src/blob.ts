@@ -50,6 +50,8 @@ export class Blob implements Scalar<Promise<string[]>> {
         repo: this.issue.repo
       }
     );
+    console.log(data);
+
     const pattern = /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/(.+)/;
     const match = this.issue.body.match(pattern);
     console.log(match[1]);
