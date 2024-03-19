@@ -80,6 +80,9 @@ async function run() {
         octokit,
         issue
       ).fetch();
+
+      console.log(smart);
+
       const excluded = JSON.parse(core.getInput("exclude"));
       const skip = new Excluded(excluded, smart).value();
       if (skip) {
