@@ -27,7 +27,7 @@ import {Base64} from "js-base64";
 /**
  * Code tree GitHub blob.
  */
-export class Blob implements Scalar<Promise<string[] | undefined>> {
+export class Blob implements Scalar<Promise<string[]>> {
 
   /**
    * Ctor.
@@ -45,7 +45,7 @@ export class Blob implements Scalar<Promise<string[] | undefined>> {
   /**
    * As text.
    */
-  async value(): Promise<string[] | undefined> {
+  async value(): Promise<string[]> {
     const {data} = await this.github.repos.get(
       {
         owner: this.issue.owner,
@@ -57,18 +57,18 @@ export class Blob implements Scalar<Promise<string[] | undefined>> {
     if (match) {
       const full = match[1];
       console.log(full);
-      // const lines = /(.+?)(?:#L(\d+)-(\d+))?/;
-      // const lined = full.match(lines);
-      // if (lined) {
-      //   const filePath = lined[1]; // File path
-      //   console.log(filePath);
-      //   if (lined[2] && lined[3]) {
-      //     const lines = lined[2] + '-' + lined[3]; // Line numbers
-      //     console.log(lines);
-      //   } else {
-      //     console.log('Line numbers not specified');
-      //   }
-      // }
+      const lines = /(.+?)(?:#L(\d+)-(\d+))?/;
+      const lined = full.match(lines);
+      if (lined) {
+        const filePath = lined[1]; // File path
+        console.log(filePath);
+        if (lined[2] && lined[3]) {
+          const lines = lined[2] + '-' + lined[3]; // Line numbers
+          console.log(lines);
+        } else {
+          console.log('Line numbers not specified');
+        }
+      }
 
       const response = await this.github.repos.getContent({
         owner: this.issue.owner,
@@ -79,6 +79,8 @@ export class Blob implements Scalar<Promise<string[] | undefined>> {
       const encoded = JSON.parse(JSON.stringify(response.data)).content;
       const decoded = Base64.decode(encoded);
       return decoded.split('\n');
+    } else {
+      throw new Error(`Asset ${this.body} does not contain puzzle blob, regex ${pattern}`);
     }
   }
 }
