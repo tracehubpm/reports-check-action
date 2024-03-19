@@ -21,45 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Octokit} from "@octokit/rest";
-import {Base64} from "js-base64";
 
 /**
- * Code tree GitHub blob.
+ * Path.
  */
-export class Blob implements Scalar<Promise<string[]>> {
+export class BlobPath implements Scalar<string | undefined> {
 
   /**
    * Ctor.
-   * @param github GitHub
-   * @param issue Issue
-   * @param path Path
+   * @param body Body
    */
-  constructor(
-    private readonly github: Octokit,
-    private readonly issue: Issue,
-    private readonly path: Scalar<string | undefined>
-  ) {
+  constructor(private readonly body: string | undefined) {
   }
 
-  /**
-   * As text.
-   */
-  async value(): Promise<string[]> {
-      const {data} = await this.github.repos.get(
-        {
-          owner: this.issue.owner,
-          repo: this.issue.repo
-        }
+  value(): string | undefined {
+    const pattern = /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/(.+)/;
+    const match = this.body?.match(pattern);
+    let path;
+    if (match) {
+      const full = match[1];
+      path = full.split("#")[0];
+    } else {
+      throw new Error(
+        `Asset body ${this.body} does not contain puzzle blob, regex: ${pattern}`
       );
-      const response = await this.github.repos.getContent({
-        owner: this.issue.owner,
-        repo: this.issue.repo,
-        ref: data.default_branch,
-        path: String(this.path.value())
-      });
-      const encoded = JSON.parse(JSON.stringify(response.data)).content;
-      const decoded = Base64.decode(encoded);
-      return decoded.split('\n');
+    }
+    return path;
   }
 }
