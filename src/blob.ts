@@ -68,16 +68,17 @@ export class Blob implements Scalar<Promise<string[] | undefined>> {
         } else {
           console.log('Line numbers not specified');
         }
-    }
+      }
 
-    const response = await this.github.repos.getContent({
-      owner: this.issue.owner,
-      repo: this.issue.repo,
-      ref: data.default_branch,
-      path: '.trace/project.yml' // file path after deterministic parsing
-    });
-    const encoded = JSON.parse(JSON.stringify(response.data)).content;
-    const decoded = Base64.decode(encoded);
-    return decoded.split('\n');
+      const response = await this.github.repos.getContent({
+        owner: this.issue.owner,
+        repo: this.issue.repo,
+        ref: data.default_branch,
+        path: '.trace/project.yml' // file path after deterministic parsing
+      });
+      const encoded = JSON.parse(JSON.stringify(response.data)).content;
+      const decoded = Base64.decode(encoded);
+      return decoded.split('\n');
+    }
   }
 }
