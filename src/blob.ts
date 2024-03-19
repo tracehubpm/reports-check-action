@@ -52,12 +52,13 @@ export class Blob implements Scalar<Promise<string[]>> {
         repo: this.issue.repo
       }
     );
-
-    const pattern = /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/(.+)/;
+    const pattern = /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/(.+?)(?:#L(\d+)-(\d+))?/;
     const match = this.body?.match(pattern);
     if (match) {
       console.log(match[1]);
+      console.log(match[2] + '-' + match[3]);
     }
+
 
     const response = await this.github.repos.getContent({
       owner: this.issue.owner,
