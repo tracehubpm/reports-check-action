@@ -43,13 +43,14 @@ export class Ranged implements Scalar<Promise<any>> {
    */
   async value() {
     const content = await this.origin.value();
+    const value = this.range.value();
     let result;
-    if (this.range.includes('-')) {
-      const start = this.range.split("-")[0] - 1;
-      const end = this.range.split("-")[1];
+    if (value.includes('-')) {
+      const start = value.split("-")[0] - 1;
+      const end = value.split("-")[1];
       result = content.splice(start, end).join("\r\n");
-    } else if (parseInt(this.range)) {
-      result = content[parseInt(this.range) - 1];
+    } else if (parseInt(value)) {
+      result = content[parseInt(value) - 1];
     }
     return result;
   }

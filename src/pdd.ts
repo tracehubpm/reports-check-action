@@ -25,6 +25,8 @@ import {Ranged} from "./ranged";
 import {Blob} from "./blob";
 import {Octokit} from "@octokit/rest";
 import {BlobPath} from "./blob-path";
+import {Lines} from "./lines";
+import {HashSplit} from "./hash-split";
 
 /**
  * PDD routine.
@@ -48,9 +50,10 @@ export class Pdd {
    * Run it.
    */
   async run() {
+    const path = new BlobPath(this.body).value();
     const puzzle = await new Ranged(
-      new Blob(this.github, this.issue, new BlobPath(this.body)),
-      "1-5"
+      new Blob(this.github, this.issue, new HashSplit(path)),
+      new Lines(path)
     ).value();
     console.log(puzzle);
   }

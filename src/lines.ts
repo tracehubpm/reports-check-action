@@ -23,29 +23,18 @@
  */
 
 /**
- * Path.
+ * Lines.
  */
-export class BlobPath implements Scalar<string | undefined> {
+export class Lines implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param body Body
+   * @param body Report body
    */
   constructor(private readonly body: string | undefined) {
   }
 
-  value(): string | undefined {
-    const pattern = /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/(.+)/;
-    const match = this.body?.match(pattern);
-    let path;
-    if (match) {
-      path = match[1];
-      // path = full.split("#")[0];
-    } else {
-      throw new Error(
-        `Asset body ${this.body} does not contain puzzle blob, regex: ${pattern}`
-      );
-    }
-    return path;
+  value(): string {
+    return "1-5";
   }
 }
