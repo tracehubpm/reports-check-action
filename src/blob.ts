@@ -57,6 +57,17 @@ export class Blob implements Scalar<Promise<string[]>> {
     if (match) {
       const full = match[1];
       console.log(full);
+      const lines = /(.+?)(?:#L(\d+)-(\d+))?/;
+      const lined = full.match(lines);
+      if (lined) {
+        const filePath = lined[1]; // File path
+        console.log(filePath);
+        if (lined[2] && lined[3]) {
+          const lines = lined[2] + '-' + lined[3]; // Line numbers
+          console.log(lines);
+        } else {
+          console.log('Line numbers not specified');
+        }
     }
 
     const response = await this.github.repos.getContent({
