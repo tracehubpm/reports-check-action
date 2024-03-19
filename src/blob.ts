@@ -44,6 +44,7 @@ export class Blob implements Scalar<Promise<string[]>> {
    * As text.
    */
   async value(): Promise<string[]> {
+    console.log("branch");
     const {data} = await this.github.repos.get(
       {
         owner: this.issue.owner,
