@@ -38,9 +38,6 @@ export class Lines implements Scalar<string> {
     const lines = this.path?.split("#")[1].split("-");
     const start = lines!![0].split("L")[1];
     const end = lines!![1].split("L")[1];
-    console.log(start);
-    console.log(end);
-
     return start + "-" + end;
   }
 }
