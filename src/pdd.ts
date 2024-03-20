@@ -54,11 +54,11 @@ export class Pdd {
   async run() {
     const path = new BlobPath(this.body).value();
     const full = new HashSplit(path);
-    const content = new Blob(this.github, this.issue, full);
+    const content = await new Blob(this.github, this.issue, full).value();
     const puzzle = await new Ranged(content, new Lines(path)).value();
 
     console.log(full.value());
-    console.log(content.value());
+    console.log(content);
     console.log(puzzle);
 
     // await new Feedback(
