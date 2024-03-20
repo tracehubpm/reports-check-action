@@ -57,8 +57,8 @@ export class Pdd {
     const content = new Blob(this.github, this.issue, full);
     const puzzle = await new Ranged(content, new Lines(path)).value();
 
-    console.log(full);
-    console.log(content);
+    console.log(full.value());
+    console.log(content.value());
     console.log(puzzle);
 
     // await new Feedback(
