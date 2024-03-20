@@ -35,7 +35,6 @@ import {Puzzled} from "./puzzled";
 import {Pdd} from "./pdd";
 import {QualityExpert} from "./quality-expert";
 import {UserPrompt} from "./user-prompt";
-import {PddPrompt} from "./pdd-prompt";
 
 export let github: {
   context: {
