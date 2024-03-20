@@ -60,6 +60,9 @@ export class Blob implements Scalar<Promise<string[]>> {
       });
       const encoded = JSON.parse(JSON.stringify(response.data)).content;
       const decoded = Base64.decode(encoded);
+
+      console.log(decoded);
+
       return decoded.split('\n');
   }
 }
