@@ -21,45 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Octokit} from "@octokit/rest";
-import {Base64} from "js-base64";
 
 /**
- * Code tree GitHub blob.
+ * Text in a split way.
  */
-export class Blob implements Scalar<Promise<string>> {
+export class Split implements Scalar<string[]> {
 
   /**
    * Ctor.
-   * @param github GitHub
-   * @param issue Issue
-   * @param path Path
+   * @param text Text to split
    */
-  constructor(
-    private readonly github: Octokit,
-    private readonly issue: Issue,
-    private readonly path: Scalar<string | undefined>
-  ) {
+  constructor(private readonly text: string) {
   }
 
-  /**
-   * As text.
-   */
-  async value(): Promise<string> {
-      const {data} = await this.github.repos.get(
-        {
-          owner: this.issue.owner,
-          repo: this.issue.repo
-        }
-      );
-      const response = await this.github.repos.getContent({
-        owner: this.issue.owner,
-        repo: this.issue.repo,
-        ref: data.default_branch,
-        path: String(this.path.value())
-      });
-      return Base64.decode(
-        JSON.parse(JSON.stringify(response.data)).content
-      );
+  value(): string[] {
+    return this.text.split('\n');
   }
 }

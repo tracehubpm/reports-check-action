@@ -27,6 +27,7 @@ import {Octokit} from "@octokit/rest";
 import {BlobPath} from "./blob-path";
 import {Lines} from "./lines";
 import {HashSplit} from "./hash-split";
+import {Split} from "./split";
 
 /**
  * PDD routine.
@@ -55,7 +56,7 @@ export class Pdd {
     const path = new BlobPath(this.body).value();
     const full = new HashSplit(path);
     const content = await new Blob(this.github, this.issue, full).value();
-    const puzzle = await new Ranged(content, new Lines(path)).value();
+    const puzzle = await new Ranged(new Split(content), new Lines(path)).value();
 
     console.log(full.value());
     console.log(content);
