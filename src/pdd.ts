@@ -28,6 +28,9 @@ import {BlobPath} from "./blob-path";
 import {Lines} from "./lines";
 import {HashSplit} from "./hash-split";
 import {Split} from "./split";
+import {Feedback} from "./feedback";
+import {PddModel} from "./pdd-model";
+import {PddPrompt} from "./pdd-prompt";
 
 /**
  * PDD routine.
@@ -39,13 +42,17 @@ export class Pdd {
    * @param github GitHub
    * @param issue Issue
    * @param body Report body
+   * @param username Username
    * @param type Model
+   * @param pair Token model pair
    */
   constructor(
     private readonly github: Octokit,
     private readonly issue: Issue,
     private readonly body: string | undefined,
-    private readonly type: string
+    private readonly username: string,
+    private readonly type: string,
+    private readonly pair: TokenModel
   ) {
   }
 
@@ -57,22 +64,24 @@ export class Pdd {
     const full = new HashSplit(path);
     const content = await new Blob(this.github, this.issue, full).value();
     const puzzle = await new Ranged(new Split(content), new Lines(path)).value();
-
-    console.log(full.value());
-    console.log(content);
-    console.log(puzzle);
-
-    // await new Feedback(
-    //   await new PddModel(
-    //     this.type,
-    //     "token",
-    //     "model",
-    //     this.prompt
-    //   ).analyze(),
-    //   this.github,
-    //   this.issue,
-    //   "username",
-    //   "model"
-    // ).post();
+    console.log(`Full path: ${full.value()}`);
+    console.log(`Content: ${content}`);
+    console.log(`Puzzle: ${puzzle}`);
+    await new Feedback(
+      await new PddModel(
+        this.type,
+        this.pair.token,
+        this.pair.model,
+        new PddPrompt(
+          puzzle,
+          full.value()!!,
+          content
+        )
+      ).analyze(),
+      this.github,
+      this.issue,
+      this.username,
+      this.pair.model
+    ).post();
   }
 }

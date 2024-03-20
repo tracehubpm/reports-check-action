@@ -118,7 +118,26 @@ async function run() {
             `Puzzle found:
              ${body}`
           );
-          await new Pdd(octokit, issue, body, type).run();
+          let token = "";
+          let model = "";
+          if ("openai" === type) {
+            token = openai;
+            model = core.getInput("openai_model");
+          } else if ("deepinfra" === type) {
+            token = deep;
+            model = core.getInput("deepinfra_model");
+          }
+          await new Pdd(
+            octokit,
+            issue,
+            body,
+            smart.user?.login!!,
+            type,
+            {
+              token: token,
+              model: model
+            }
+          ).run();
         } else {
           if ("openai" === type) {
             const model = core.getInput("openai_model");
