@@ -40,7 +40,6 @@ export class BlobPath implements Scalar<string | undefined> {
     let path;
     if (match) {
       path = match[1];
-      // path = full.split("#")[0];
     } else {
       throw new Error(
         `Asset body ${this.body} does not contain puzzle blob, regex: ${pattern}`

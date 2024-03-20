@@ -34,29 +34,31 @@ export class ChatGpt implements Model {
    * Ctor.
    * @param open Open AI
    * @param model Model name
+   * @param system System prompt
+   * @param prompt User prompt
    */
   constructor(
     private readonly open: OpenAI,
-    private readonly model: string
+    private readonly model: string,
+    private readonly system: Scalar<string>,
+    private readonly prompt: Scalar<string>
   ) {
     this.open = open;
     this.model = model;
   }
 
-  async analyze(report: string | null | undefined) {
+  async analyze() {
     const response = await this.open.chat.completions.create({
       model: this.model,
       temperature: 0.5,
       messages: [
         {
           role: "system",
-          content: new QualityExpert().value()
+          content: this.system.value()
         },
         {
           role: "user",
-          content: new UserPrompt(
-            report
-          ).value()
+          content: this.prompt.value()
         }
       ]
     });

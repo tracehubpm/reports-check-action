@@ -33,6 +33,9 @@ import {Titled} from "./titled";
 import {Excluded} from "./excluded";
 import {Puzzled} from "./puzzled";
 import {Pdd} from "./pdd";
+import {QualityExpert} from "./quality-expert";
+import {UserPrompt} from "./user-prompt";
+import {PddPrompt} from "./pdd-prompt";
 
 export let github: {
   context: {
@@ -70,6 +73,18 @@ async function run() {
     if (!ghToken) {
       core.setFailed("`github_token` was not provided");
     }
+    const openai = core.getInput("openai_token");
+    const deep = core.getInput("deepinfra_token");
+    let type;
+    if (!openai) {
+      type = "deepinfra";
+    } else if (!deep) {
+      type = "openai";
+    } else {
+      throw new Error(
+        "Neither `openai_token` nor `deepinfra_token` was not provided"
+      );
+    }
     const issue = github.context.issue;
     if (issue) {
       console.log(`Found new issue: #${issue.number}`);
@@ -104,30 +119,34 @@ async function run() {
             `Puzzle found:
              ${body}`
           );
-          await new Pdd(octokit, issue, body).run();
+          await new Pdd(octokit, issue, body, type).run();
         } else {
-          const openai = core.getInput("openai_token");
-          if (openai) {
+          if ("openai" === type) {
             const model = core.getInput("openai_model");
             await new Feedback(
               await new ChatGpt(
-                new OpenAI({apiKey: core.getInput("openai_token")}),
-                model
-              ).analyze(
-                new Titled(smart.title, body).asString()
-              ),
+                new OpenAI({apiKey: openai}),
+                model,
+                new QualityExpert(),
+                new UserPrompt(
+                  new Titled(smart.title, body).asString()
+                )
+              ).analyze(),
               octokit,
               issue,
               smart.user?.login,
               model
             ).post();
-          } else if (core.getInput("deepinfra_token")) {
-            const deepinfra = core.getInput("deepinfra_token");
+          } else if ("deepinfra" === type) {
             const model = core.getInput("deepinfra_model");
-            const answer = await new DeepInfra(deepinfra, model)
-              .analyze(
+            const answer = await new DeepInfra(
+              deep,
+              model,
+              new QualityExpert(),
+              new UserPrompt(
                 new Titled(smart.title, body).asString()
-              );
+              )
+            ).analyze();
             await new Feedback(
               answer,
               octokit,
@@ -135,10 +154,6 @@ async function run() {
               smart.user?.login,
               model
             ).post();
-          } else {
-            core.setFailed(
-              "Neither `openai_token` nor `deepinfra_token` was not provided"
-            );
           }
         }
       }

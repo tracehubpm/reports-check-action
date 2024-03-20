@@ -28,9 +28,8 @@
 interface Model {
 
   /**
-   * Analyze report.
-   * @param report Bug report to analyze
+   * Analyze.
    * @returns Promise<any>
    */
-  analyze(report: string | undefined): Promise<any>;
+  analyze(): Promise<any>;
 }

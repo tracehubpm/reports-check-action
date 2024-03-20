@@ -38,11 +38,13 @@ export class Pdd {
    * @param github GitHub
    * @param issue Issue
    * @param body Report body
+   * @param type Model
    */
   constructor(
     private readonly github: Octokit,
     private readonly issue: Issue,
-    private readonly body: string | undefined
+    private readonly body: string | undefined,
+    private readonly type: string
   ) {
   }
 
@@ -51,10 +53,25 @@ export class Pdd {
    */
   async run() {
     const path = new BlobPath(this.body).value();
-    const puzzle = await new Ranged(
-      new Blob(this.github, this.issue, new HashSplit(path)),
-      new Lines(path)
-    ).value();
+    const full = new HashSplit(path);
+    const content = new Blob(this.github, this.issue, full);
+    const puzzle = await new Ranged(content, new Lines(path)).value();
+
+    console.log(full);
+    console.log(content);
     console.log(puzzle);
+
+    // await new Feedback(
+    //   await new PddModel(
+    //     this.type,
+    //     "token",
+    //     "model",
+    //     this.prompt
+    //   ).analyze(),
+    //   this.github,
+    //   this.issue,
+    //   "username",
+    //   "model"
+    // ).post();
   }
 }

@@ -21,8 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {QualityExpert} from "./quality-expert";
-import {UserPrompt} from "./user-prompt";
 
 /**
  * Deep Infra.
@@ -33,16 +31,20 @@ export class DeepInfra implements Model {
    * Ctor.
    * @param token Token
    * @param model Model
+   * @param system System prompt
+   * @param prompt User prompt
    */
   constructor(
     private readonly token: string,
-    private readonly model: string
+    private readonly model: string,
+    private readonly system: Scalar<string>,
+    private readonly prompt: Scalar<string>
   ) {
     this.token = token;
     this.model = model;
   }
 
-  async analyze(report: string | null | undefined) {
+  async analyze() {
     const response = await fetch(
       'https://api.deepinfra.com/v1/openai/chat/completions', {
         method: 'POST',
@@ -52,13 +54,14 @@ export class DeepInfra implements Model {
           messages: [
             {
               role: "system",
-              content: new QualityExpert().value()
+              content: this.system.value()
             },
             {
               role: "user",
-              content: new UserPrompt(
-                report
-              ).value()
+              content: this.prompt.value()
+              // content: new UserPrompt(
+              //   report
+              // ).value()
             }
           ],
         }),
