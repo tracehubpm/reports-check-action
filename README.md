@@ -79,6 +79,34 @@ jobs:
 
 In this case we are preventing all issues with titles `I have a question...` and `I want to request new feature...` to be analyzed by the reports checker.
 
+### Puzzle (PDD) Analysis
+
+This action supports analysis not only for issues created by humans, but also for puzzles, a.k.a `todo` in your code. 
+[Puzzle Driven Development (2010)](https://www.yegor256.com/2010/03/04/pdd.html), [12/840,306](https://patents.google.com/patent/US20120023476) was suggested as a novel way for managing issues in software development.
+Read how it works:
+* [PDD in Action (2017)](https://www.yegor256.com/2017/04/05/pdd-in-action.html)
+* [A Disabled Test In Lieu of a Bug Report (2023)](https://www.yegor256.com/2023/07/25/contribute-disabled-tests.html)
+
+Issue is treated as puzzle if it satisfies the following regex:
+
+```regexp
+The puzzle `(.+)` from #(\d+) has to be resolved:.+
+```
+
+Then we are parsing the issue to find a tree path where puzzle is hidden.
+
+This one
+```text
+https://github.com/tracehubpm/tracehub/blob/8d2aca048e33a5c9d83a49af4246c9ad7fde9998/src/main/java/SnippetTestCase.java#L61-L66
+```
+
+Turns into 3 elements:
+* file path (`src/main/java/SnippetTestCase.java`)
+* `SnippetTestCase.java` source code
+* puzzle, located in range of `61` and `66` lines
+
+After all of this done, we provide it to LLM and ask for quality problems.
+
 ### Quality Evaluation Process
 
 Each bug report goes through quality evaluation process, where
