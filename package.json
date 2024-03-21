@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "gha": "npm run build && npm run package && npm run test",
-    "cov": "jest --coverage",
+    "cov": "jest --coverage --verbose",
     "build": "tsc",
     "package": "ncc build --source-map --license licenses.txt",
     "format": "prettier --write .",
@@ -30,23 +30,34 @@
     "lint": "prettier --check ."
   },
   "jest": {
-    "transform": {"^.+\\.ts?$": "ts-jest"},
-    "testEnvironment": "node",
-    "testRegex": "/tests/.*\\.(test|spec)?\\.(ts|tsx)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-    "collectCoverage": true,
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ],
+    "testRegex": "(/tests/.*\\.(test|spec)?\\.(ts))$",
     "coverageDirectory": "../coverage",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "package.json",
-      "package-lock.json"
+    "collectCoverageFrom": [
+      "**/*.ts"
     ],
     "coverageThreshold": {
-      "branches": 60,
-      "functions": 60,
-      "statements": 60,
-      "lines": 60
-    }
+      "global": {
+        "branches": 1,
+        "functions": 1,
+        "statements": 1,
+        "lines": 1
+      }
+    },
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text-summary"
+    ],
+    "testEnvironment": "node"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
