@@ -22,8 +22,7 @@ jobs:
       - name: Install and Test
         run: | 
           npm install
-          npm run build
-          npm run package
+          npm run gha
   build:
     runs-on: ubuntu-20.04
     steps:
@@ -35,8 +34,7 @@ jobs:
       - name: Install and Build
         run: |
           npm install
-          npm run build
-          npm run package
+          npm run gha
           npm install --production
           ls node_modules
       - name: Upload Artifacts
