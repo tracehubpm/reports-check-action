@@ -81,7 +81,7 @@ In this case we are preventing all issues with titles `I have a question...` and
 
 ### Puzzle (PDD) Analysis
 
-This action supports analysis not only for issues created by humans, but also for puzzles, a.k.a `todo` in your code. 
+This action supports analysis not only for issues created manually, but also for puzzles, a.k.a `todo` in your code. 
 [Puzzle Driven Development (2010)](https://www.yegor256.com/2010/03/04/pdd.html), [12/840,306](https://patents.google.com/patent/US20120023476) was suggested as a novel way for managing issues in software development.
 Read how it works:
 * [PDD in Action (2017)](https://www.yegor256.com/2017/04/05/pdd-in-action.html)
