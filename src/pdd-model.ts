@@ -60,7 +60,8 @@ export class PddModel implements Model {
         this.token,
         this.model,
         new TodoReviewer(),
-        this.prompt
+        this.prompt,
+        0.7
       ).analyze();
     }
     return answer;

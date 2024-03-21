@@ -33,12 +33,14 @@ export class DeepInfra implements Model {
    * @param model Model
    * @param system System prompt
    * @param prompt User prompt
+   * @param temperature Temperature
    */
   constructor(
     private readonly token: string,
     private readonly model: string,
     private readonly system: Scalar<string>,
-    private readonly prompt: Scalar<string>
+    private readonly prompt: Scalar<string>,
+    private readonly temperature: number
   ) {
     this.token = token;
     this.model = model;
@@ -50,7 +52,7 @@ export class DeepInfra implements Model {
         method: 'POST',
         body: JSON.stringify({
           model: this.model,
-          temperature: 0.5,
+          temperature: this.temperature,
           messages: [
             {
               role: "system",
@@ -59,9 +61,6 @@ export class DeepInfra implements Model {
             {
               role: "user",
               content: this.prompt.value()
-              // content: new UserPrompt(
-              //   report
-              // ).value()
             }
           ],
         }),

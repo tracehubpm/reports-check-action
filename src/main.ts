@@ -163,7 +163,8 @@ async function run() {
               new QualityExpert(),
               new UserPrompt(
                 new Titled(smart.title, body).asString()
-              )
+              ),
+              0.5
             ).analyze();
             await new Feedback(
               answer,
