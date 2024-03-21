@@ -57,10 +57,12 @@ export class PddPrompt implements Scalar<string> {
     * <>
     * <>
     Todo snippet:
-    ${this.snippet}
+    
+${this.snippet}
     
     This todo is located inside ${this.path}:
-    ${this.content}
+    
+${this.content}
     `;
   }
 }
