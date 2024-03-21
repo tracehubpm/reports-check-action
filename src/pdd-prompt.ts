@@ -47,10 +47,9 @@ export class PddPrompt implements Scalar<string> {
     Ignore any other information such as LICENSE, other todos and irrelevant to the outlined todo code.
     The todo message must deliver a clear state of reason of what needs to be done by other codebase contributor.
     Please review it and generate a summary about quality issues related to this todo message formulation.
-    The summary must include only star (*), no indent bullet points with quality problems that only this message has, and context tips on how to fix them, so author of this report can improve it.
-    If you see that message is clear, then just say "Quality is awesome".
-    You must generate either summary with quality problems that related to this todo or just say "Quality is awesome", nothing in middle.
+    The summary must include only star (*), no indent bullet points with quality problems that only this todo message has, and context tips on how to fix them, so author of this report can improve it.
     Don't generate any other information.
+    If you see that message is clear, then just say "Quality is awesome".
     Please strictly adhere to the summary example.
     Summary example:
     * <>
