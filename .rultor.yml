@@ -3,7 +3,7 @@ architect:
 merge:
   script: |
     npm install
-    npm run build
+    npm run gha
 release:
   script: |-
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
