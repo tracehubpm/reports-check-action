@@ -56,6 +56,7 @@ export class PddModel implements Model {
         this.prompt
       ).analyze();
     } else {
+      console.log(this.prompt);
       answer = await new DeepInfra(
         this.token,
         this.model,
