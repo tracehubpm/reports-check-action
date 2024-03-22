@@ -73,7 +73,6 @@ async function run() {
       core.setFailed("`github_token` was not provided");
     }
     const openai = core.getInput("openai_token");
-    console.log(openai);
     const deep = core.getInput("deepinfra_token");
     let type;
     if (!openai && deep) {
