@@ -120,6 +120,7 @@ async function run() {
           );
           let token = "";
           let model = "";
+          console.log("empty");
           if ("openai" === type) {
             console.log("OPENAI");
             token = openai;
