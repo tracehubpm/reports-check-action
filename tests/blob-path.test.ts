@@ -21,37 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Covered} from "./covered";
+import {BlobPath} from "../src/blob-path";
 
 /**
- * With summary.
+ * Test cases for BlobPath.
  */
-export class WithSummary {
+describe("Test cases for BlobPath", () => {
+  test("parses blob path from text", () => {
+    expect(
+      new BlobPath(
+        `
+The puzzle \`148-2e63b3d7\` from #148 has to be resolved:
 
-  /**
-   * Ctor.
-   * @param origin Origin
-   * @param summary Summary
-   * @param model LLM Model
-   */
-  constructor(
-    private readonly origin: Covered,
-    private readonly summary: string | undefined,
-    private readonly model: string
-  ) {
-  }
+https://github.com/tracehubpm/tracehub/blob/8d2aca048e33a5c9d83a49af4246c9ad7fde9998/parser.ts#L1-L2
 
-  /**
-   * Print with summary attached.
-   */
-  value(): string {
-    const remove = "   ";
-    return this.origin.value() +
+The puzzle was created by Aliaksei Bialiauski on 12-Feb-24. 
+
+Estimate: 25 minutes,  role: DEV.
+ 
+If you have any technical questions, don't ask me, submit new tickets instead. The task will be \\"done\\" when the problem is fixed and the text of the puzzle is _removed_ from the source code. Here is more about [PDD](http://www.yegor256.com/2009/03/04/pdd.html) and [about me](http://www.yegor256.com/2017/04/05/pdd-in-action.html). 
 `
-${this.summary?.split('\n').map(line => line.replace(new RegExp(`${remove}`), '')).join('\n')}
-
-Please fix the bug report in order it to get resolved faster.
-Analyzed with \`${this.model}\`
-`;
-  }
-}
+      ).value()
+    ).toEqual("parser.ts#L1-L2");
+  });
+});

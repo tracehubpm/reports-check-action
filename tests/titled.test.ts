@@ -21,37 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Covered} from "./covered";
+import {Titled} from "../src/titled";
 
 /**
- * With summary.
+ * Test cases for Titled.
  */
-export class WithSummary {
-
-  /**
-   * Ctor.
-   * @param origin Origin
-   * @param summary Summary
-   * @param model LLM Model
-   */
-  constructor(
-    private readonly origin: Covered,
-    private readonly summary: string | undefined,
-    private readonly model: string
-  ) {
-  }
-
-  /**
-   * Print with summary attached.
-   */
-  value(): string {
-    const remove = "   ";
-    return this.origin.value() +
+describe('Test cases for Titled', () => {
+  test("returns composed bug report", () => {
+    const title = "some title";
+    const body = "some body";
+    const titled = new Titled(title, body).asString();
+    expect(titled).toBe(
 `
-${this.summary?.split('\n').map(line => line.replace(new RegExp(`${remove}`), '')).join('\n')}
-
-Please fix the bug report in order it to get resolved faster.
-Analyzed with \`${this.model}\`
-`;
-  }
-}
+    ${title}
+    ${body}
+    `
+    )
+  });
+});

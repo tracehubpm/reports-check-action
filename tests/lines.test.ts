@@ -21,37 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Covered} from "./covered";
+import {Lines} from "../src/lines";
 
 /**
- * With summary.
+ * Test cases for Lines.
  */
-export class WithSummary {
-
-  /**
-   * Ctor.
-   * @param origin Origin
-   * @param summary Summary
-   * @param model LLM Model
-   */
-  constructor(
-    private readonly origin: Covered,
-    private readonly summary: string | undefined,
-    private readonly model: string
-  ) {
-  }
-
-  /**
-   * Print with summary attached.
-   */
-  value(): string {
-    const remove = "   ";
-    return this.origin.value() +
-`
-${this.summary?.split('\n').map(line => line.replace(new RegExp(`${remove}`), '')).join('\n')}
-
-Please fix the bug report in order it to get resolved faster.
-Analyzed with \`${this.model}\`
-`;
-  }
-}
+describe("Test cases for Lines", () => {
+  test("parses lines from full path", () => {
+    expect(
+      new Lines(
+        "src/main/java/SnippetTestCase.java#L61-L66"
+      ).value()
+    ).toEqual(
+      "61-66"
+    )
+  });
+});

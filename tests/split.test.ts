@@ -21,37 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Covered} from "./covered";
+import {Split} from "../src/split";
 
 /**
- * With summary.
+ * Test cases for Split.
  */
-export class WithSummary {
-
-  /**
-   * Ctor.
-   * @param origin Origin
-   * @param summary Summary
-   * @param model LLM Model
-   */
-  constructor(
-    private readonly origin: Covered,
-    private readonly summary: string | undefined,
-    private readonly model: string
-  ) {
-  }
-
-  /**
-   * Print with summary attached.
-   */
-  value(): string {
-    const remove = "   ";
-    return this.origin.value() +
-`
-${this.summary?.split('\n').map(line => line.replace(new RegExp(`${remove}`), '')).join('\n')}
-
-Please fix the bug report in order it to get resolved faster.
-Analyzed with \`${this.model}\`
-`;
-  }
-}
+describe("Test cases for Split", () => {
+  test("splits text into array of strings", () => {
+    expect(
+      new Split(
+        "some big text\nbla bla bla"
+      ).value()
+    ).toEqual(
+      [
+        "some big text",
+        "bla bla bla"
+      ]
+    )
+  });
+});
