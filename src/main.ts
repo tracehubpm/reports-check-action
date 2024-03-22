@@ -121,9 +121,11 @@ async function run() {
           let token = "";
           let model = "";
           if ("openai" === type) {
+            console.log("OPENAI");
             token = openai;
             model = core.getInput("openai_model");
           } else if ("deepinfra" === type) {
+            console.log("DEEP");
             token = deep;
             model = core.getInput("deepinfra_model");
           }
