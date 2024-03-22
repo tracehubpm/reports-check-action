@@ -75,9 +75,9 @@ async function run() {
     const openai = core.getInput("openai_token");
     const deep = core.getInput("deepinfra_token");
     let type;
-    if (!openai) {
+    if (!openai && deep) {
       type = "deepinfra";
-    } else if (!deep) {
+    } else if (!deep && openai) {
       type = "openai";
     } else {
       throw new Error(
