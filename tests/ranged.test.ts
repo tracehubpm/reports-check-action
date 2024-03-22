@@ -6,6 +6,9 @@ import {Lines} from "../src/lines";
  * Test cases for BlobPath.
  * @todo #3:30min Enable "ranges the snippet" test.
  *  Its broken for now, probably due inability to properly read the `program` content.
+ *  Besides we must note that the expected todo
+ *  <a href="https://github.com/tracehubpm/reports-check-action/actions/runs/8389464801/job/22975734145?pr=61"
+ *  can be detected> as "puzzle duplicate on CI environment".
  *  We should fix it and enable the test. Don't forget to remove this puzzle.
  */
 describe("Test cases for Ranged", () => {
@@ -170,7 +173,7 @@ final class SnippetTestCase {
       ).value()
     ).toBe(
       `
- * @todo #2718:30min One snippets is disabled now, in
+ * #2718:30min One snippets is disabled now, in
  *  the "src/test/resources/snippets/*.yaml". It needs
  *  "sprintf" object in objectionary (fibo.yaml).
  *  When "sprintf" is in objectionary again - we need to enable
