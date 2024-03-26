@@ -51,6 +51,7 @@ These are the parameters you can use/override:
 * `deepinfra_token`: Deep Infra API key, you can obtain it [here](https://deepinfra.com/dash/api_keys).
 * `deepinfra_model`: Deep Infra API model, the default one is `Phind/Phind-CodeLlama-34B-v2`,
 check out [all available models](https://deepinfra.com/models/text-generation).
+* `exclude`: Issue titles to exclude from checking.
 
 ### Issues to ignore
 
