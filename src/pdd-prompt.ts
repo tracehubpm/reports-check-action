@@ -45,6 +45,7 @@ export class PddPrompt implements Scalar<string> {
     Take a look at this code snippet.
     Pay attention only to the code to which outlined 'todo' connected with and the outlined todo formulation.
     Ignore any other information such as LICENSE, other todos and irrelevant to the outlined todo code.
+    Please ignore '@todo #?:?min' syntax, pay attention only to the message itself.
     The todo message must deliver a clear state of reason of what needs to be done by other codebase contributor.
     Please review it and generate a summary about quality issues related to this todo message formulation.
     The summary must include only star (*), no indent bullet points with quality problems that only this todo message has, and context tips on how to fix them, so author of this report can improve it.
