@@ -45,6 +45,7 @@ export class UserPrompt {
     return `
     Please strictly review the following bug report and generate a summary with quality problems related to this report formulation.
     The summary must include only star (*), no indent bullet points with quality problems that only this report has and tips on how to fix them, so author of this report can improve it.
+    Number of suggestions must be 3 at max.
     Don't suggest how to fix the bug, instead focus only on problems with bug report formulation.
     If you see that bug report don't have quality problems with it's formulation, then just say "Quality is awesome".
     Don't generate any other info.
