@@ -111,12 +111,42 @@ After all of this done, we provide it to LLM and ask for quality problems.
 
 ### Quality Evaluation Process
 
-Each bug report goes through quality evaluation process, where
-your report will be assessed by those configured criteria using `.rules.yml` placed in the root of the repo:
+If your bug report does not look clean, this action will automatically
+formulate the list of _top 3 most_ suggestions on how to improve the bug
+report to its author.
 
-TBD..
+Technically, the process internals look like this:
 
-If your bug report does not match these criteria, it will be **rejected automatically** by robot.
+![evaluation.svg](/doc/evaluation.svg)
+
+problems.json:
+```json
+[
+  "The bug report title is not descriptive enough. It only mentions \"diamond operator check gives false positive\" but doesn't specify where or in what context. A more descriptive title would be \"False positive on diamond operator check in MapOf class\"",
+  "The report lacks essential details such as the software version, the operating system, and the development environment. Including these details can help to reproduce the bug and understand if it's a localized issue or a more general one.",
+  "The report is missing steps to reproduce the bug. Even though the code snippet is provided, it would be helpful to outline the steps leading to the issue.",
+  "The report does not include any error messages or logs. These can provide valuable context and clues about what is causing the bug",
+  "The author should avoid using phrases like \"Can we do something about this?\" and instead use a more formal language, such as \"Suggesting to review the DiamondOperatorCheck for potential improvements\"."
+]
+```
+
+top.json:
+```json
+[
+  "The bug report title is not descriptive enough. It only mentions \"diamond operator check gives false positive\" but doesn't specify where or in what context. A more descriptive title would be \"False positive on diamond operator check in MapOf class\"",
+  "The report does not include any error messages or logs. These can provide valuable context and clues about what is causing the bug",
+  "The report does not include any error messages or logs. These can provide valuable context and clues about what is causing the bug"
+]
+```
+
+suggestions.json:
+```json
+[
+  "Improve the title of the bug report: Title: \"False positive on diamond operator check for MapOf class\"",
+  "Include the specific error messages and logs: Error message from PMD: \"UseDiamondOperator: Use Diamond Operator\" Error message from DiamondOperatorCheck: \"DiamondOperatorCheck: Redundant specification of type arguments\"",
+  "Describe the issue in more detail: Description: The PMD and DiamondOperatorCheck tools are reporting that there is an issue with the use of the diamond operator in the MapOf class. However, if we attempt to use the diamond operator with MapOf, we receive a compilation error."
+]
+```
 
 Quality criteria are based on several researches, including:
 * [Painless Bug Tracking, by Joel Spolsky, 2000](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
