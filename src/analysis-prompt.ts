@@ -33,8 +33,8 @@ export class AnalysisPrompt implements Scalar<string> {
   value(): string {
     return `
     Please review the following bug report and generate a summary with quality problems related to this report formulation.
+    Don't suggest how to fix the bug, instead focus only on the quality problems that only this bug report formulation has.
     Please strictly adhere the provided response template.
-    Don't suggest how to fix the bug, instead focus only on problems with bug report formulation.
     If you see that bug report don't have quality problems with it's formulation, then leave an array empty: [].
     Don't generate any other info.
     Response example:
