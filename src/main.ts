@@ -37,6 +37,8 @@ import {QualityExpert} from "./quality-expert";
 import {UserPrompt} from "./user-prompt";
 import {AnalysisPrompt} from "./analysis-prompt";
 import {CapPrompt} from "./cap-prompt";
+import {ContextPrompt} from "./context-prompt";
+import {ContextExpert} from "./context-expert";
 
 export let github: {
   context: {
@@ -170,13 +172,25 @@ async function run() {
             ).analyze();
             console.log(problems);
 
+            const contexted = await new DeepInfra(
+              deep,
+              model,
+              new ContextExpert(),
+              new ContextPrompt(
+                problems,
+                new Titled(smart.title, body).asString()
+              ),
+              0.7
+            ).analyze();
+            console.log(contexted);
+
             const most = await new DeepInfra(
               deep,
               model,
               new QualityExpert(),
               new CapPrompt(
                 new Titled(smart.title, body).asString(),
-                problems
+                contexted
               ),
               0.7
             ).analyze();
