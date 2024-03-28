@@ -119,7 +119,7 @@ Technically, the process internals look like this:
 
 ![evaluation.svg](/doc/evaluation.svg)
 
-problems.json:
+`problems.json`:
 ```json
 [
   "The bug report title is not descriptive enough. It only mentions \"diamond operator check gives false positive\" but doesn't specify where or in what context. A more descriptive title would be \"False positive on diamond operator check in MapOf class\"",
@@ -130,7 +130,7 @@ problems.json:
 ]
 ```
 
-top.json:
+`top.json`:
 ```json
 [
   "The bug report title is not descriptive enough. It only mentions \"diamond operator check gives false positive\" but doesn't specify where or in what context. A more descriptive title would be \"False positive on diamond operator check in MapOf class\"",
@@ -139,7 +139,7 @@ top.json:
 ]
 ```
 
-suggestions.json:
+`suggestions.json`:
 ```json
 [
   "Improve the title of the bug report: Title: \"False positive on diamond operator check for MapOf class\"",

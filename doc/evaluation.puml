@@ -4,7 +4,7 @@ participant GitHub as github
 participant Action as action
 participant LLM as llm
 
-reporter --> github: GitHub issue
+reporter -> github: GitHub issue
 github -> action: GitHub issue
 action -> llm: issue, ask for problems
 llm --> action: problems.json
