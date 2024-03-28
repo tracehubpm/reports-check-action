@@ -35,6 +35,7 @@ import {Puzzled} from "./puzzled";
 import {Pdd} from "./pdd";
 import {QualityExpert} from "./quality-expert";
 import {UserPrompt} from "./user-prompt";
+import {AnalysisPrompt} from "./analysis-prompt";
 
 export let github: {
   context: {
@@ -157,22 +158,24 @@ async function run() {
             ).post();
           } else if ("deepinfra" === type) {
             const model = core.getInput("deepinfra_model");
-            const answer = await new DeepInfra(
+            const problems = await new DeepInfra(
               deep,
               model,
               new QualityExpert(),
-              new UserPrompt(
+              new AnalysisPrompt(
                 new Titled(smart.title, body).asString()
               ),
-              0.5
+              0.7
             ).analyze();
-            await new Feedback(
-              answer,
-              octokit,
-              issue,
-              smart.user?.login,
-              model
-            ).post();
+            console.log(problems);
+
+            // await new Feedback(
+            //   problems,
+            //   octokit,
+            //   issue,
+            //   smart.user?.login,
+            //   model
+            // ).post();
           }
         }
       }

@@ -40,7 +40,7 @@ export class Titled {
    */
   asString(): string {
     return `
-    ${this.title}
+    ${this.title}:
     ${this.body}
     `
   }
