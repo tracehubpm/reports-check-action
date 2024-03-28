@@ -41,7 +41,8 @@ export class CapPrompt implements Scalar<string> {
   value(): string {
     return `
     Please limit the list of the quality problems for the following bug report
-    to just three. Pick most important problems for this bug report and form new array.
+    to just three. Pick the most important problems for this bug report and move them into the new array.
+    Don't edit or rephrase a problem formulations at all. Only pick the most important problems.
     Response example:
     [
       "...",
