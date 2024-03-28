@@ -36,6 +36,7 @@ import {Pdd} from "./pdd";
 import {QualityExpert} from "./quality-expert";
 import {UserPrompt} from "./user-prompt";
 import {AnalysisPrompt} from "./analysis-prompt";
+import {CapPrompt} from "./cap-prompt";
 
 export let github: {
   context: {
@@ -169,6 +170,17 @@ async function run() {
             ).analyze();
             console.log(problems);
 
+            const most = await new DeepInfra(
+              deep,
+              model,
+              new QualityExpert(),
+              new CapPrompt(
+                new Titled(smart.title, body).asString(),
+                problems
+              ),
+              0.7
+            ).analyze();
+            console.log(most);
             // await new Feedback(
             //   problems,
             //   octokit,
