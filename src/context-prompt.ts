@@ -16,11 +16,12 @@ export class ContextPrompt implements Scalar<string> {
 
   value(): string {
     return `
-    Enhance the problem formulations with a more context of provided bug report.
+    Transform existing problem statements into more context-specific statements,
+    related to the provided bug report. 
     Please strictly adhere the provided response template.
     Don't generate any other info.
     Response example: 
-    [ 
+    [
       "...",
       "...",
       "...",
