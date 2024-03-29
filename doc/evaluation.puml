@@ -6,6 +6,8 @@ participant LLM as llm
 
 reporter -> github: GitHub issue
 github -> action: GitHub issue
+'action -> llm: issue, rules
+'llm --> action: matched rules
 action -> llm: issue, ask for problems
 llm --> action: problems.json
 alt problems are empty
@@ -13,7 +15,9 @@ alt problems are empty
   action --> reporter: thank you
 end
 alt problems are not empty
-  action -> llm: problems.json, cap top 3 problems
+  action -> llm: problems.json, report
+  llm --> action: contexted.json
+  action -> llm: contexted.json, cap top 3 problems
   llm --> action: top.json
   action -> llm: top.json, ask for suggestions
   llm --> action: suggestions.json

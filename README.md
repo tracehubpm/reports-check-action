@@ -119,33 +119,40 @@ Technically, the process internals look like this:
 
 ![evaluation.svg](/doc/evaluation.svg)
 
-`problems.json`:
+`problems.json` is a simple JSON array with quality problems about the bug report:
 ```json
 [
-  "The bug report title is not descriptive enough. It only mentions \"diamond operator check gives false positive\" but doesn't specify where or in what context. A more descriptive title would be \"False positive on diamond operator check in MapOf class\"",
-  "The report lacks essential details such as the software version, the operating system, and the development environment. Including these details can help to reproduce the bug and understand if it's a localized issue or a more general one.",
-  "The report is missing steps to reproduce the bug. Even though the code snippet is provided, it would be helpful to outline the steps leading to the issue.",
-  "The report does not include any error messages or logs. These can provide valuable context and clues about what is causing the bug",
-  "The author should avoid using phrases like \"Can we do something about this?\" and instead use a more formal language, such as \"Suggesting to review the DiamondOperatorCheck for potential improvements\"."
+  "The bug report lacks a clear and concise description of the issue.",
+  "The bug report does not provide any steps to reproduce the issue.",
+  "The bug report does not specify the expected and actual behavior.",
+  "The bug report does not mention the software version or environment where the issue occurred.",
+  "The bug report does not have a proper title that summarizes the issue."
 ]
 ```
 
-`top.json`:
+`contexted.json` applies bug report's context to the original array:
 ```json
 [
-  "The bug report title is not descriptive enough. It only mentions \"diamond operator check gives false positive\" but doesn't specify where or in what context. A more descriptive title would be \"False positive on diamond operator check in MapOf class\"",
-  "The report does not include any error messages or logs. These can provide valuable context and clues about what is causing the bug",
-  "The report does not include any error messages or logs. These can provide valuable context and clues about what is causing the bug"
+  "The bug report lacks clarity regarding the location and context of the Phi.g4 grammar file.",
+  "The bug report doesn't outline the specific steps or actions leading to the identification of typos in `deltaBinding` and `lambdaBinding`.",
+  "The bug report fails to articulate the anticipated behavior versus the observed behavior resulting from the typos in `deltaBinding` and `lambdaBinding`.",
+  "The bug report doesn't specify the version of the software or the environment in which the Phi.g4 grammar file is being used, potentially hindering accurate diagnosis.",
+  "The bug report requires a more descriptive title that succinctly summarizes the issue with `deltaBinding` and `lambdaBinding` typos in the Phi.g4 grammar file."
 ]
 ```
 
-`suggestions.json`:
+`top.json` contains only most important problems after context was applied:
 ```json
 [
-  "Improve the title of the bug report: Title: \"False positive on diamond operator check for MapOf class\"",
-  "Include the specific error messages and logs: Error message from PMD: \"UseDiamondOperator: Use Diamond Operator\" Error message from DiamondOperatorCheck: \"DiamondOperatorCheck: Redundant specification of type arguments\"",
-  "Describe the issue in more detail: Description: The PMD and DiamondOperatorCheck tools are reporting that there is an issue with the use of the diamond operator in the MapOf class. However, if we attempt to use the diamond operator with MapOf, we receive a compilation error."
+  "The bug report lacks clarity regarding the location and context of the Phi.g4 grammar file.",
+  "The bug report doesn't outline the specific steps or actions leading to the identification of typos in `deltaBinding` and `lambdaBinding`.",
+  "The bug report requires a more descriptive title that succinctly summarizes the issue with `deltaBinding` and `lambdaBinding` typos in the Phi.g4 grammar file."
 ]
+```
+
+`suggestions.json` enhances the problems with a suggestions on how to improve the bug report:
+```json
+[]
 ```
 
 Quality criteria are based on several researches, including:
