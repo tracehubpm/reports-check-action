@@ -62,7 +62,8 @@ export class PddModel implements Model {
         this.model,
         new TodoReviewer(),
         this.prompt,
-        0.7
+        0.7,
+        512
       ).analyze();
     }
     return answer;
