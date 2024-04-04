@@ -39,6 +39,9 @@ import {AnalysisPrompt} from "./analysis-prompt";
 import {CapPrompt} from "./cap-prompt";
 import {ContextPrompt} from "./context-prompt";
 import {ContextExpert} from "./context-expert";
+import {ValidatePrompt} from "./validate-prompt";
+import {Default} from "./default";
+import {JsonFormat} from "./json-format";
 
 export let github: {
   context: {
@@ -168,33 +171,57 @@ async function run() {
               new AnalysisPrompt(
                 new Titled(smart.title, body).asString()
               ),
-              0.7
+              0.7,
+              512
             ).analyze();
             console.log(problems);
 
-            const contexted = await new DeepInfra(
+            const validated = await new DeepInfra(
               deep,
               model,
-              new ContextExpert(),
-              new ContextPrompt(
-                problems,
-                new Titled(smart.title, body).asString()
-              ),
-              0.7
-            ).analyze();
-            console.log(contexted);
-
-            const most = await new DeepInfra(
-              deep,
-              model,
-              new QualityExpert(),
-              new CapPrompt(
+              new Default(),
+              new ValidatePrompt(
                 new Titled(smart.title, body).asString(),
-                contexted
+                problems
               ),
-              0.7
+              1.0,
+              1024
             ).analyze();
-            console.log(most);
+            console.log(validated);
+
+            const vformatted = await new DeepInfra(
+              deep,
+              model,
+              new Default(),
+              new JsonFormat(validated),
+              0.7,
+              512
+            ).analyze();
+            console.log(vformatted);
+
+            // const contexted = await new DeepInfra(
+            //   deep,
+            //   model,
+            //   new ContextExpert(),
+            //   new ContextPrompt(
+            //     problems,
+            //     new Titled(smart.title, body).asString()
+            //   ),
+            //   0.7
+            // ).analyze();
+            // console.log(contexted);
+            //
+            // const most = await new DeepInfra(
+            //   deep,
+            //   model,
+            //   new QualityExpert(),
+            //   new CapPrompt(
+            //     new Titled(smart.title, body).asString(),
+            //     contexted
+            //   ),
+            //   0.7
+            // ).analyze();
+            // console.log(most);
             // await new Feedback(
             //   problems,
             //   octokit,

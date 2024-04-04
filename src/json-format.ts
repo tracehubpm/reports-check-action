@@ -23,21 +23,34 @@
  */
 
 /**
- * Quality analysis prompt.
+ * Format to JSON prompt.
  */
-export class AnalysisPrompt implements Scalar<string> {
+export class JsonFormat implements Scalar<string> {
 
-  constructor(private readonly report: string) {
+  /**
+   * Ctor.
+   * @param problems Problems
+   */
+  constructor(private readonly problems: any) {
   }
 
   value(): string {
     return `
-    Please review the following bug report and generate a summary with quality problems related to this report formulation.
-    Generate only the quality problems that only this bug report formulation has.
-    If you see that bug report don't have quality problems with it's formulation, then say "Quality is awesome".
-    Don't generate any other info.
-    Bug report:
-    ${this.report}
+    Please format these response to JSON array format.
+    Each problem statement must be represented as a plain string array member.
+    Please strictly adhere the provided example template.
+    Example:
+    {
+      "size": <size of the array>,
+      "problems": [
+        "...",
+        "...",
+         ...
+      ]
+    }
+    
+    Problems:
+${this.problems}
     `;
   }
 }

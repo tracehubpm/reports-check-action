@@ -23,21 +23,31 @@
  */
 
 /**
- * Quality analysis prompt.
+ * Prompt for self-validation.
  */
-export class AnalysisPrompt implements Scalar<string> {
+export class ValidatePrompt implements Scalar<string> {
 
-  constructor(private readonly report: string) {
+  /**
+   * Ctor.
+   * @param report Report
+   * @param problems Problems
+   */
+  constructor(
+    private readonly report: string,
+    private readonly problems: any
+  ) {
   }
 
   value(): string {
     return `
-    Please review the following bug report and generate a summary with quality problems related to this report formulation.
-    Generate only the quality problems that only this bug report formulation has.
-    If you see that bug report don't have quality problems with it's formulation, then say "Quality is awesome".
-    Don't generate any other info.
+    Please verify whether following bug report has outlined quality problems or not.
+    Remove irrelevant or false to the bug report problems and return only problems that bug report has.
+    Don't rephrase problems or generate any other info.
+    Problems:
+${this.problems}
+    
     Bug report:
-    ${this.report}
+${this.report}
     `;
   }
 }
