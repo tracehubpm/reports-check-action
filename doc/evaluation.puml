@@ -6,20 +6,24 @@ participant LLM as llm
 
 reporter -> github: GitHub issue
 github -> action: GitHub issue
-'action -> llm: issue, rules
-'llm --> action: matched rules
 action -> llm: issue, ask for problems
-llm --> action: problems.json
-alt problems are empty
+llm --> action: problems
+action -> llm: problems, validate
+llm --> action: validated
+alt validated are empty
   action --> github: success
   action --> reporter: thank you
 end
-alt problems are not empty
-  action -> llm: problems.json, report
-  llm --> action: contexted.json
-  action -> llm: contexted.json, cap top 3 problems
+alt validated are not empty
+  action -> llm: validated, report
+  llm --> action: contexted
+  action -> llm: contexted, cap top 3 problems
+  llm --> action: top
+  action -> llm: top, format to JSON
   llm --> action: top.json
-  action -> llm: top.json, ask for suggestions
+  action -> llm: top, ask for suggestions
+  llm --> action: suggestions
+  action -> llm: suggestions, format to JSON
   llm --> action: suggestions.json
   action --> github: fail
   action --> reporter: suggestions, spent tokens
