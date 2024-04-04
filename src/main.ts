@@ -42,6 +42,7 @@ import {ContextExpert} from "./context-expert";
 import {ValidatePrompt} from "./validate-prompt";
 import {Default} from "./default";
 import {JsonFormat} from "./json-format";
+import {Top} from "./top";
 
 export let github: {
   context: {
@@ -176,12 +177,13 @@ async function run() {
             ).analyze();
             console.log(problems);
 
+            const report = new Titled(smart.title, body).asString();
             const validated = await new DeepInfra(
               deep,
               model,
               new Default(),
               new ValidatePrompt(
-                new Titled(smart.title, body).asString(),
+                report,
                 problems
               ),
               1.0,
@@ -198,6 +200,22 @@ async function run() {
               512
             ).analyze();
             console.log(vformatted);
+
+            const amount = JSON.parse(vformatted).size;
+            if (amount > 3) {
+              const top = await new DeepInfra(
+                deep,
+                model,
+                new Default(),
+                new Top(
+                  vformatted,
+                  report
+                ),
+                0.7,
+                512
+              ).analyze();
+              console.log(top);
+            }
 
             // const contexted = await new DeepInfra(
             //   deep,
