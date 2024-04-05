@@ -40,8 +40,10 @@ export class FormattedSummary implements Scalar<string> {
 
   value(): string {
     return `
+    Problems:
 ${this.problems.value()}
 
+    Suggestions:
 ${this.suggestions.value()}
     `;
   }
