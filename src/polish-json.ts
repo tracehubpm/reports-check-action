@@ -38,6 +38,7 @@ export class PolishJson implements Scalar<string> {
     return `
     Please polish this JSON and return polished JSON.
     Polished JSON problems node must have only text without any numbering or other formatting.
+    Response must contain only JSON without any extra text or info.
     Don't rephrase problems or generate any other info.
 
     Problems:
