@@ -12,9 +12,12 @@ export class MdUnbox implements Scalar<any> {
 
   value(): any {
     let result;
-    const match = this.response.match(/```json\s*([\s\S]*?)\s*```/);
-    if (match && match.length > 1) {
-      result = match[1];
+    const trimmed = this.response.trim();
+    const start = 7;
+    if (trimmed.endsWith("```")) {
+      const index = trimmed.lastIndexOf("```");
+      const sliced = trimmed.slice(0, index) + trimmed.slice(index + 3);
+      result = sliced.slice(start).trim();
     } else {
       result = this.response;
     }

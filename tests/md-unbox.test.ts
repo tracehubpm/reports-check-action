@@ -44,4 +44,31 @@ describe('Test cases for MdUnbox', () => {
     `
     );
   });
+  test('unboxes more complex case', () => {
+    const response = `
+    \`\`\`json
+{
+  "suggestions": [
+    "Clear and concise description: Please add a clear and concise description of the issue. This will help developers understand the problem and work on a solution efficiently. For example, 'There are two typos in the \`binding\` rule of the Phi.g4 grammar file. The correct grammar rules should be \`deltaBinding\` and \`lambdaBinding\` instead of \`deltaBidning\` and \`lambdaBidning\`.'",
+    "Expected and current behavior: It would be helpful to know when these typos occur, what is the expected behavior, and the current behavior with the typos. This information will assist in verifying the solution and ensuring that the issue is resolved completely.",
+    "Severity and impact: Mention the severity and impact of the issue on the code or functionality. This will help developers prioritize the bug and decide when to fix it. For example, 'These typos might cause the parser to misunderstand the \`binding\` rule and lead to unexpected parsing results.'",
+    "Suggested fix: If you have already identified a possible solution, please provide a suggestion on how to fix the issue. For example, 'A possible fix for this issue is to replace \`deltaBidning\` and \`lambdaBidning\` with their correct counterparts, \`deltaBinding\` and \`lambdaBinding\`, in the \`binding\` rule of the Phi.g4 grammar file.'",
+    "\`\`\`antlr binding : alphaBinding | emptyBinding | deltaBinding | lambdaBinding ; \`\`\`"
+  ]
+}
+\`\`\`
+    `;
+    expect(new MdUnbox(response).value())
+      .toBe(
+`{
+  "suggestions": [
+    "Clear and concise description: Please add a clear and concise description of the issue. This will help developers understand the problem and work on a solution efficiently. For example, 'There are two typos in the \`binding\` rule of the Phi.g4 grammar file. The correct grammar rules should be \`deltaBinding\` and \`lambdaBinding\` instead of \`deltaBidning\` and \`lambdaBidning\`.'",
+    "Expected and current behavior: It would be helpful to know when these typos occur, what is the expected behavior, and the current behavior with the typos. This information will assist in verifying the solution and ensuring that the issue is resolved completely.",
+    "Severity and impact: Mention the severity and impact of the issue on the code or functionality. This will help developers prioritize the bug and decide when to fix it. For example, 'These typos might cause the parser to misunderstand the \`binding\` rule and lead to unexpected parsing results.'",
+    "Suggested fix: If you have already identified a possible solution, please provide a suggestion on how to fix the issue. For example, 'A possible fix for this issue is to replace \`deltaBidning\` and \`lambdaBidning\` with their correct counterparts, \`deltaBinding\` and \`lambdaBinding\`, in the \`binding\` rule of the Phi.g4 grammar file.'",
+    "\`\`\`antlr binding : alphaBinding | emptyBinding | deltaBinding | lambdaBinding ; \`\`\`"
+  ]
+}`
+      );
+  });
 });
