@@ -43,6 +43,9 @@ import {ValidatePrompt} from "./validate-prompt";
 import {Default} from "./default";
 import {JsonFormat} from "./json-format";
 import {Top} from "./top";
+import {PolishJson} from "./polish-json";
+import {Suggestions} from "./suggestions";
+import {SuggestionsJson} from "./suggestions-json";
 
 export let github: {
   context: {
@@ -201,6 +204,7 @@ async function run() {
             ).analyze();
             console.log(vformatted);
 
+            let candidate;
             const amount = JSON.parse(vformatted).size;
             if (amount > 3) {
               const top = await new DeepInfra(
@@ -215,7 +219,36 @@ async function run() {
                 512
               ).analyze();
               console.log(top);
+
+              candidate = await new DeepInfra(
+                deep,
+                model,
+                new Default(),
+                new PolishJson(top),
+                0.7,
+                512
+              ).analyze();
+              console.log(candidate);
+            } else {
+              candidate = vformatted;
             }
+            const suggestions = await new DeepInfra(
+              deep,
+              model,
+              new Default(),
+              new Suggestions(report, candidate),
+              0.7,
+              512
+            ).analyze();
+            const json = await new DeepInfra(
+              deep,
+              model,
+              new Default(),
+              new SuggestionsJson(suggestions),
+              0.7,
+              512
+            ).analyze();
+            console.log(json);
 
             // const contexted = await new DeepInfra(
             //   deep,
