@@ -42,7 +42,7 @@ export class Suggestions implements Scalar<string> {
     return `
     Please generate a suggestions for given bug report taking into an account
     all the quality problems related to it.
-    Don't suggest how to fix the issue itself, instead focus only on suggestions to improve bug report formulation.
+    Don't suggest how to fix the issue itself, instead focus only on suggestions to improve bug report formulation based on outlined problems.
     
     Bug report:
 ${this.report}
