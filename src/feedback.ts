@@ -26,8 +26,6 @@ import {Covered} from "./covered";
 import {WithSummary} from "./with-summary";
 import * as core from "@actions/core";
 import {Octokit} from "@octokit/rest";
-import {NonRelevant} from "./non-relevant";
-import {summary} from "@actions/core";
 
 /**
  * Feedback.
@@ -36,14 +34,14 @@ export class Feedback {
 
   /**
    * Ctor.
-   * @param summary Summary
+   * @param summary Problems
    * @param github GitHub
    * @param issue Issue
    * @param username Username
    * @param model LLM Model
    */
   constructor(
-    private readonly summary: string | undefined,
+    private readonly summary: Scalar<string>,
     private readonly github: Octokit,
     private readonly issue: Issue,
     private readonly username: string | undefined,
@@ -52,7 +50,8 @@ export class Feedback {
   }
 
   async post() {
-    if (this.summary?.includes("awesome")) {
+    const response = this.summary.value();
+    if (response.includes("awesome")) {
       await new Comment(
         this.github,
         this.issue,
@@ -61,11 +60,6 @@ export class Feedback {
           "thanks for detailed and disciplined report."
         ).value()
       ).post();
-    } else if (this.summary?.includes("Not relevant")) {
-      console.log("Not relevant");
-      await new NonRelevant(this.github, this.issue, this.username).close();
-    } else if (this.summary?.includes("Not a bug report")) {
-      console.log("Not a bug report");
     } else {
       await new Comment(
         this.github,
@@ -73,16 +67,16 @@ export class Feedback {
         new WithSummary(
           new Covered(
             this.username,
-            "thanks for the report, but here some unclear moments:",
+            "thanks for the report, here is a feedback:",
           ),
-          this.summary,
+          response,
           this.model
         ).value()
       ).post();
       core.setFailed(
         `
           Quality analysis found the following errors:
-          ${this.summary}
+          ${response}
           `
       );
     }

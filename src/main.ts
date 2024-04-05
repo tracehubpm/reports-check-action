@@ -46,6 +46,9 @@ import {Top} from "./top";
 import {PolishJson} from "./polish-json";
 import {Suggestions} from "./suggestions";
 import {SuggestionsJson} from "./suggestions-json";
+import {log} from "node:util";
+import {FormattedSummary} from "./formatted-summary";
+import {MdObjects} from "./md-objects";
 
 export let github: {
   context: {
@@ -153,14 +156,18 @@ async function run() {
           if ("openai" === type) {
             const model = core.getInput("openai_model");
             await new Feedback(
-              await new ChatGpt(
-                new OpenAI({apiKey: openai}),
-                model,
-                new QualityExpert(),
-                new UserPrompt(
-                  new Titled(smart.title, body).asString()
-                )
-              ).analyze(),
+              new FormattedSummary(
+                new MdObjects([]),
+                new MdObjects([])
+              ),
+              // await new ChatGpt(
+              //   new OpenAI({apiKey: openai}),
+              //   model,
+              //   new QualityExpert(),
+              //   new UserPrompt(
+              //     new Titled(smart.title, body).asString()
+              //   )
+              // ).analyze(),
               octokit,
               issue,
               smart.user?.login,
@@ -203,7 +210,6 @@ async function run() {
               512
             ).analyze();
             console.log(vformatted);
-
             let candidate;
             const amount = JSON.parse(vformatted).size;
             if (amount > 3) {
@@ -219,7 +225,6 @@ async function run() {
                 512
               ).analyze();
               console.log(top);
-
               candidate = await new DeepInfra(
                 deep,
                 model,
@@ -232,54 +237,34 @@ async function run() {
             } else {
               candidate = vformatted;
             }
-            const suggestions = await new DeepInfra(
-              deep,
-              model,
-              new Default(),
-              new Suggestions(report, candidate),
-              0.7,
-              512
-            ).analyze();
             const json = await new DeepInfra(
               deep,
               model,
               new Default(),
-              new SuggestionsJson(suggestions),
+              new SuggestionsJson(
+                await new DeepInfra(
+                  deep,
+                  model,
+                  new Default(),
+                  new Suggestions(report, candidate),
+                  0.7,
+                  512
+                ).analyze()
+              ),
               0.7,
               512
             ).analyze();
             console.log(json);
-
-            // const contexted = await new DeepInfra(
-            //   deep,
-            //   model,
-            //   new ContextExpert(),
-            //   new ContextPrompt(
-            //     problems,
-            //     new Titled(smart.title, body).asString()
-            //   ),
-            //   0.7
-            // ).analyze();
-            // console.log(contexted);
-            //
-            // const most = await new DeepInfra(
-            //   deep,
-            //   model,
-            //   new QualityExpert(),
-            //   new CapPrompt(
-            //     new Titled(smart.title, body).asString(),
-            //     contexted
-            //   ),
-            //   0.7
-            // ).analyze();
-            // console.log(most);
-            // await new Feedback(
-            //   problems,
-            //   octokit,
-            //   issue,
-            //   smart.user?.login,
-            //   model
-            // ).post();
+            await new Feedback(
+              new FormattedSummary(
+                new MdObjects(JSON.parse(candidate).problems),
+                new MdObjects(JSON.parse(json).suggestions)
+              ),
+              octokit,
+              issue,
+              smart.user?.login,
+              model
+            ).post();
           }
         }
       }
