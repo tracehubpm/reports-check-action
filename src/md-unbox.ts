@@ -12,11 +12,12 @@ export class MdUnbox implements Scalar<any> {
 
   value(): any {
     let result;
-    if (this.response.startsWith("```") && this.response.endsWith("```")) {
-      result = this.response.slice(3, -3);
+    const match = this.response.match(/```json\s*([\s\S]*?)\s*```/);
+    if (match && match.length > 1) {
+      result = match[1];
     } else {
       result = this.response;
     }
-    return result
+    return result;
   }
 }
