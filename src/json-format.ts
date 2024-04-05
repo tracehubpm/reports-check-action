@@ -38,7 +38,6 @@ export class JsonFormat implements Scalar<string> {
     return `
     Please format these response to JSON array format.
     Each problem statement must be represented as a plain string array member.
-    Don't apply Markdown formatting to your response, just return plain JSON.
     Please strictly adhere the provided example template.
     Example:
     {

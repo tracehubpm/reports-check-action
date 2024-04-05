@@ -38,7 +38,6 @@ export class SuggestionsJson implements Scalar<string> {
     return `
     Please combine provided suggestions text into logical array of suggestions and format these response to JSON format. 
     Each suggestion must be represented as a plain string array member.
-    Don't apply markdown formatting to your response, just return plain JSON.
     Please strictly adhere the provided example template.
     Don't rephrase suggestions or generate any other info.
     Example:

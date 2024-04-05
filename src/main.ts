@@ -49,6 +49,7 @@ import {SuggestionsJson} from "./suggestions-json";
 import {log} from "node:util";
 import {FormattedSummary} from "./formatted-summary";
 import {MdObjects} from "./md-objects";
+import {MdUnbox} from "./md-unbox";
 
 export let github: {
   context: {
@@ -211,7 +212,7 @@ async function run() {
             ).analyze();
             console.log(vformatted);
             let candidate;
-            const amount = JSON.parse(vformatted).size;
+            const amount = JSON.parse(new MdUnbox(vformatted).value()).size;
             if (amount > 3) {
               const top = await new DeepInfra(
                 deep,
@@ -257,8 +258,8 @@ async function run() {
             console.log(json);
             await new Feedback(
               new FormattedSummary(
-                new MdObjects(JSON.parse(candidate).problems),
-                new MdObjects(JSON.parse(json).suggestions)
+                new MdObjects(JSON.parse(new MdUnbox(candidate).value()).problems),
+                new MdObjects(JSON.parse(new MdUnbox(json).value()).suggestions)
               ),
               octokit,
               issue,
