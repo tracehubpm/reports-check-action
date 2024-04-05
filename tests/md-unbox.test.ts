@@ -27,12 +27,21 @@ import {MdUnbox} from "../src/md-unbox";
  * Test cases for MdUnbox.
  */
 describe('Test cases for MdUnbox', () => {
-  test('Unboxes markdown from JSON object', () => {
+  test('unboxes markdown from JSON object', () => {
     const response = `
     \`\`\`json
     {"test": true}
     \`\`\`
     `;
     expect(new MdUnbox(response).value()).toBe("{\"test\": true}");
+  });
+  test('returns origin response', () => {
+    const response = `
+    {"test": true}
+    `;
+    expect(new MdUnbox(response).value()).toBe(`
+    {"test": true}
+    `
+    );
   });
 });
