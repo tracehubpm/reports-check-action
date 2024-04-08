@@ -21,21 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Prompt to cap bug report problems.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class CapPrompt implements Scalar<string> {
+
+  /**
+   * Ctor.
+   * @param report Report
+   * @param problems Problems
+   */
+  constructor(
+    private readonly report: string,
+    private readonly problems: any
+  ) {
+  }
+
+  value(): string {
+    return `
+    Please limit the list of the quality problems for the following bug report
+    to just three. Pick the most important problems for this bug report and move them into the new array.
+    Don't edit or rephrase a problem formulations at all. Only pick the most important problems.
+    Response example:
+    [
+      "...",
+      "...",
+      "..."
+    ].
+    Don't generate any other info.
+    Problems:
+${this.problems}
+    
+    Bug report:
+${this.report}
+    `;
+  }
+}

@@ -28,7 +28,7 @@ export class QualityExpert {
     return `
     The quality of bug reports is paramount for the overall quality of a software project:
     poorly formulated bug reports often lead to wasted time, programmers frustration, and delays.
-    You are a software quality analysis expert tasked with reviewing incoming bug reports that developers are submit.
+    You are a software quality analysis expert tasked with reviewing incoming bug reports that developers are submit on GitHub Issue platform.
     `
   }
 }

@@ -21,21 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Prompt to format suggestions to JSON.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class SuggestionsJson implements Scalar<string> {
+
+  /**
+   * Ctor.
+   * @param suggestions Suggestions
+   */
+  constructor(private readonly suggestions: any) {
+  }
+
+  value(): string {
+    return `
+    Please combine provided suggestions text into logical array of suggestions and format these response to JSON format. 
+    Each suggestion must be represented as a plain string array member.
+    It's very important to split text into array members smart using logic.
+    Please strictly adhere the provided example template.
+    Don't rephrase suggestions or generate any other info.
+    Example:
+    { 
+      "suggestions": [
+       "...",
+       "...",
+        ... 
+      ]
+    }
+    Suggestions:
+${this.suggestions}
+    `;
+  }
+}

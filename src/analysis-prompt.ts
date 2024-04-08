@@ -21,21 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Quality analysis prompt.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class AnalysisPrompt implements Scalar<string> {
+
+  constructor(private readonly report: string) {
+  }
+
+  value(): string {
+    return `
+    Please review the following bug report and generate a summary with quality problems related to this report formulation.
+    Generate only the quality problems that only this bug report formulation has.
+    Don't generate any other info.
+    Bug report:
+    ${this.report}
+    `;
+  }
+}

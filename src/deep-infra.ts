@@ -34,16 +34,16 @@ export class DeepInfra implements Model {
    * @param system System prompt
    * @param prompt User prompt
    * @param temperature Temperature
+   * @param max Max new tokens
    */
   constructor(
     private readonly token: string,
     private readonly model: string,
     private readonly system: Scalar<string>,
     private readonly prompt: Scalar<string>,
-    private readonly temperature: number
+    private readonly temperature: number,
+    private readonly max: number
   ) {
-    this.token = token;
-    this.model = model;
   }
 
   async analyze() {
@@ -52,6 +52,7 @@ export class DeepInfra implements Model {
         method: 'POST',
         body: JSON.stringify({
           model: this.model,
+          max_new_tokens: this.max,
           temperature: this.temperature,
           messages: [
             {

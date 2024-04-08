@@ -21,21 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Context expert.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class ContextExpert implements Scalar<string> {
+
+  value(): string {
+    return "You are a software quality analysis expert tasked with combining quality problems formulations with the bug report context, enhancing the context information about the quality problems."
+  }
+}

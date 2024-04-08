@@ -81,9 +81,161 @@ jobs:
 
 In this case we are preventing all issues with titles `I have a question...` and `I want to request new feature...` to be analyzed by the reports checker.
 
+### Analysis Method
+
+Our analysis method consists of a series intermediate steps.
+Once [reports-check-action](https://github.com/marketplace/actions/reports-check-action)
+receives new GitHub issue, the following happens:
+
+![chain.svg](/doc/chain.svg)
+
+Each goal is represented as separate prompt to the LLM. Thus, we utilize 
+famous pattern called [Chain-Of-Thought](https://arxiv.org/abs/2201.11903).
+
+#### Analysis
+
+Firstly, we run simple analysis against submitted bug report.
+Output looks like this:
+
+```text
+Quality problems related to this bug report formulation:
+
+* The title of the bug report "deltaBidning" and "lambdaBidning" Typos in Phi.g4 grammar file is not clear and descriptive enough. A better title could be "Incorrect naming in Phi.g4 grammar file".
+* The bug report lacks a clear problem statement. It's suggested to start the description with a clear problem statement instead of an action. For example: "In the Phi.g4 grammar file, there are two typos in the following code block. Instead of 'deltaBidning' and 'lambdaBidning', it should be 'deltaBinding' and 'lambdaBinding'."
+* The bug report lacks information about the impact of these typos on the software's functionality. For example, it would be helpful to know if the issue prevents compilation, causes runtime errors, or leads to unexpected behavior. Additionally, a severity label for the issue could be useful.
+```
+
+#### Self Validation
+
+LLM validates previous analysis result and corrects it if needed:
+
+```text
+The title of the bug report "deltaBidning" and "lambdaBidning" Typos in Phi.g4 grammar file is not clear and descriptive enough. A better title could be "Incorrect naming in Phi.g4 grammar file".
+The bug report lacks information about the impact of these typos on the software's functionality. For example, it would be helpful to know if the issue prevents compilation, causes runtime errors, or leads to unexpected behavior. Additionally, a severity label for the issue could be useful.
+```
+
+We utilize pattern so-called [Self Validation](https://arxiv.org/abs/2212.09561)
+that aims to help a bit with [hallucinations](https://www.iguazio.com/glossary/llm-hallucination)
+and [stochasticity](https://en.wikipedia.org/wiki/Stochastic_parrot)
+as [this paper](https://arxiv.org/abs/2308.00245) suggests.
+After self validation proceeded, we pack it into [JSON](https://en.wikipedia.org/wiki/JSON)
+format using [JSON Packing Method](#json-packing-method):
+
+```json
+{
+  "size": 2,
+  "problems": [
+    "The title of the bug report \"deltaBidning\" and \"lambdaBidning\" Typos in Phi.g4 grammar file is not clear and descriptive enough. A better title could be \"Incorrect naming in Phi.g4 grammar file\". The bug report lacks information about the impact of these typos on the software's functionality. For example, it would be helpful to know if the issue prevents compilation, causes runtime errors, or leads to unexpected behavior. Additionally, a severity label for the issue could be useful.",
+    "The second problem statement goes here, if any."
+  ]
+}
+```
+
+#### Cap Top 3
+
+Some analysis results contains many problems.
+In order to make programmers not ignore the feedback reports by this action,
+we **minimize** amount of problems to just 3 or less.
+LLM at this stage picks the most important problems from previous analysis
+and adds them into new response: 
+
+```json
+{
+  "size": 3,
+  "problems": [
+    "1. Lack of a clear description: The report lacks a clear and concise description of the problem. It simply states there are typos but does not specify what the typos are or how they impact the system.",
+    "2. Missing steps to reproduce: There are no steps provided to reproduce the issue. This makes it difficult for developers to identify if they have fixed the issue correctly.",
+    "6. Incomplete code block: The code block is not complete (it is cut off after the relevant lines). This makes it difficult for developers to understand the context of the issue."
+  ]
+}
+```
+
+#### Polish
+
+Here we polish the response we got before. In this goal we fix formatting
+issues and improve standardization of the response by making it "solid":
+
+```json
+{
+  "size": 3,
+  "problems": [
+    "Lack of a clear description: The report lacks a clear and concise description of the problem. It simply states there are typos but does not specify what the typos are or how they impact the system.",
+    "Missing steps to reproduce: There are no steps provided to reproduce the issue. This makes it difficult for developers to identify if they have fixed the issue correctly.",
+    "Incomplete code block: The code block is not complete (it is cut off after the relevant lines). This makes it difficult for developers to understand the context of the issue."
+  ]
+}
+```
+
+#### Suggestions
+
+At `suggestions` we generate actual suggestions on how to improve bug report formulation.
+At this point we don't ask LLM to use strict formatting, in most cases it is
+just a free of format text:
+
+```text
+Suggested improvements:
+
+Clear description: Please provide a clear explanation of the issue. Explain what typos were found in the code (deltaBidning and lambdaBidning) and how they impact the system functionality.
+
+Steps to reproduce: Include the necessary steps to reproduce the issue. This will help the developers understand the issue better and identify if the fix was correct.
+
+Complete code block: Kindly provide the complete code block for better context understanding.
+
+Suggested Bug Report:
+
+deltaBidning and lambdaBidning Typos in Phi.g4 grammar file: In our Phi.g4 grammar file, we have identified typos in the following lines:
+
+binding
+    : alphaBinding
+    | emptyBinding
+    | deltaBidning
+    | lambdaBidning
+    ;
+The correct syntax should be:
+
+binding
+    : alphaBinding
+    | emptyBinding
+    | deltaBinding
+    | lambdaBinding
+    ;
+The typos(deltaBidning and lambdaBidning) impact the system's syntax understanding and cause unexpected behavior or errors.
+
+To reproduce this issue, follow these steps:
+
+Open the Phi.g4 grammar file.
+Locate the lines marked above.
+Observe that deltaBidning should be deltaBinding and lambdaBidning should be lambdaBinding.
+These corrections will solve the issue and appropriately define the grammar rules for binding.
+```
+
+Next step we do is splitting this text into _logical chunks_ and [format](#json-packing-method)
+them into JSON object:
+
+```json
+{
+  "suggestions": [
+    "Clear description: Please provide a clear explanation of the issue. Explain what typos were found in the code (deltaBidning and lambdaBidning) and how they impact the system functionality.",
+    "Steps to reproduce: Include the necessary steps to reproduce the issue. This will help the developers understand the issue better and identify if the fix was correct.",
+    "Complete code block: Kindly provide the complete code block for better context understanding.",
+    "Suggested Bug Report:deltaBidning and lambdaBidning Typos in Phi.g4 grammar file: In our Phi.g4 grammar file, we have identified typos in the following lines:\n\n```\nbinding\n    : alphaBinding\n    | emptyBinding\n    | deltaBidning\n    | lambdaBidning\n    ;\n```\nThe correct syntax should be:\n\n```\nbinding\n    : alphaBinding\n    | emptyBinding\n    | deltaBinding\n    | lambdaBinding\n    ;\n```\nThe typos(deltaBidning and lambdaBidning) impact the system's syntax understanding and cause unexpected behavior or errors.\n\nTo reproduce this issue, follow these steps:\n\n- Open the Phi.g4 grammar file.\n- Locate the lines marked above.\n- Observe that deltaBidning should be deltaBinding and lambdaBidning should be lambdaBinding.\n\nThese corrections will solve the issue and appropriately define the grammar rules for binding."
+  ]
+}
+```
+
+#### JSON Packing Method
+
+LLMs often produce suboptimal results when directly prompted to output in JSON format.
+That's why we let LLM "think" in English and ask to summarize JSON only at the final step of the operation.
+At this stage we pack previous LLM response to JSON object format.
+
+In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) notation, the process internals look like this:
+
+![method.svg](/doc/method.svg)
+
 ### Puzzle (PDD) Analysis
 
-This action supports analysis not only for issues created manually, but also for puzzles, a.k.a `todo` in your code. 
+This action supports analysis not only for issues created manually, but also for puzzles, a.k.a `todo` in your code.
 [Puzzle Driven Development (2010)](https://www.yegor256.com/2010/03/04/pdd.html), [12/840,306](https://patents.google.com/patent/US20120023476) was suggested as a novel way for managing issues in software development.
 Read how it works:
 * [PDD in Action (2017)](https://www.yegor256.com/2017/04/05/pdd-in-action.html)
@@ -108,49 +260,6 @@ Turns into 3 elements:
 * puzzle, located in range of `61` and `66` lines
 
 After all of this done, we provide it to LLM and ask for quality problems.
-
-### Quality Evaluation Process
-
-If your bug report does not look clean, this action will automatically
-formulate the list of _top 3 most_ suggestions on how to improve the bug
-report to its author.
-
-Technically, the process internals look like this:
-
-![evaluation.svg](/doc/evaluation.svg)
-
-problems.json:
-```json
-[
-  "The bug report title is not descriptive enough. It only mentions \"diamond operator check gives false positive\" but doesn't specify where or in what context. A more descriptive title would be \"False positive on diamond operator check in MapOf class\"",
-  "The report lacks essential details such as the software version, the operating system, and the development environment. Including these details can help to reproduce the bug and understand if it's a localized issue or a more general one.",
-  "The report is missing steps to reproduce the bug. Even though the code snippet is provided, it would be helpful to outline the steps leading to the issue.",
-  "The report does not include any error messages or logs. These can provide valuable context and clues about what is causing the bug",
-  "The author should avoid using phrases like \"Can we do something about this?\" and instead use a more formal language, such as \"Suggesting to review the DiamondOperatorCheck for potential improvements\"."
-]
-```
-
-top.json:
-```json
-[
-  "The bug report title is not descriptive enough. It only mentions \"diamond operator check gives false positive\" but doesn't specify where or in what context. A more descriptive title would be \"False positive on diamond operator check in MapOf class\"",
-  "The report does not include any error messages or logs. These can provide valuable context and clues about what is causing the bug",
-  "The report does not include any error messages or logs. These can provide valuable context and clues about what is causing the bug"
-]
-```
-
-suggestions.json:
-```json
-[
-  "Improve the title of the bug report: Title: \"False positive on diamond operator check for MapOf class\"",
-  "Include the specific error messages and logs: Error message from PMD: \"UseDiamondOperator: Use Diamond Operator\" Error message from DiamondOperatorCheck: \"DiamondOperatorCheck: Redundant specification of type arguments\"",
-  "Describe the issue in more detail: Description: The PMD and DiamondOperatorCheck tools are reporting that there is an issue with the use of the diamond operator in the MapOf class. However, if we attempt to use the diamond operator with MapOf, we receive a compilation error."
-]
-```
-
-Quality criteria are based on several researches, including:
-* [Painless Bug Tracking, by Joel Spolsky, 2000](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
-* [What Makes a Satisficing Bug Report? by Tommaso Dal Sasso, Andrea Mocci, and Michele Lanza, 2016](https://www.researchgate.net/publication/309151102_What_Makes_a_Satisficing_Bug_Report)
 
 ### How to contribute
 

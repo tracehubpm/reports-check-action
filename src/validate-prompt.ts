@@ -21,21 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Prompt for self-validation.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class ValidatePrompt implements Scalar<string> {
+
+  /**
+   * Ctor.
+   * @param report Report
+   * @param problems Problems
+   */
+  constructor(
+    private readonly report: string,
+    private readonly problems: any
+  ) {
+  }
+
+  value(): string {
+    return `
+    Please verify whether following bug report has outlined quality problems or not.
+    Remove irrelevant or false to the bug report problems and return only problems that bug report has.
+    Don't rephrase problems or generate any other info.
+    Problems:
+${this.problems}
+    
+    Bug report:
+${this.report}
+    `;
+  }
+}

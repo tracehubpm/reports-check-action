@@ -21,21 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Formatted summary, from JSON objects into GitHub Markdown.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class FormattedSummary implements Scalar<string> {
+
+  /**
+   * Ctor.
+   * @param problems Problems
+   * @param suggestions Suggestions
+   */
+  constructor(
+    private readonly problems: Scalar<string>,
+    private readonly suggestions: Scalar<string>
+  ) {
+  }
+
+  value(): string {
+    return `
+    Problems:
+${this.problems.value()}
+
+    Suggestions:
+${this.suggestions.value()}
+    `;
+  }
+}

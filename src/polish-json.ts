@@ -21,21 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Prompt to polish JSON.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class PolishJson implements Scalar<string> {
+
+  /**
+   * Ctor.
+   * @param origin JSON to polish
+   */
+  constructor(private readonly origin: any) {
+  }
+
+  value(): string {
+    return `
+    Please polish this JSON and return polished JSON.
+    Polished JSON problems node must have only text without any numbering or other formatting.
+    Response must contain only JSON without any extra text or info.
+    Don't rephrase problems or generate any other info.
+
+    Problems:
+${this.origin}
+    `;
+  }
+}

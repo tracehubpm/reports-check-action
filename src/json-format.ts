@@ -21,21 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Format to JSON prompt.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class JsonFormat implements Scalar<string> {
+
+  /**
+   * Ctor.
+   * @param problems Problems
+   */
+  constructor(private readonly problems: any) {
+  }
+
+  value(): string {
+    return `
+    Please format these response to JSON array format.
+    Each problem statement must be represented as a plain string array member.
+    Please strictly adhere the provided example template.
+    Example:
+    {
+      "size": <size of the array>,
+      "problems": [
+        "...",
+        "...",
+         ...
+      ]
+    }
+    
+    Problems:
+${this.problems}
+    `;
+  }
+}

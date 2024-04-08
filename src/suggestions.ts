@@ -21,21 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Prompt to generate suggestions.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class Suggestions implements Scalar<string> {
+
+  /**
+   * Ctor.
+   * @param report Report
+   * @param problems Problems
+   */
+  constructor(
+    private readonly report: string,
+    private readonly problems: any
+  ) {
+  }
+
+  value(): string {
+    return `
+    Please generate a suggestions for given bug report taking into an account
+    all the quality problems related to it.
+    Don't suggest how to fix the issue itself, instead focus only on suggestions to improve bug report formulation based on outlined problems.
+    
+    Bug report:
+${this.report}
+
+    Problems:
+${this.problems}
+    `;
+  }
+}

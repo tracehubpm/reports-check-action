@@ -21,21 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Titled} from "../src/titled";
 
 /**
- * Test cases for Titled.
+ * Markdown unboxed object.
  */
-describe('Test cases for Titled', () => {
-  test("returns composed bug report", () => {
-    const title = "some title";
-    const body = "some body";
-    const titled = new Titled(title, body).asString();
-    expect(titled).toBe(
-`
-    ${title}:
-    ${body}
-    `
-    )
-  });
-});
+export class MdUnbox implements Scalar<any> {
+
+  /**
+   * Ctor.
+   * @param response JSON response
+   */
+  constructor(private readonly response: any) {
+  }
+
+  value(): any {
+    let result;
+    const trimmed = this.response.trim();
+    const start = 7;
+    if (trimmed.endsWith("```")) {
+      const index = trimmed.lastIndexOf("```");
+      const sliced = trimmed.slice(0, index) + trimmed.slice(index + 3);
+      result = sliced.slice(start).trim();
+    } else {
+      result = this.response;
+    }
+    return result;
+  }
+}

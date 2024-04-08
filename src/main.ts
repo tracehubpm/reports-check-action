@@ -25,16 +25,26 @@ import * as core from "@actions/core";
 import {Octokit} from "@octokit/rest";
 import {SmartIssue} from "./smart-issue";
 import {Comment} from "./comment";
-import OpenAI from "openai";
 import {DeepInfra} from "./deep-infra";
-import {ChatGpt} from "./chat-gpt";
 import {Feedback} from "./feedback";
 import {Titled} from "./titled";
 import {Excluded} from "./excluded";
 import {Puzzled} from "./puzzled";
 import {Pdd} from "./pdd";
 import {QualityExpert} from "./quality-expert";
-import {UserPrompt} from "./user-prompt";
+import {AnalysisPrompt} from "./analysis-prompt";
+import {ValidatePrompt} from "./validate-prompt";
+import {Default} from "./default";
+import {JsonFormat} from "./json-format";
+import {Top} from "./top";
+import {PolishJson} from "./polish-json";
+import {Suggestions} from "./suggestions";
+import {SuggestionsJson} from "./suggestions-json";
+import {FormattedSummary} from "./formatted-summary";
+import {MdObjects} from "./md-objects";
+import {MdUnbox} from "./md-unbox";
+import {ChatGpt} from "./chat-gpt";
+import OpenAI from "openai";
 
 export let github: {
   context: {
@@ -139,17 +149,119 @@ async function run() {
             }
           ).run();
         } else {
+          /**
+           * @todo #69:90min Resolve huge code duplication when proceeding chain-of-thought.
+           *  For now we have absolute the same code for both LLMs: ChatGPT and DeepInfra.
+           *  Would be good to resolve this code duplication at this level in order to make this piece
+           *  of code a bit more maintainable and logic-scalable.
+           */
           if ("openai" === type) {
             const model = core.getInput("openai_model");
-            await new Feedback(
-              await new ChatGpt(
-                new OpenAI({apiKey: openai}),
+            const report = new Titled(smart.title, body).asString();
+            const open = new OpenAI({apiKey: openai});
+            const problems = await new ChatGpt(
+              open,
+              model,
+              new QualityExpert(),
+              new AnalysisPrompt(report),
+              0.7,
+              512
+            ).analyze();
+            console.log(
+              `Analysis found problems: 
+              ${problems}
+              This list can have fake or falsy problems that bug report does not have.
+              Running self-validation...
+              `
+            );
+            const validated = await new ChatGpt(
+              open,
+              model,
+              new Default(),
+              new ValidatePrompt(report, problems),
+              1.0,
+              1024
+            ).analyze();
+            console.log(
+              `Problems were validated, updated list of them:
+              ${validated}
+              `
+            );
+            const vformatted = await new ChatGpt(
+              open,
+              model,
+              new Default(),
+              new JsonFormat(validated),
+              0.7,
+              512
+            ).analyze();
+            console.log(
+              `Packed into JSON:
+              ${validated}
+              ->
+              ${vformatted}
+              `
+            );
+            let candidate;
+            const amount = JSON.parse(new MdUnbox(vformatted).value()).size;
+            if (amount > 3) {
+              console.log("Amount of problems is more than 3, running top goal")
+              const top = await new ChatGpt(
+                open,
                 model,
-                new QualityExpert(),
-                new UserPrompt(
-                  new Titled(smart.title, body).asString()
-                )
-              ).analyze(),
+                new Default(),
+                new Top(vformatted, report),
+                0.7,
+                512
+              ).analyze();
+              console.log(
+                `Top problems:
+                ${top}
+                `
+              );
+              candidate = await new ChatGpt(
+                open,
+                model,
+                new Default(),
+                new PolishJson(top),
+                0.7,
+                512
+              ).analyze();
+            } else {
+              candidate = vformatted;
+            }
+            console.log(
+              `Candidate problems for suggestions:
+              ${candidate}
+              `
+            );
+            const json = await new ChatGpt(
+              open,
+              model,
+              new Default(),
+              new SuggestionsJson(
+                await new ChatGpt(
+                  open,
+                  model,
+                  new Default(),
+                  new Suggestions(report, candidate),
+                  0.7,
+                  512
+                ).analyze()
+              ),
+              0.7,
+              512
+            ).analyze();
+            console.log(
+              `Packed suggestions into JSON:
+              ${json}
+              `
+            );
+            await new Feedback(
+              new FormattedSummary(
+                new MdObjects(JSON.parse(new MdUnbox(candidate).value()).problems),
+                new MdObjects(JSON.parse(new MdUnbox(json).value()).suggestions)
+              ),
               octokit,
               issue,
               smart.user?.login,
@@ -157,17 +269,118 @@ async function run() {
             ).post();
           } else if ("deepinfra" === type) {
             const model = core.getInput("deepinfra_model");
-            const answer = await new DeepInfra(
+            const report = new Titled(smart.title, body).asString();
+            const problems = await new DeepInfra(
               deep,
               model,
               new QualityExpert(),
-              new UserPrompt(
-                new Titled(smart.title, body).asString()
+              new AnalysisPrompt(
+                report
               ),
-              0.5
+              0.7,
+              512
             ).analyze();
+            console.log(
+              `Analysis found problems: 
+              ${problems}
+              This list can have fake or falsy problems that bug report does not have.
+              Running self-validation...
+              `
+            );
+            const validated = await new DeepInfra(
+              deep,
+              model,
+              new Default(),
+              new ValidatePrompt(
+                report,
+                problems
+              ),
+              1.0,
+              1024
+            ).analyze();
+            console.log(
+              `Problems were validated, updated list of them:
+              ${validated}
+              `
+            );
+            const vformatted = await new DeepInfra(
+              deep,
+              model,
+              new Default(),
+              new JsonFormat(validated),
+              0.7,
+              512
+            ).analyze();
+            console.log(
+              `Packed into JSON:
+              ${validated}
+              ->
+              ${vformatted}
+              `
+            );
+            let candidate;
+            const amount = JSON.parse(new MdUnbox(vformatted).value()).size;
+            if (amount > 3) {
+              console.log("Amount of problems is more than 3, running top goal")
+              const top = await new DeepInfra(
+                deep,
+                model,
+                new Default(),
+                new Top(
+                  vformatted,
+                  report
+                ),
+                0.7,
+                512
+              ).analyze();
+              console.log(
+                `Top problems:
+                ${top}
+                `
+              );
+              candidate = await new DeepInfra(
+                deep,
+                model,
+                new Default(),
+                new PolishJson(top),
+                0.7,
+                512
+              ).analyze();
+            } else {
+              candidate = vformatted;
+            }
+            console.log(
+              `Candidate problems for suggestions:
+              ${candidate}
+              `
+            );
+            const json = await new DeepInfra(
+              deep,
+              model,
+              new Default(),
+              new SuggestionsJson(
+                await new DeepInfra(
+                  deep,
+                  model,
+                  new Default(),
+                  new Suggestions(report, candidate),
+                  0.7,
+                  512
+                ).analyze()
+              ),
+              0.7,
+              512
+            ).analyze();
+            console.log(
+              `Packed suggestions into JSON:
+              ${json}
+              `
+            );
             await new Feedback(
-              answer,
+              new FormattedSummary(
+                new MdObjects(JSON.parse(new MdUnbox(candidate).value()).problems),
+                new MdObjects(JSON.parse(new MdUnbox(json).value()).suggestions)
+              ),
               octokit,
               issue,
               smart.user?.login,

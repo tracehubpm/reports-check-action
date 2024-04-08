@@ -1,0 +1,12 @@
+@startuml
+start
+:Bug Report;
+:analysis;
+:self-validation;
+:validated.json;
+:top;
+:polish;
+:suggestions;
+:suggestions.json;
+stop
+@enduml

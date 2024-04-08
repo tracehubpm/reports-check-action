@@ -1,0 +1,33 @@
+@startuml
+participant Reporter as reporter
+participant GitHub as github
+participant Action as action
+participant LLM as llm
+
+reporter -> github: GitHub issue
+github -> action: GitHub issue
+action -> llm: issue, ask for problems
+llm --> action: problems
+action -> llm: report, problems, validate
+llm --> action: validated
+alt validated are empty
+  action --> github: success
+  action --> reporter: thank you
+end
+alt validated are not empty
+  action -> llm: validated, format to JSON
+  llm --> action: validated.json
+  alt validated size > 3
+    action -> llm: validated.json, cap top 3 problems
+    llm --> action: top
+    action -> llm: top, polish JSON
+    llm --> action: top.json
+  end
+  action -> llm: validated.json/top.json, ask for suggestions
+  llm --> action: suggestions
+  action -> llm: suggestions, format to JSON
+  llm --> action: suggestions.json
+  action --> github: fail
+  action --> reporter: top, suggestions, spent tokens
+end
+@enduml
