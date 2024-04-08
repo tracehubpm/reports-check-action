@@ -92,7 +92,7 @@ receives new GitHub issue, the following happens:
 Each goal is represented as separate prompt to the LLM. Thus, we utilize 
 famous pattern called [Chain-Of-Thought](https://arxiv.org/abs/2201.11903).
 
-### Analysis
+#### Analysis
 
 Firstly, we run simple analysis against submitted bug report.
 Output looks like this:
@@ -105,7 +105,7 @@ Quality problems related to this bug report formulation:
 * The bug report lacks information about the impact of these typos on the software's functionality. For example, it would be helpful to know if the issue prevents compilation, causes runtime errors, or leads to unexpected behavior. Additionally, a severity label for the issue could be useful.
 ```
 
-### Self Validation
+#### Self Validation
 
 LLM validates previous analysis result and corrects it if needed:
 
@@ -131,7 +131,7 @@ format using [JSON Packing Method](#json-packing-method):
 }
 ```
 
-### Cap Top 3
+#### Cap Top 3
 
 Some analysis results contains many problems.
 In order to make programmers not ignore the feedback reports by this action,
@@ -150,7 +150,7 @@ and adds them into new response:
 }
 ```
 
-### Polish
+#### Polish
 
 Here we polish the response we got before. In this goal we fix formatting
 issues and improve standardization of the response by making it "solid":
@@ -166,7 +166,7 @@ issues and improve standardization of the response by making it "solid":
 }
 ```
 
-### Suggestions
+#### Suggestions
 
 At `suggestions` we generate actual suggestions on how to improve bug report formulation.
 At this point we don't ask LLM to use strict formatting, in most cases it is
@@ -223,7 +223,7 @@ them into JSON object:
 }
 ```
 
-### JSON Packing Method
+#### JSON Packing Method
 
 LLMs often produce suboptimal results when directly prompted to output in JSON format.
 That's why we let LLM "think" in English and ask to summarize JSON only at the final step of the operation.
