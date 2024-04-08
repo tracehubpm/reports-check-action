@@ -83,10 +83,14 @@ In this case we are preventing all issues with titles `I have a question...` and
 
 ### Analysis Method
 
-Ones [reports-check-action](https://github.com/marketplace/actions/reports-check-action)
+Our analysis method consists of a series intermediate steps.
+Once [reports-check-action](https://github.com/marketplace/actions/reports-check-action)
 receives new GitHub issue, the following happens:
 
 ![chain.svg](/doc/chain.svg)
+
+Each goal is represented as separate prompt to the LLM. Thus, we utilize 
+famous pattern called [Chain-Of-Thought](https://arxiv.org/abs/2201.11903).
 
 ### Analysis
 
@@ -110,7 +114,8 @@ The title of the bug report "deltaBidning" and "lambdaBidning" Typos in Phi.g4 g
 The bug report lacks information about the impact of these typos on the software's functionality. For example, it would be helpful to know if the issue prevents compilation, causes runtime errors, or leads to unexpected behavior. Additionally, a severity label for the issue could be useful.
 ```
 
-We utilize pattern so-called `"Self Validation"` that aims to help a bit with [hallucinations](https://www.iguazio.com/glossary/llm-hallucination)
+We utilize pattern so-called [Self Validation](https://arxiv.org/abs/2212.09561)
+that aims to help a bit with [hallucinations](https://www.iguazio.com/glossary/llm-hallucination)
 and [stochasticity](https://en.wikipedia.org/wiki/Stochastic_parrot)
 as [this paper](https://arxiv.org/abs/2308.00245) suggests.
 After self validation proceeded, we pack it into [JSON](https://en.wikipedia.org/wiki/JSON)
@@ -227,10 +232,6 @@ At this stage we pack previous LLM response to JSON object format.
 In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) notation, the process internals look like this:
 
 ![method.svg](/doc/method.svg)
-
-Quality criteria are based on several researches, including:
-* [Painless Bug Tracking, by Joel Spolsky, 2000](https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking)
-* [What Makes a Satisficing Bug Report? by Tommaso Dal Sasso, Andrea Mocci, and Michele Lanza, 2016](https://www.researchgate.net/publication/309151102_What_Makes_a_Satisficing_Bug_Report)
 
 ### Puzzle (PDD) Analysis
 
