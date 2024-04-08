@@ -83,13 +83,12 @@ In this case we are preventing all issues with titles `I have a question...` and
 
 ### Analysis Method
 
-Ones `reports-check-action` receives new GitHub issue, the following happens:
-* `analysis`
-* `self-validation -> validated.json`
-* `top -> polish`
-* `suggestions -> suggestions.json`
+Ones [reports-check-action](https://github.com/marketplace/actions/reports-check-action)
+receives new GitHub issue, the following happens:
 
-#### Analysis
+![chain.svg](/doc/chain.svg)
+
+### Analysis
 
 Firstly, we run simple analysis against submitted bug report.
 Output looks like this:
@@ -102,7 +101,7 @@ Quality problems related to this bug report formulation:
 * The bug report lacks information about the impact of these typos on the software's functionality. For example, it would be helpful to know if the issue prevents compilation, causes runtime errors, or leads to unexpected behavior. Additionally, a severity label for the issue could be useful.
 ```
 
-#### Self Validation
+### Self Validation
 
 LLM validates previous analysis result and corrects it if needed:
 
@@ -114,7 +113,6 @@ The bug report lacks information about the impact of these typos on the software
 We utilize pattern so-called `"Self Validation"` that aims to help a bit with [hallucinations](https://www.iguazio.com/glossary/llm-hallucination)
 and [stochasticity](https://en.wikipedia.org/wiki/Stochastic_parrot)
 as [this paper](https://arxiv.org/abs/2308.00245) suggests.
-
 After self validation proceeded, we pack it into [JSON](https://en.wikipedia.org/wiki/JSON)
 format using [JSON Packing Method](#json-packing-method):
 
@@ -128,7 +126,7 @@ format using [JSON Packing Method](#json-packing-method):
 }
 ```
 
-#### Cap Top 3
+### Cap Top 3
 
 Some analysis results contains many problems.
 In order to make programmers not ignore the feedback reports by this action,
@@ -147,7 +145,7 @@ and adds them into new response:
 }
 ```
 
-#### Polish
+### Polish
 
 Here we polish the response we got before. In this goal we fix formatting
 issues and improve standardization of the response by making it "solid":
@@ -163,7 +161,7 @@ issues and improve standardization of the response by making it "solid":
 }
 ```
 
-#### Suggestions
+### Suggestions
 
 At `suggestions` we generate actual suggestions on how to improve bug report formulation.
 At this point we don't ask LLM to use strict formatting, in most cases it is
@@ -220,13 +218,13 @@ them into JSON object:
 }
 ```
 
-#### JSON Packing Method
+### JSON Packing Method
 
 LLMs often produce suboptimal results when directly prompted to output in JSON format.
 That's why we let LLM "think" in English and ask to summarize JSON only at the final step of the operation.
 At this stage we pack previous LLM response to JSON object format.
 
-In the [UML notation](https://en.wikipedia.org/wiki/Unified_Modeling_Language), the process internals look like this:
+In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) notation, the process internals look like this:
 
 ![method.svg](/doc/method.svg)
 
