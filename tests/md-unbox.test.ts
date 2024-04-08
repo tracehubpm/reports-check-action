@@ -70,5 +70,23 @@ describe('Test cases for MdUnbox', () => {
   ]
 }`
       );
+  })
+  test('returns complex JSON if no backticks', () => {
+    const response = `
+    {
+    "suggestions": [
+       "Clear and descriptive title: The title should be more specific, concise, and summarize the issue. For example: \\"Incorrect naming of binding types in Phi.g4 grammar file\\".",
+       "Detailed description: The description should include more context and explanation about the issue. Consider including: - A summary of what you were expecting to happen - A description of the exact issue or error message you encountered - The steps you took to reproduce the issue - Any additional information that might be helpful for reproducing or fixing the issue (e.g. a code snippet, a link to a relevant file or documentation, etc.)",
+       "Steps to reproduce the issue: It would be helpful to include a step-by-step guide on how to reproduce the issue. This can help developers understand the problem better and more efficiently pinpoint the root cause.",
+       "Expected behavior and actual behavior: As mentioned earlier, it is crucial to include details about what you expected to happen versus what actually happened. This information helps developers understand the severity and impact of the bug.",
+       "Screenshots or code snippets: If applicable, including screenshots or code snippets can significantly aid in reproducing and understanding the issue.",
+       "Version information: It is useful to provide information about the version of the software you are using. This can help developers determine if the issue is specific to a certain version or if it is a general problem.",
+       "Priority or Severity: Consider adding a priority or severity level to the bug report, which can help developers understand the urgency of the issue.",
+       "Additional labels or tags: Depending on the bug tracking system, you may have the ability to add additional labels or tags to the bug report. These can help categorize and filter the bug report for easier access for developers."
+      ]
+    }
+    `;
+    expect(new MdUnbox(response).value())
+      .toBe(response);
   });
 });
