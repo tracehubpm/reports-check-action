@@ -21,8 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {QualityExpert} from "./quality-expert";
-import {UserPrompt} from "./user-prompt";
 import OpenAI from "openai";
 
 /**
@@ -36,12 +34,16 @@ export class ChatGpt implements Model {
    * @param model Model name
    * @param system System prompt
    * @param prompt User prompt
+   * @param temperature Temperature
+   * @param max Max new tokens
    */
   constructor(
     private readonly open: OpenAI,
     private readonly model: string,
     private readonly system: Scalar<string>,
-    private readonly prompt: Scalar<string>
+    private readonly prompt: Scalar<string>,
+    private readonly temperature: number,
+    private readonly max: number
   ) {
     this.open = open;
     this.model = model;
