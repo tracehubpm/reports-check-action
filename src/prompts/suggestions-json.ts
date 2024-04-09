@@ -23,34 +23,34 @@
  */
 
 /**
- * Format to JSON prompt.
+ * Prompt to format suggestions to JSON.
  */
-export class JsonProblemsPrompt implements Scalar<string> {
+export class SuggestionsJson implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param problems Problems
+   * @param suggestions Suggestions
    */
-  constructor(private readonly problems: any) {
+  constructor(private readonly suggestions: any) {
   }
 
   value(): string {
     return `
-    Please format these response to JSON array format.
-    Each problem statement must be represented as a plain string array member.
+    Please combine provided suggestions text into logical array of suggestions and format these response to JSON format. 
+    Each suggestion must be represented as a plain string array member.
+    It's very important to split text into array members smart using logic.
     Please strictly adhere the provided example template.
+    Don't rephrase suggestions or generate any other info.
     Example:
-    {
-      "size": <size of the array>,
-      "problems": [
-        "...",
-        "...",
-         ...
+    { 
+      "suggestions": [
+       "...",
+       "...",
+        ... 
       ]
     }
-    
-    Problems:
-${this.problems}
+    Suggestions:
+${this.suggestions}
     `;
   }
 }

@@ -23,38 +23,32 @@
  */
 
 /**
- * User prompt.
+ * Prompt to generate suggestions.
  */
-export class UserPrompt {
+export class Suggestions implements Scalar<string> {
 
   /**
    * Ctor.
-   *
-   * @param report Bug report
+   * @param report Report
+   * @param problems Problems
    */
   constructor(
-    private readonly report: string | null | undefined
+    private readonly report: string,
+    private readonly problems: any
   ) {
-    this.report = report;
   }
 
-  /**
-   * Build user prompt.
-   */
   value(): string {
     return `
-    Please strictly review the following bug report and generate a summary with quality problems related to this report formulation.
-    The summary must include only star (*), no indent bullet points with quality problems that only this report has and tips on how to fix them, so author of this report can improve it.
-    Maximum number of suggestions must be 3 bullet points.
-    Don't suggest how to fix the bug, instead focus only on problems with bug report formulation.
-    If you see that bug report don't have quality problems with it's formulation, then just say "Quality is awesome".
-    Don't generate any other info.
-    Summary example:
-    * <>
-    * <>
-    * <>
+    Please generate a suggestions for given bug report taking into an account
+    all the quality problems related to it.
+    Don't suggest how to fix the issue itself, instead focus only on suggestions to improve bug report formulation based on outlined problems.
+    
     Bug report:
-    ${this.report}
+${this.report}
+
+    Problems:
+${this.problems}
     `;
   }
 }

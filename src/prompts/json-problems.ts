@@ -23,30 +23,32 @@
  */
 
 /**
- * Prompt to generate suggestions.
+ * Format to JSON prompt.
  */
-export class SuggestionsPrompt implements Scalar<string> {
+export class JsonProblems implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param report Report
    * @param problems Problems
    */
-  constructor(
-    private readonly report: string,
-    private readonly problems: any
-  ) {
+  constructor(private readonly problems: any) {
   }
 
   value(): string {
     return `
-    Please generate a suggestions for given bug report taking into an account
-    all the quality problems related to it.
-    Don't suggest how to fix the issue itself, instead focus only on suggestions to improve bug report formulation based on outlined problems.
+    Please format these response to JSON array format.
+    Each problem statement must be represented as a plain string array member.
+    Please strictly adhere the provided example template.
+    Example:
+    {
+      "size": <size of the array>,
+      "problems": [
+        "...",
+        "...",
+         ...
+      ]
+    }
     
-    Bug report:
-${this.report}
-
     Problems:
 ${this.problems}
     `;

@@ -25,7 +25,7 @@
 /**
  * Prompt for self-validation.
  */
-export class ValidatePrompt implements Scalar<string> {
+export class Validate implements Scalar<string> {
 
   /**
    * Ctor.

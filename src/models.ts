@@ -24,12 +24,12 @@
 import {TopGoal} from "./goals/top-goal";
 import {NamedGoal} from "./goals/named-goal";
 import {Default} from "./prompts/default";
-import {JsonProblemsPrompt} from "./prompts/json-problems-prompt";
-import {ValidatePrompt} from "./prompts/validate-prompt";
+import {JsonProblems} from "./prompts/json-problems";
+import {Validate} from "./prompts/validate";
 import {QualityExpert} from "./prompts/quality-expert";
 import {Analyze} from "./prompts/analyze";
-import {SuggestionsJsonPrompt} from "./prompts/suggestions-json-prompt";
-import {SuggestionsPrompt} from "./prompts/suggestions-prompt";
+import {SuggestionsJson} from "./prompts/suggestions-json";
+import {Suggestions} from "./prompts/suggestions";
 
 /**
  * Models.
@@ -55,12 +55,12 @@ export class Models {
         "json-validate",
         this.def,
         new Default(),
-        new JsonProblemsPrompt(
+        new JsonProblems(
           await new NamedGoal(
             "validate",
             this.validator,
             new Default(),
-            new ValidatePrompt(
+            new Validate(
               report,
               await new NamedGoal(
                 "analyze",
@@ -77,12 +77,12 @@ export class Models {
       "json-suggestions",
       this.def,
       new Default(),
-      new SuggestionsJsonPrompt(
+      new SuggestionsJson(
         await new NamedGoal(
           "suggestions",
           this.def,
           new Default(),
-          new SuggestionsPrompt(
+          new Suggestions(
             report,
             candidate
           )
