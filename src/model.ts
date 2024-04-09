@@ -31,5 +31,11 @@ interface Model {
    * Analyze.
    * @returns Promise<any>
    */
-  analyze(): Promise<any>;
+  analyze(system: Scalar<string>, user: Scalar<string>): Promise<any>;
+
+  /**
+   * Name of the model.
+   * @returns Model name
+   */
+  name(): string;
 }

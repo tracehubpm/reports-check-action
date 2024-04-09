@@ -31,22 +31,18 @@ export class DeepInfra implements Model {
    * Ctor.
    * @param token Token
    * @param model Model
-   * @param system System prompt
-   * @param prompt User prompt
    * @param temperature Temperature
    * @param max Max new tokens
    */
   constructor(
     private readonly token: string,
     private readonly model: string,
-    private readonly system: Scalar<string>,
-    private readonly prompt: Scalar<string>,
     private readonly temperature: number,
     private readonly max: number
   ) {
   }
 
-  async analyze() {
+  async analyze(system: Scalar<string>, prompt: Scalar<string>) {
     const response = await fetch(
       'https://api.deepinfra.com/v1/openai/chat/completions', {
         method: 'POST',
@@ -57,11 +53,11 @@ export class DeepInfra implements Model {
           messages: [
             {
               role: "system",
-              content: this.system.value()
+              content: system.value()
             },
             {
               role: "user",
-              content: this.prompt.value()
+              content: prompt.value()
             }
           ],
         }),
@@ -75,5 +71,9 @@ export class DeepInfra implements Model {
       `Tokens usage: prompt: ${answer.usage.prompt_tokens}, completion: ${answer.usage.completion_tokens}, total: ${answer.usage.total_tokens}`
     );
     return answer.choices[0].message.content;
+  }
+
+  name(): string {
+    return this.model;
   }
 }

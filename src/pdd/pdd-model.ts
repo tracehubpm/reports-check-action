@@ -21,10 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {DeepInfra} from "./deep-infra";
-import {ChatGpt} from "./chat-gpt";
+import {DeepInfra} from "../deep-infra";
+import {ChatGpt} from "../chat-gpt";
 import OpenAI from "openai";
-import {TodoReviewer} from "./todo-reviewer";
 
 /**
  * PDD model.
@@ -36,38 +35,35 @@ export class PddModel implements Model {
    * @param type Type
    * @param token Token
    * @param model Model name
-   * @param prompt Prompt
    */
   constructor(
     private readonly type: string,
     private readonly token: string,
-    private readonly model: string,
-    private readonly prompt: Scalar<string>
+    private readonly model: string
   ) {
   }
 
-  async analyze(): Promise<any> {
+  async analyze(system: Scalar<string>, user: Scalar<string>): Promise<any> {
     let answer;
     if (this.type === "openai") {
       answer = await new ChatGpt(
         new OpenAI({apiKey: this.token}),
         this.model,
-        new TodoReviewer(),
-        this.prompt,
         0.7,
         512
-      ).analyze();
+      ).analyze(system, user);
     } else {
-      console.log(this.prompt.value());
       answer = await new DeepInfra(
         this.token,
         this.model,
-        new TodoReviewer(),
-        this.prompt,
         0.7,
         512
-      ).analyze();
+      ).analyze(system, user);
     }
     return answer;
+  }
+
+  name(): string {
+    return this.model;
   }
 }

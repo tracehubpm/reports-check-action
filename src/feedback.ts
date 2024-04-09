@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Comment} from "./comment";
+import {Comment} from "./github/comment";
 import {Covered} from "./covered";
 import {WithSummary} from "./with-summary";
 import * as core from "@actions/core";
