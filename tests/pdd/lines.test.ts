@@ -21,40 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {Lines} from "../../src/pdd/lines";
 
 /**
- * Prompt to cap bug report problems.
+ * Test cases for Lines.
  */
-export class CapPrompt implements Scalar<string> {
-
-  /**
-   * Ctor.
-   * @param report Report
-   * @param problems Problems
-   */
-  constructor(
-    private readonly report: string,
-    private readonly problems: any
-  ) {
-  }
-
-  value(): string {
-    return `
-    Please limit the list of the quality problems for the following bug report
-    to just three. Pick the most important problems for this bug report and move them into the new array.
-    Don't edit or rephrase a problem formulations at all. Only pick the most important problems.
-    Response example:
-    [
-      "...",
-      "...",
-      "..."
-    ].
-    Don't generate any other info.
-    Problems:
-${this.problems}
-    
-    Bug report:
-${this.report}
-    `;
-  }
-}
+describe("Test cases for Lines", () => {
+  test("parses lines from full path", () => {
+    expect(
+      new Lines(
+        "src/main/java/SnippetTestCase.java#L61-L66"
+      ).value()
+    ).toEqual(
+      "61-66"
+    )
+  });
+});

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {BlobPath} from "../src/blob-path";
+import {BlobPath} from "../../src/pdd/blob-path";
 
 /**
  * Test cases for BlobPath.

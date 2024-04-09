@@ -1,6 +1,6 @@
-import {Ranged} from "../src/ranged";
-import {Split} from "../src/split";
-import {Lines} from "../src/lines";
+import {Ranged} from "../../src/pdd/ranged";
+import {Split} from "../../src/pdd/split";
+import {Lines} from "../../src/pdd/lines";
 
 /**
  * Test cases for BlobPath.

@@ -21,22 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Split} from "../src/split";
 
 /**
- * Test cases for Split.
+ * Format to JSON prompt.
  */
-describe("Test cases for Split", () => {
-  test("splits text into array of strings", () => {
-    expect(
-      new Split(
-        "some big text\nbla bla bla"
-      ).value()
-    ).toEqual(
-      [
-        "some big text",
-        "bla bla bla"
+export class JsonProblemsPrompt implements Scalar<string> {
+
+  /**
+   * Ctor.
+   * @param problems Problems
+   */
+  constructor(private readonly problems: any) {
+  }
+
+  value(): string {
+    return `
+    Please format these response to JSON array format.
+    Each problem statement must be represented as a plain string array member.
+    Please strictly adhere the provided example template.
+    Example:
+    {
+      "size": <size of the array>,
+      "problems": [
+        "...",
+        "...",
+         ...
       ]
-    )
-  });
-});
+    }
+    
+    Problems:
+${this.problems}
+    `;
+  }
+}

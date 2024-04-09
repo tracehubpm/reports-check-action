@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {HashSplit} from "../src/hash-split";
+import {HashSplit} from "../../src/pdd/hash-split";
 
 /**
  * Test cases for HashSplit.

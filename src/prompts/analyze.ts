@@ -23,18 +23,20 @@
  */
 
 /**
- * Example of analysis summary.
+ * Quality analysis prompt.
  */
-export class Example {
+export class Analyze implements Scalar<string> {
 
-  /**
-   * Example of analysis summary as string.
-   */
+  constructor(private readonly report: string) {
+  }
+
   value(): string {
     return `
-    * <...>
-    * <...>
-    * <...>
+    Please review the following bug report and generate a summary with quality problems related to this report formulation.
+    Generate only the quality problems that only this bug report formulation has.
+    Don't generate any other info.
+    Bug report:
+    ${this.report}
     `;
   }
 }

@@ -21,34 +21,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {Goal} from "../goal";
+import {Default} from "../prompts/default";
+import {MdUnbox} from "../md-unbox";
+import {Top} from "../prompts/top";
+import {NamedGoal} from "./named-goal";
+import {Polish} from "../prompts/polish";
 
 /**
- * Prompt to generate suggestions.
+ * Cap top problems goal.
  */
-export class Suggestions implements Scalar<string> {
+export class TopGoal implements Goal {
 
   /**
    * Ctor.
+   * @param model Model
    * @param report Report
    * @param problems Problems
    */
   constructor(
+    private readonly model: Model,
     private readonly report: string,
     private readonly problems: any
   ) {
   }
 
-  value(): string {
-    return `
-    Please generate a suggestions for given bug report taking into an account
-    all the quality problems related to it.
-    Don't suggest how to fix the issue itself, instead focus only on suggestions to improve bug report formulation based on outlined problems.
-    
-    Bug report:
-${this.report}
-
-    Problems:
-${this.problems}
-    `;
+  async exec(): Promise<any> {
+    console.log(
+      `Running top goal`
+    );
+    const amount = JSON.parse(new MdUnbox(this.problems).value()).size;
+    let candidate;
+    if (amount > 3) {
+      console.log(
+        "Amount of problems is more than 3, capping problems..."
+      );
+      const top = await this.model.analyze(
+        new Default(),
+        new Top(this.problems, this.report)
+      );
+      console.log(
+        `Top problems:
+        ${top}`
+      );
+      candidate = await new NamedGoal(
+        "polish",
+        this.model,
+        new Default(),
+        new Polish(top)
+      ).exec();
+    } else {
+      candidate = this.problems;
+    }
+    return candidate;
   }
 }

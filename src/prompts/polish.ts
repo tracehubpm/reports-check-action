@@ -23,34 +23,26 @@
  */
 
 /**
- * Prompt to format suggestions to JSON.
+ * Prompt to polish JSON.
  */
-export class SuggestionsJson implements Scalar<string> {
+export class Polish implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param suggestions Suggestions
+   * @param origin JSON to polish
    */
-  constructor(private readonly suggestions: any) {
+  constructor(private readonly origin: any) {
   }
 
   value(): string {
     return `
-    Please combine provided suggestions text into logical array of suggestions and format these response to JSON format. 
-    Each suggestion must be represented as a plain string array member.
-    It's very important to split text into array members smart using logic.
-    Please strictly adhere the provided example template.
-    Don't rephrase suggestions or generate any other info.
-    Example:
-    { 
-      "suggestions": [
-       "...",
-       "...",
-        ... 
-      ]
-    }
-    Suggestions:
-${this.suggestions}
+    Please polish this JSON and return polished JSON.
+    Polished JSON problems node must have only text without any numbering or other formatting.
+    Response must contain only JSON without any extra text or info.
+    Don't rephrase problems or generate any other info.
+
+    Problems:
+${this.origin}
     `;
   }
 }

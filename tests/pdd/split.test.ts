@@ -21,22 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {Split} from "../../src/pdd/split";
 
 /**
- * Quality analysis prompt.
+ * Test cases for Split.
  */
-export class AnalysisPrompt implements Scalar<string> {
-
-  constructor(private readonly report: string) {
-  }
-
-  value(): string {
-    return `
-    Please review the following bug report and generate a summary with quality problems related to this report formulation.
-    Generate only the quality problems that only this bug report formulation has.
-    Don't generate any other info.
-    Bug report:
-    ${this.report}
-    `;
-  }
-}
+describe("Test cases for Split", () => {
+  test("splits text into array of strings", () => {
+    expect(
+      new Split(
+        "some big text\nbla bla bla"
+      ).value()
+    ).toEqual(
+      [
+        "some big text",
+        "bla bla bla"
+      ]
+    )
+  });
+});

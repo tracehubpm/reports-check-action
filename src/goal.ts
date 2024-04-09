@@ -23,11 +23,12 @@
  */
 
 /**
- * Context expert.
+ * Goal.
  */
-export class ContextExpert implements Scalar<string> {
+export interface Goal {
 
-  value(): string {
-    return "You are a software quality analysis expert tasked with combining quality problems formulations with the bug report context, enhancing the context information about the quality problems."
-  }
+  /**
+   * Execute the goal.
+   */
+  exec(): Promise<any>;
 }

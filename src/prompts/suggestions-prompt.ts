@@ -23,26 +23,32 @@
  */
 
 /**
- * Prompt to polish JSON.
+ * Prompt to generate suggestions.
  */
-export class PolishJson implements Scalar<string> {
+export class SuggestionsPrompt implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param origin JSON to polish
+   * @param report Report
+   * @param problems Problems
    */
-  constructor(private readonly origin: any) {
+  constructor(
+    private readonly report: string,
+    private readonly problems: any
+  ) {
   }
 
   value(): string {
     return `
-    Please polish this JSON and return polished JSON.
-    Polished JSON problems node must have only text without any numbering or other formatting.
-    Response must contain only JSON without any extra text or info.
-    Don't rephrase problems or generate any other info.
+    Please generate a suggestions for given bug report taking into an account
+    all the quality problems related to it.
+    Don't suggest how to fix the issue itself, instead focus only on suggestions to improve bug report formulation based on outlined problems.
+    
+    Bug report:
+${this.report}
 
     Problems:
-${this.origin}
+${this.problems}
     `;
   }
 }
