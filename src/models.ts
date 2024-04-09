@@ -48,21 +48,21 @@ export class Models {
   }
 
   async compose(report: string) {
-    const candidate = new TopGoal(
+    const candidate = await new TopGoal(
       this.def,
       report,
-      new NamedGoal(
+      await new NamedGoal(
         "json-validate",
         this.def,
         new Default(),
         new JsonProblemsPrompt(
-          new NamedGoal(
+          await new NamedGoal(
             "validate",
             this.validator,
             new Default(),
             new ValidatePrompt(
               report,
-              new NamedGoal(
+              await new NamedGoal(
                 "analyze",
                 this.def,
                 new QualityExpert(),
@@ -78,7 +78,7 @@ export class Models {
       this.def,
       new Default(),
       new SuggestionsJsonPrompt(
-        new NamedGoal(
+        await new NamedGoal(
           "suggestions",
           this.def,
           new Default(),
