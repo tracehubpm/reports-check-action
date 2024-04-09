@@ -32,16 +32,12 @@ export class ChatGpt implements Model {
    * Ctor.
    * @param open Open AI
    * @param model Model name
-   * @param system System prompt
-   * @param prompt User prompt
    * @param temperature Temperature
    * @param max Max new tokens
    */
   constructor(
     private readonly open: OpenAI,
     private readonly model: string,
-    private readonly system: Scalar<string>,
-    private readonly prompt: Scalar<string>,
     private readonly temperature: number,
     private readonly max: number
   ) {
@@ -49,21 +45,26 @@ export class ChatGpt implements Model {
     this.model = model;
   }
 
-  async analyze() {
+  async analyze(system: Scalar<string>, user: Scalar<string>) {
     const response = await this.open.chat.completions.create({
       model: this.model,
-      temperature: 0.5,
+      temperature: this.temperature,
+      max_tokens: this.max,
       messages: [
         {
           role: "system",
-          content: this.system.value()
+          content: system.value()
         },
         {
           role: "user",
-          content: this.prompt.value()
+          content: user.value()
         }
       ]
     });
     return response.choices[0].message.content?.trim();
+  }
+
+  name(): string {
+    return this.model;
   }
 }

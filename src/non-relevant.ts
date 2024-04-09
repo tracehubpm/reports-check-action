@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 import {Octokit} from "@octokit/rest";
-import {Comment} from "./comment";
-import {Label} from "./label";
+import {Comment} from "./github/comment";
+import {Label} from "./github/label";
 
 /**
  * Non Relevant bug report.

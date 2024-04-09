@@ -21,13 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {Split} from "../../src/pdd/split";
 
 /**
- * Context expert.
+ * Test cases for Split.
  */
-export class ContextExpert implements Scalar<string> {
-
-  value(): string {
-    return "You are a software quality analysis expert tasked with combining quality problems formulations with the bug report context, enhancing the context information about the quality problems."
-  }
-}
+describe("Test cases for Split", () => {
+  test("splits text into array of strings", () => {
+    expect(
+      new Split(
+        "some big text\nbla bla bla"
+      ).value()
+    ).toEqual(
+      [
+        "some big text",
+        "bla bla bla"
+      ]
+    )
+  });
+});

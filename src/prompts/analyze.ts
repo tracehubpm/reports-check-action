@@ -21,53 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {DeepInfra} from "./deep-infra";
-import {ChatGpt} from "./chat-gpt";
-import OpenAI from "openai";
-import {TodoReviewer} from "./todo-reviewer";
 
 /**
- * PDD model.
+ * Quality analysis prompt.
  */
-export class PddModel implements Model {
+export class Analyze implements Scalar<string> {
 
-  /**
-   * Ctor.
-   * @param type Type
-   * @param token Token
-   * @param model Model name
-   * @param prompt Prompt
-   */
-  constructor(
-    private readonly type: string,
-    private readonly token: string,
-    private readonly model: string,
-    private readonly prompt: Scalar<string>
-  ) {
+  constructor(private readonly report: string) {
   }
 
-  async analyze(): Promise<any> {
-    let answer;
-    if (this.type === "openai") {
-      answer = await new ChatGpt(
-        new OpenAI({apiKey: this.token}),
-        this.model,
-        new TodoReviewer(),
-        this.prompt,
-        0.7,
-        512
-      ).analyze();
-    } else {
-      console.log(this.prompt.value());
-      answer = await new DeepInfra(
-        this.token,
-        this.model,
-        new TodoReviewer(),
-        this.prompt,
-        0.7,
-        512
-      ).analyze();
-    }
-    return answer;
+  value(): string {
+    return `
+    Please review the following bug report and generate a summary with quality problems related to this report formulation.
+    Generate only the quality problems that only this bug report formulation has.
+    Don't generate any other info.
+    Bug report:
+    ${this.report}
+    `;
   }
 }

@@ -23,31 +23,26 @@
  */
 
 /**
- * Prompt for self-validation.
+ * Prompt to polish JSON.
  */
-export class ValidatePrompt implements Scalar<string> {
+export class Polish implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param report Report
-   * @param problems Problems
+   * @param origin JSON to polish
    */
-  constructor(
-    private readonly report: string,
-    private readonly problems: any
-  ) {
+  constructor(private readonly origin: any) {
   }
 
   value(): string {
     return `
-    Please verify whether following bug report has outlined quality problems or not.
-    Remove irrelevant or false to the bug report problems and return only problems that bug report has.
+    Please polish this JSON and return polished JSON.
+    Polished JSON problems node must have only text without any numbering or other formatting.
+    Response must contain only JSON without any extra text or info.
     Don't rephrase problems or generate any other info.
+
     Problems:
-${this.problems}
-    
-    Bug report:
-${this.report}
+${this.origin}
     `;
   }
 }

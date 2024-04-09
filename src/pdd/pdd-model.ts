@@ -21,20 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {DeepInfra} from "../deep-infra";
+import {ChatGpt} from "../chat-gpt";
+import OpenAI from "openai";
 
 /**
- * Example of analysis summary.
+ * PDD model.
  */
-export class Example {
+export class PddModel implements Model {
 
   /**
-   * Example of analysis summary as string.
+   * Ctor.
+   * @param type Type
+   * @param token Token
+   * @param model Model name
    */
-  value(): string {
-    return `
-    * <...>
-    * <...>
-    * <...>
-    `;
+  constructor(
+    private readonly type: string,
+    private readonly token: string,
+    private readonly model: string
+  ) {
+  }
+
+  async analyze(system: Scalar<string>, user: Scalar<string>): Promise<any> {
+    let answer;
+    if (this.type === "openai") {
+      answer = await new ChatGpt(
+        new OpenAI({apiKey: this.token}),
+        this.model,
+        0.7,
+        512
+      ).analyze(system, user);
+    } else {
+      answer = await new DeepInfra(
+        this.token,
+        this.model,
+        0.7,
+        512
+      ).analyze(system, user);
+    }
+    return answer;
+  }
+
+  name(): string {
+    return this.model;
   }
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Lines} from "../src/lines";
+import {Lines} from "../../src/pdd/lines";
 
 /**
  * Test cases for Lines.

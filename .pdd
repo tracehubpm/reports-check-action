@@ -1,6 +1,6 @@
 --source=.
 --verbose
---exclude src/pdd-prompt.ts
+--exclude src/prompts/pdd-prompt.ts
 --exclude target/**
 --exclude xargs/**
 --rule min-words:20

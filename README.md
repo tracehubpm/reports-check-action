@@ -134,10 +134,26 @@ format using [JSON Packing Method](#json-packing-method):
 #### Cap Top 3
 
 Some analysis results contains many problems.
+Consider this example:
+
+```json
+{
+  "size": 6,
+  "problems": [
+    "1. Lack of a clear description: The report lacks a clear and concise description of the problem. It simply states there are typos but does not specify what the typos are or how they impact the system.",
+    "2. Missing steps to reproduce: There are no steps provided to reproduce the issue. This makes it difficult for developers to identify if they have fixed the issue correctly.",
+    "3. No severity level: The severity level of the issue is not stated. This is important information for developers to prioritize how soon the issue should be resolved.",
+    "4. Lack of environment details: The report does not mention which environment this issue occurs in (e.g., which version of the software, which operating system).",
+    "5. Use of shorthand: The term 'take a look here' is used, which is not clear or professional. It is best to avoid using shorthand or colloquial language in formal documentation.",
+    "6. Incomplete code block: The code block is not complete (it is cut off after the relevant lines). This makes it difficult for developers to understand the context of the issue."
+  ]
+}
+```
+
 In order to make programmers not ignore the feedback reports by this action,
 we **minimize** amount of problems to just 3 or less.
 LLM at this stage picks the most important problems from previous analysis
-and adds them into new response: 
+and adds them into new response:
 
 ```json
 {
@@ -223,15 +239,15 @@ them into JSON object:
 }
 ```
 
+In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) notation, the full process looks like this:
+
+![method.svg](/doc/method.svg)
+
 #### JSON Packing Method
 
 LLMs often produce suboptimal results when directly prompted to output in JSON format.
 That's why we let LLM "think" in English and ask to summarize JSON only at the final step of the operation.
 At this stage we pack previous LLM response to JSON object format.
-
-In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) notation, the process internals look like this:
-
-![method.svg](/doc/method.svg)
 
 ### Puzzle (PDD) Analysis
 
@@ -247,7 +263,7 @@ Issue is treated as puzzle if it satisfies the following regex:
 The puzzle `(.+)` from #(\d+) has to be resolved:.+
 ```
 
-Then we are parsing the issue to find a tree path where puzzle is hidden.
+Then we parse the issue to find a tree path where puzzle is hidden.
 
 This one
 ```text

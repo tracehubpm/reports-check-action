@@ -21,22 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {HashSplit} from "../../src/pdd/hash-split";
 
 /**
- * Quality analysis prompt.
+ * Test cases for HashSplit.
  */
-export class AnalysisPrompt implements Scalar<string> {
-
-  constructor(private readonly report: string) {
-  }
-
-  value(): string {
-    return `
-    Please review the following bug report and generate a summary with quality problems related to this report formulation.
-    Generate only the quality problems that only this bug report formulation has.
-    Don't generate any other info.
-    Bug report:
-    ${this.report}
-    `;
-  }
-}
+describe("Test cases for HashSplit", () => {
+  test("splits path with hash into plain path", () => {
+    expect(
+      new HashSplit(
+        "src/main/java/SnippetTestCase.java#L61-L66"
+      ).value()
+    ).toEqual(
+      "src/main/java/SnippetTestCase.java"
+    )
+  });
+});

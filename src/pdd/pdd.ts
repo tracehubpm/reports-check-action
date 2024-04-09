@@ -28,9 +28,10 @@ import {BlobPath} from "./blob-path";
 import {Lines} from "./lines";
 import {HashSplit} from "./hash-split";
 import {Split} from "./split";
-import {Feedback} from "./feedback";
+import {Feedback} from "../feedback";
 import {PddModel} from "./pdd-model";
-import {PddPrompt} from "./pdd-prompt";
+import {PddPrompt} from "../prompts/pdd-prompt";
+import {TodoReviewer} from "./todo-reviewer";
 
 /**
  * PDD routine.
@@ -72,12 +73,14 @@ export class Pdd {
         this.type,
         this.pair.token,
         this.pair.model,
+      ).analyze(
+        new TodoReviewer(),
         new PddPrompt(
           puzzle,
           full.value()!!,
           content
         )
-      ).analyze(),
+      ),
       this.github,
       this.issue,
       this.username,

@@ -23,38 +23,34 @@
  */
 
 /**
- * User prompt.
+ * Format to JSON prompt.
  */
-export class UserPrompt {
+export class JsonProblems implements Scalar<string> {
 
   /**
    * Ctor.
-   *
-   * @param report Bug report
+   * @param problems Problems
    */
-  constructor(
-    private readonly report: string | null | undefined
-  ) {
-    this.report = report;
+  constructor(private readonly problems: any) {
   }
 
-  /**
-   * Build user prompt.
-   */
   value(): string {
     return `
-    Please strictly review the following bug report and generate a summary with quality problems related to this report formulation.
-    The summary must include only star (*), no indent bullet points with quality problems that only this report has and tips on how to fix them, so author of this report can improve it.
-    Maximum number of suggestions must be 3 bullet points.
-    Don't suggest how to fix the bug, instead focus only on problems with bug report formulation.
-    If you see that bug report don't have quality problems with it's formulation, then just say "Quality is awesome".
-    Don't generate any other info.
-    Summary example:
-    * <>
-    * <>
-    * <>
-    Bug report:
-    ${this.report}
+    Please format these response to JSON array format.
+    Each problem statement must be represented as a plain string array member.
+    Please strictly adhere the provided example template.
+    Example:
+    {
+      "size": <size of the array>,
+      "problems": [
+        "...",
+        "...",
+         ...
+      ]
+    }
+    
+    Problems:
+${this.problems}
     `;
   }
 }

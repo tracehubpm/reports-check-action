@@ -39,12 +39,18 @@ export class MdUnbox implements Scalar<any> {
     const trimmed = this.response.trim();
     const start = 7;
     if (trimmed.endsWith("```")) {
+      console.log("Response is in markdown format, unboxing it...");
       const index = trimmed.lastIndexOf("```");
       const sliced = trimmed.slice(0, index) + trimmed.slice(index + 3);
       result = sliced.slice(start).trim();
     } else {
       result = this.response;
     }
+    console.log(
+      `Unboxed JSON response:
+       ${result}
+       `
+    );
     return result;
   }
 }

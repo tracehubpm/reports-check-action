@@ -21,36 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {Goal} from "../goal";
 
 /**
- * Format to JSON prompt.
+ * Simple named goal.
  */
-export class JsonFormat implements Scalar<string> {
+export class NamedGoal implements Goal {
 
   /**
    * Ctor.
-   * @param problems Problems
+   * @param name Name of the goal
+   * @param model Model
+   * @param system System
+   * @param user User
    */
-  constructor(private readonly problems: any) {
+  constructor(
+    private readonly name: string,
+    private readonly model: Model,
+    private readonly system: Scalar<string>,
+    private readonly user: Scalar<string>
+  ) {
   }
 
-  value(): string {
-    return `
-    Please format these response to JSON array format.
-    Each problem statement must be represented as a plain string array member.
-    Please strictly adhere the provided example template.
-    Example:
-    {
-      "size": <size of the array>,
-      "problems": [
-        "...",
-        "...",
-         ...
-      ]
-    }
-    
-    Problems:
-${this.problems}
-    `;
+  async exec(): Promise<any> {
+    console.log(
+      `Running ${this.name} goal`
+    );
+    const response = await this.model.analyze(this.system, this.user);
+    console.log(
+      `${this.name} completed, response from ${this.model.name()}:
+      ${response}
+      `
+    );
+    return response;
   }
 }

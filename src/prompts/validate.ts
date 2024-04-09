@@ -21,19 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {HashSplit} from "../src/hash-split";
 
 /**
- * Test cases for HashSplit.
+ * Prompt for self-validation.
  */
-describe("Test cases for HashSplit", () => {
-  test("splits path with hash into plain path", () => {
-    expect(
-      new HashSplit(
-        "src/main/java/SnippetTestCase.java#L61-L66"
-      ).value()
-    ).toEqual(
-      "src/main/java/SnippetTestCase.java"
-    )
-  });
-});
+export class Validate implements Scalar<string> {
+
+  /**
+   * Ctor.
+   * @param report Report
+   * @param problems Problems
+   */
+  constructor(
+    private readonly report: string,
+    private readonly problems: any
+  ) {
+  }
+
+  value(): string {
+    return `
+    Please verify whether following bug report has outlined quality problems or not.
+    Remove irrelevant or false to the bug report problems and return only problems that bug report has.
+    Don't rephrase problems or generate any other info.
+    Problems:
+${this.problems}
+    
+    Bug report:
+${this.report}
+    `;
+  }
+}
