@@ -32,6 +32,7 @@ import {Feedback} from "../feedback";
 import {PddModel} from "./pdd-model";
 import {PddPrompt} from "../prompts/pdd-prompt";
 import {TodoReviewer} from "./todo-reviewer";
+import {DefaultSummary} from "../default-summary";
 
 /**
  * PDD routine.
@@ -69,17 +70,19 @@ export class Pdd {
     console.log(`Content: ${content}`);
     console.log(`Puzzle: ${puzzle}`);
     await new Feedback(
-      await new PddModel(
-        this.type,
-        this.pair.token,
-        this.pair.model,
-      ).analyze(
-        new TodoReviewer(),
-        new PddPrompt(
-          puzzle,
-          full.value()!!,
-          content
-        )
+      new DefaultSummary(
+        await new PddModel(
+          this.type,
+          this.pair.token,
+          this.pair.model,
+        ).analyze(
+          new TodoReviewer(),
+          new PddPrompt(
+            puzzle,
+            full.value()!!,
+            content
+          )
+        ),
       ),
       this.github,
       this.issue,
