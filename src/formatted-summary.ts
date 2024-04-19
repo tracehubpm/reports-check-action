@@ -33,18 +33,18 @@ export class FormattedSummary implements Scalar<string> {
    * @param suggestions Suggestions
    */
   constructor(
-    private readonly problems: Scalar<string>,
-    private readonly suggestions: Scalar<string>
+    private readonly problems: any,
+    private readonly suggestions: any
   ) {
   }
 
   value(): string {
     return `
-    Problems:
-${this.problems.value()}
+    ### Problems
+${this.problems}
 
-    Suggestions:
-${this.suggestions.value()}
+    ### Suggestions
+${this.suggestions}
     `;
   }
 }

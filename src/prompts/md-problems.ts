@@ -23,34 +23,29 @@
  */
 
 /**
- * Prompt to format suggestions to JSON.
+ * Format to JSON prompt.
  */
-export class SuggestionsJson implements Scalar<string> {
+export class MdProblems implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param suggestions Suggestions
+   * @param problems Problems
    */
-  constructor(private readonly suggestions: any) {
+  constructor(private readonly problems: any) {
   }
 
   value(): string {
     return `
-    Please combine provided suggestions text into logical array of suggestions and format these response to JSON format. 
-    Each suggestion must be represented as a plain string array member.
-    It's very important to split text into array members smart using logic.
+    Please format these response to Markdown array format.
+    Each problem statement must be represented as a star(*) array member.
     Please strictly adhere the provided example template.
-    Don't rephrase suggestions or generate any other info.
     Example:
-    { 
-      "suggestions": [
-       "...",
-       "...",
-        ... 
-      ]
-    }
-    Suggestions:
-${this.suggestions}
+    * ...
+    * ...
+    * ...
+    
+    Problems:
+${this.problems}
     `;
   }
 }

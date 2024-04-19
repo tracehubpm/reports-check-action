@@ -1,3 +1,5 @@
+# reports-check-action
+
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 [![DevOps By Rultor.com](http://www.rultor.com/b/trarcehubpm/reports-check-action)](http://www.rultor.com/p/tracehubpm/reports-check-action)
 [![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
@@ -11,21 +13,23 @@
 Bug Reports (GitHub Issues) Quality Checker.
 
 **Motivation**.
-The quality of bug reports is paramount for the overall quality of a software project:
-[poorly formulated bug reports](https://www.yegor256.com/2018/04/24/right-way-to-report-bugs.html) often lead to wasted time,
-programmers frustration, and delays.
-This repository is a [Github Action](https://github.com/features/actions) that would trigger
-on every new issue submitted, check that issue for quality problems, 
-and report them in the issue as a comment, asking bug reporter to fix the report.
+The quality of bug reports is paramount for the overall quality of a
+software project: [poorly formulated bug reports](https://www.yegor256.com/2018/04/24/right-way-to-report-bugs.html)
+often lead to wasted time, programmers frustration, and delays.
+This repository is a [Github Action](https://github.com/features/actions)
+that would trigger on every new issue submitted, check that issue for quality
+problems, and report them in the issue as a comment, asking bug reporter to fix
+the report.
 
-### How to use
+## How to use
 
 Consider this configuration:
+
 ```yml
 name: reports-check
 on:
- issues:
-   types: opened
+  issues:
+    types: opened
 permissions:
   issues: write
   contents: read
@@ -50,7 +54,7 @@ These are the parameters you can use/override:
 * `openai_model`: Open AI ChatGPT model, the default one is `gpt-4`.
 * `deepinfra_token`: Deep Infra API key, you can obtain it [here](https://deepinfra.com/dash/api_keys).
 * `deepinfra_model`: Deep Infra API model, the default one is `Phind/Phind-CodeLlama-34B-v2`,
-check out [all available models](https://deepinfra.com/models/text-generation).
+  check out [all available models](https://deepinfra.com/models/text-generation).
 * `exclude`: Issue titles to exclude from checking.
 
 ### Issues to ignore
@@ -62,8 +66,8 @@ Consider this configuration:
 ```yml
 name: reports-check
 on:
- issues:
-   types: opened
+  issues:
+    types: opened
 permissions:
   issues: write
   contents: read
@@ -79,7 +83,9 @@ jobs:
           exclude: '["^I have a question*.+$", "^I want to request new feature*.+$"]'
 ```
 
-In this case we are preventing all issues with titles `I have a question...` and `I want to request new feature...` to be analyzed by the reports checker.
+In this case we are preventing all issues with titles
+`I have a question...` and `I want to request new feature...` to
+be analyzed by the reports checker.
 
 ### Analysis Method
 
@@ -89,7 +95,7 @@ receives new GitHub issue, the following happens:
 
 ![chain.svg](/doc/chain.svg)
 
-Each goal is represented as separate prompt to the LLM. Thus, we utilize 
+Each goal is represented as separate prompt to the LLM. Thus, we utilize
 famous pattern called [Chain-Of-Thought](https://arxiv.org/abs/2201.11903).
 
 #### Analysis
@@ -118,17 +124,15 @@ We utilize pattern so-called [Self Validation](https://arxiv.org/abs/2212.09561)
 that aims to help a bit with [hallucinations](https://www.iguazio.com/glossary/llm-hallucination)
 and [stochasticity](https://en.wikipedia.org/wiki/Stochastic_parrot)
 as [this paper](https://arxiv.org/abs/2308.00245) suggests.
-After self validation proceeded, we pack it into [JSON](https://en.wikipedia.org/wiki/JSON)
-format using [JSON Packing Method](#json-packing-method):
+After self validation proceeded, we pack it into [Markdown](https://en.wikipedia.org/wiki/Markdown)
+format using [Markdown Packing Method](#markdown-packing-method):
 
-```json
-{
-  "size": 2,
-  "problems": [
-    "The title of the bug report \"deltaBidning\" and \"lambdaBidning\" Typos in Phi.g4 grammar file is not clear and descriptive enough. A better title could be \"Incorrect naming in Phi.g4 grammar file\". The bug report lacks information about the impact of these typos on the software's functionality. For example, it would be helpful to know if the issue prevents compilation, causes runtime errors, or leads to unexpected behavior. Additionally, a severity label for the issue could be useful.",
-    "The second problem statement goes here, if any."
-  ]
-}
+```markdown
+* The title of the bug report "deltaBidning" and "lambdaBidning" Typos in Phi.g4 grammar file is not clear and
+  descriptive enough. A better title could be "Incorrect naming in Phi.g4 grammar file".
+* The bug report lacks information about the impact of these typos on the software's functionality. For example, it
+  would be helpful to know if the issue prevents compilation, causes runtime errors, or leads to unexpected behavior.
+  Additionally, a severity label for the issue could be useful.
 ```
 
 #### Cap Top 3
@@ -136,18 +140,13 @@ format using [JSON Packing Method](#json-packing-method):
 Some analysis results contains many problems.
 Consider this example:
 
-```json
-{
-  "size": 6,
-  "problems": [
-    "1. Lack of a clear description: The report lacks a clear and concise description of the problem. It simply states there are typos but does not specify what the typos are or how they impact the system.",
-    "2. Missing steps to reproduce: There are no steps provided to reproduce the issue. This makes it difficult for developers to identify if they have fixed the issue correctly.",
-    "3. No severity level: The severity level of the issue is not stated. This is important information for developers to prioritize how soon the issue should be resolved.",
-    "4. Lack of environment details: The report does not mention which environment this issue occurs in (e.g., which version of the software, which operating system).",
-    "5. Use of shorthand: The term 'take a look here' is used, which is not clear or professional. It is best to avoid using shorthand or colloquial language in formal documentation.",
-    "6. Incomplete code block: The code block is not complete (it is cut off after the relevant lines). This makes it difficult for developers to understand the context of the issue."
-  ]
-}
+```markdown
+1. Lack of a clear description: The report lacks a clear and concise description of the problem. It simply states there are typos but does not specify what the typos are or how they impact the system.
+2. Missing steps to reproduce: There are no steps provided to reproduce the issue. This makes it difficult for developers to identify if they have fixed the issue correctly.
+3. No severity level: The severity level of the issue is not stated. This is important information for developers to prioritize how soon the issue should be resolved.
+4. Lack of environment details: The report does not mention which environment this issue occurs in (e.g., which version of the software, which operating system).
+5. Use of shorthand: The term 'take a look here' is used, which is not clear or professional. It is best to avoid using shorthand or colloquial language in formal documentation.
+6. Incomplete code block: The code block is not complete (it is cut off after the relevant lines). This makes it difficult for developers to understand the context of the issue.
 ```
 
 In order to make programmers not ignore the feedback reports by this action,
@@ -155,15 +154,10 @@ we **minimize** amount of problems to just 3 or less.
 LLM at this stage picks the most important problems from previous analysis
 and adds them into new response:
 
-```json
-{
-  "size": 3,
-  "problems": [
-    "1. Lack of a clear description: The report lacks a clear and concise description of the problem. It simply states there are typos but does not specify what the typos are or how they impact the system.",
-    "2. Missing steps to reproduce: There are no steps provided to reproduce the issue. This makes it difficult for developers to identify if they have fixed the issue correctly.",
-    "6. Incomplete code block: The code block is not complete (it is cut off after the relevant lines). This makes it difficult for developers to understand the context of the issue."
-  ]
-}
+```markdown
+1. Lack of a clear description: The report lacks a clear and concise description of the problem. It simply states there are typos but does not specify what the typos are or how they impact the system.
+2. Missing steps to reproduce: There are no steps provided to reproduce the issue. This makes it difficult for developers to identify if they have fixed the issue correctly.
+6. Incomplete code block: The code block is not complete (it is cut off after the relevant lines). This makes it difficult for developers to understand the context of the issue.
 ```
 
 #### Polish
@@ -171,22 +165,17 @@ and adds them into new response:
 Here we polish the response we got before. In this goal we fix formatting
 issues and improve standardization of the response by making it "solid":
 
-```json
-{
-  "size": 3,
-  "problems": [
-    "Lack of a clear description: The report lacks a clear and concise description of the problem. It simply states there are typos but does not specify what the typos are or how they impact the system.",
-    "Missing steps to reproduce: There are no steps provided to reproduce the issue. This makes it difficult for developers to identify if they have fixed the issue correctly.",
-    "Incomplete code block: The code block is not complete (it is cut off after the relevant lines). This makes it difficult for developers to understand the context of the issue."
-  ]
-}
+```markdown
+* Lack of a clear description: The report lacks a clear and concise description of the problem. It simply states there are typos but does not specify what the typos are or how they impact the system.
+* Missing steps to reproduce: There are no steps provided to reproduce the issue. This makes it difficult for developers to identify if they have fixed the issue correctly.
+* Incomplete code block: The code block is not complete (it is cut off after the relevant lines). This makes it difficult for developers to understand the context of the issue.
 ```
 
 #### Suggestions
 
-At `suggestions` we generate actual suggestions on how to improve bug report formulation.
-At this point we don't ask LLM to use strict formatting, in most cases it is
-just a free of format text:
+At `suggestions` we generate actual suggestions on how to improve bug report
+formulation. At this point we don't ask LLM to use strict formatting, in most
+cases it is just a free of format text:
 
 ```text
 Suggested improvements:
@@ -225,35 +214,40 @@ Observe that deltaBidning should be deltaBinding and lambdaBidning should be lam
 These corrections will solve the issue and appropriately define the grammar rules for binding.
 ```
 
-Next step we do is splitting this text into _logical chunks_ and [format](#json-packing-method)
+Next step we do is splitting this text into _logical chunks_ and [format](#markdown-packing-method)
 them into JSON object:
 
-```json
-{
-  "suggestions": [
-    "Clear description: Please provide a clear explanation of the issue. Explain what typos were found in the code (deltaBidning and lambdaBidning) and how they impact the system functionality.",
-    "Steps to reproduce: Include the necessary steps to reproduce the issue. This will help the developers understand the issue better and identify if the fix was correct.",
-    "Complete code block: Kindly provide the complete code block for better context understanding.",
-    "Suggested Bug Report:deltaBidning and lambdaBidning Typos in Phi.g4 grammar file: In our Phi.g4 grammar file, we have identified typos in the following lines:\n\n```\nbinding\n    : alphaBinding\n    | emptyBinding\n    | deltaBidning\n    | lambdaBidning\n    ;\n```\nThe correct syntax should be:\n\n```\nbinding\n    : alphaBinding\n    | emptyBinding\n    | deltaBinding\n    | lambdaBinding\n    ;\n```\nThe typos(deltaBidning and lambdaBidning) impact the system's syntax understanding and cause unexpected behavior or errors.\n\nTo reproduce this issue, follow these steps:\n\n- Open the Phi.g4 grammar file.\n- Locate the lines marked above.\n- Observe that deltaBidning should be deltaBinding and lambdaBidning should be lambdaBinding.\n\nThese corrections will solve the issue and appropriately define the grammar rules for binding."
-  ]
-}
+```markdown
+* Clear description: Please provide a clear explanation of the issue. Explain what typos were found in the code (deltaBidning and lambdaBidning) and how they impact the system functionality.
+* Steps to reproduce: Include the necessary steps to reproduce the issue. This will help the developers understand the issue better and identify if the fix was correct.
+* Complete code block: Kindly provide the complete code block for better context understanding.
+* Suggested Bug Report:deltaBidning and lambdaBidning Typos in Phi.g4 grammar file: In our Phi.g4 grammar file, we have identified typos in the following lines:\n\n```\nbinding\n    : alphaBinding\n    | emptyBinding\n    | deltaBidning\n    | lambdaBidning\n    ;\n```\nThe correct syntax should be:\n\n```\nbinding\n    : alphaBinding\n    | emptyBinding\n    | deltaBinding\n    | lambdaBinding\n    ;\n```\nThe typos(deltaBidning and lambdaBidning) impact the system's syntax understanding and cause unexpected behavior or errors.\n\nTo reproduce this issue, follow these steps:\n\n- Open the Phi.g4 grammar file.\n- Locate the lines marked above.\n- Observe that deltaBidning should be deltaBinding and lambdaBidning should be lambdaBinding.\n\nThese corrections will solve the issue and appropriately define the grammar rules for binding.
 ```
 
-In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) notation, the full process looks like this:
+In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language)
+notation, the full process looks like this:
 
 ![method.svg](/doc/method.svg)
 
-#### JSON Packing Method
+#### Markdown Packing Method
 
-LLMs often produce suboptimal results when directly prompted to output in JSON format.
-That's why we let LLM "think" in English and ask to summarize JSON only at the final step of the operation.
-At this stage we pack previous LLM response to JSON object format.
+LLMs often produce suboptimal results when directly prompted to output in
+some strict user format. That's why we let LLM "think" in English and ask
+to summarize Markdown array only at the final step of the operation.
+At this stage we pack previous LLM response to Markdown array format.
+
+Sometime before we got to this solution, we used to utilize one prompt,
+where we describe all the details and _format_ that we expect LLM to give us.
 
 ### Puzzle (PDD) Analysis
 
-This action supports analysis not only for issues created manually, but also for puzzles, a.k.a `todo` in your code.
-[Puzzle Driven Development (2010)](https://www.yegor256.com/2010/03/04/pdd.html), [12/840,306](https://patents.google.com/patent/US20120023476) was suggested as a novel way for managing issues in software development.
+This action supports analysis not only for issues created manually,
+but also for puzzles, a.k.a `todo` in your code.
+[Puzzle Driven Development (2010)](https://www.yegor256.com/2010/03/04/pdd.html),
+[12/840,306](https://patents.google.com/patent/US20120023476)
+was suggested as a novel way for managing issues in software development.
 Read how it works:
+
 * [PDD in Action (2017)](https://www.yegor256.com/2017/04/05/pdd-in-action.html)
 * [A Disabled Test In Lieu of a Bug Report (2023)](https://www.yegor256.com/2023/07/25/contribute-disabled-tests.html)
 
@@ -266,11 +260,13 @@ The puzzle `(.+)` from #(\d+) has to be resolved:.+
 Then we parse the issue to find a tree path where puzzle is hidden.
 
 This one
+
 ```text
 https://github.com/tracehubpm/tracehub/blob/8d2aca048e33a5c9d83a49af4246c9ad7fde9998/src/main/java/SnippetTestCase.java#L61-L66
 ```
 
 Turns into 3 elements:
+
 * file path (`src/main/java/SnippetTestCase.java`)
 * `SnippetTestCase.java` source code
 * puzzle, located in range of `61` and `66` lines
@@ -285,6 +281,6 @@ provided they don't violate our quality standards. To avoid frustration,
 before sending us your pull request please run full build:
 
 ```bash
-$ npm install
-$ npm run gha
+npm install
+npm run gha
 ```
