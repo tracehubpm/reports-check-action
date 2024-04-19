@@ -83,9 +83,9 @@ export class Models {
             ).exec(),
             report
           )
-        )
+        ).exec()
       )
-    );
+    ).exec();
     const suggestions = await new NamedGoal(
       "suggestions.md",
       this.def,
