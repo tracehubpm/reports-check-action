@@ -3,10 +3,10 @@ start
 :Bug Report;
 :analysis;
 :self-validation;
-:validated.json;
+:validated.md;
 :top;
 :polish;
 :suggestions;
-:suggestions.json;
+:suggestions.md;
 stop
 @enduml

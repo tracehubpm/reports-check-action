@@ -15,18 +15,18 @@ alt validated are empty
   action --> reporter: thank you
 end
 alt validated are not empty
-  action -> llm: validated, format to JSON
-  llm --> action: validated.json
+  action -> llm: validated, format to Markdown
+  llm --> action: validated.md
   alt validated size > 3
-    action -> llm: validated.json, cap top 3 problems
+    action -> llm: validated.md, cap top 3 problems
     llm --> action: top
-    action -> llm: top, polish JSON
-    llm --> action: top.json
+    action -> llm: top, polish Markdown
+    llm --> action: top.md
   end
-  action -> llm: validated.json/top.json, ask for suggestions
+  action -> llm: validated.md/polished.md, ask for suggestions
   llm --> action: suggestions
-  action -> llm: suggestions, format to JSON
-  llm --> action: suggestions.json
+  action -> llm: suggestions, format to Markdown
+  llm --> action: suggestions.md
   action --> github: fail
   action --> reporter: top, suggestions, spent tokens
 end
