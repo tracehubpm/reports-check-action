@@ -14,11 +14,11 @@ Bug Reports (GitHub Issues) Quality Checker.
 
 **Motivation**.
 The quality of bug reports is paramount for the overall quality of a
-software project: [poorly formulated bug reports](https://www.yegor256.com/2018/04/24/right-way-to-report-bugs.html) often lead to wasted
-time, programmers frustration, and delays.
-This repository is a [Github Action](https://github.com/features/actions) that would trigger
-on every new issue submitted, check that issue for quality problems,
-and report them in the issue as a comment, asking bug reporter to fix
+software project: [poorly formulated bug reports](https://www.yegor256.com/2018/04/24/right-way-to-report-bugs.html)
+often lead to wasted time, programmers frustration, and delays.
+This repository is a [Github Action](https://github.com/features/actions)
+that would trigger on every new issue submitted, check that issue for quality
+problems, and report them in the issue as a comment, asking bug reporter to fix
 the report.
 
 ### How to use
@@ -83,7 +83,8 @@ jobs:
           exclude: '["^I have a question*.+$", "^I want to request new feature*.+$"]'
 ```
 
-In this case we are preventing all issues with titles `I have a question...` and `I want to request new feature...` to
+In this case we are preventing all issues with titles
+`I have a question...` and `I want to request new feature...` to
 be analyzed by the reports checker.
 
 ### Analysis Method
@@ -229,7 +230,7 @@ In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) notation, 
 
 #### Markdown Packing Method
 
-LLMs often produce suboptimal results when directly prompted to output in 
+LLMs often produce suboptimal results when directly prompted to output in
 some strict user format. That's why we let LLM "think" in English and ask
 to summarize Markdown array only at the final step of the operation.
 At this stage we pack previous LLM response to Markdown array format.
@@ -241,7 +242,8 @@ where we describe all the details and _format_ that we expect LLM to give us.
 
 This action supports analysis not only for issues created manually,
 but also for puzzles, a.k.a `todo` in your code.
-[Puzzle Driven Development (2010)](https://www.yegor256.com/2010/03/04/pdd.html), [12/840,306](https://patents.google.com/patent/US20120023476)
+[Puzzle Driven Development (2010)](https://www.yegor256.com/2010/03/04/pdd.html),
+[12/840,306](https://patents.google.com/patent/US20120023476)
 was suggested as a novel way for managing issues in software development.
 Read how it works:
 
