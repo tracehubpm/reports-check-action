@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {TopGoal} from "./goals/top-goal";
 import {NamedGoal} from "./goals/named-goal";
 import {Default} from "./prompts/default";
 import {MdProblems} from "./prompts/md-problems";

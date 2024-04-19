@@ -31,22 +31,9 @@ import {Titled} from "./titled";
 import {Excluded} from "./excluded";
 import {Puzzled} from "./pdd/puzzled";
 import {Pdd} from "./pdd/pdd";
-import {QualityExpert} from "./prompts/quality-expert";
-import {Analyze} from "./prompts/analyze";
-import {Validate} from "./prompts/validate";
-import {Default} from "./prompts/default";
-import {MdProblems} from "./prompts/md-problems";
-import {Top} from "./prompts/top";
-import {Polish} from "./prompts/polish";
-import {Suggestions} from "./prompts/suggestions";
-import {MdSuggestions} from "./prompts/md-suggestions";
 import {FormattedSummary} from "./formatted-summary";
-import {MdObjects} from "./md-objects";
-import {MdUnbox} from "./md-unbox";
 import {ChatGpt} from "./chat-gpt";
 import OpenAI from "openai";
-import {NamedGoal} from "./goals/named-goal";
-import {TopGoal} from "./goals/top-goal";
 import {Models} from "./models";
 
 export let github: {
@@ -192,8 +179,6 @@ async function run() {
             new FormattedSummary(
               composed.problems,
               composed.suggestions
-              // new MdObjects(JSON.parse(new MdUnbox(composed.problems).value()).problems),
-              // new MdObjects(JSON.parse(new MdUnbox(composed.suggestions).value()).suggestions)
             ),
             octokit,
             issue,
