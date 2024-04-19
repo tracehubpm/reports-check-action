@@ -61,7 +61,7 @@ export class Models {
           new Default(),
           new Top(
             await new NamedGoal(
-              "validated.md",
+              "validate.md",
               this.def,
               new Default(),
               new MdProblems(
@@ -80,7 +80,7 @@ export class Models {
                   )
                 ).exec()
               )
-            ),
+            ).exec(),
             report
           )
         )
