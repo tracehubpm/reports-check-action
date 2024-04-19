@@ -21,7 +21,7 @@ that would trigger on every new issue submitted, check that issue for quality
 problems, and report them in the issue as a comment, asking bug reporter to fix
 the report.
 
-### How to use
+## How to use
 
 Consider this configuration:
 
@@ -224,7 +224,8 @@ them into JSON object:
 * Suggested Bug Report:deltaBidning and lambdaBidning Typos in Phi.g4 grammar file: In our Phi.g4 grammar file, we have identified typos in the following lines:\n\n```\nbinding\n    : alphaBinding\n    | emptyBinding\n    | deltaBidning\n    | lambdaBidning\n    ;\n```\nThe correct syntax should be:\n\n```\nbinding\n    : alphaBinding\n    | emptyBinding\n    | deltaBinding\n    | lambdaBinding\n    ;\n```\nThe typos(deltaBidning and lambdaBidning) impact the system's syntax understanding and cause unexpected behavior or errors.\n\nTo reproduce this issue, follow these steps:\n\n- Open the Phi.g4 grammar file.\n- Locate the lines marked above.\n- Observe that deltaBidning should be deltaBinding and lambdaBidning should be lambdaBinding.\n\nThese corrections will solve the issue and appropriately define the grammar rules for binding.
 ```
 
-In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) notation, the full process looks like this:
+In the [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language)
+notation, the full process looks like this:
 
 ![method.svg](/doc/method.svg)
 
