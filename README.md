@@ -1,3 +1,5 @@
+# reports-check-action
+
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 [![DevOps By Rultor.com](http://www.rultor.com/b/trarcehubpm/reports-check-action)](http://www.rultor.com/p/tracehubpm/reports-check-action)
 [![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
@@ -11,13 +13,13 @@
 Bug Reports (GitHub Issues) Quality Checker.
 
 **Motivation**.
-The quality of bug reports is paramount for the overall quality of a software project:
-[poorly formulated bug reports](https://www.yegor256.com/2018/04/24/right-way-to-report-bugs.html) often lead to wasted
-time,
-programmers frustration, and delays.
+The quality of bug reports is paramount for the overall quality of a
+software project: [poorly formulated bug reports](https://www.yegor256.com/2018/04/24/right-way-to-report-bugs.html) often lead to wasted
+time, programmers frustration, and delays.
 This repository is a [Github Action](https://github.com/features/actions) that would trigger
 on every new issue submitted, check that issue for quality problems,
-and report them in the issue as a comment, asking bug reporter to fix the report.
+and report them in the issue as a comment, asking bug reporter to fix
+the report.
 
 ### How to use
 
@@ -170,9 +172,9 @@ issues and improve standardization of the response by making it "solid":
 
 #### Suggestions
 
-At `suggestions` we generate actual suggestions on how to improve bug report formulation.
-At this point we don't ask LLM to use strict formatting, in most cases it is
-just a free of format text:
+At `suggestions` we generate actual suggestions on how to improve bug report
+formulation. At this point we don't ask LLM to use strict formatting, in most
+cases it is just a free of format text:
 
 ```text
 Suggested improvements:
@@ -237,7 +239,8 @@ where we describe all the details and _format_ that we expect LLM to give us.
 
 ### Puzzle (PDD) Analysis
 
-This action supports analysis not only for issues created manually, but also for puzzles, a.k.a `todo` in your code.
+This action supports analysis not only for issues created manually,
+but also for puzzles, a.k.a `todo` in your code.
 [Puzzle Driven Development (2010)](https://www.yegor256.com/2010/03/04/pdd.html), [12/840,306](https://patents.google.com/patent/US20120023476)
 was suggested as a novel way for managing issues in software development.
 Read how it works:
@@ -275,6 +278,6 @@ provided they don't violate our quality standards. To avoid frustration,
 before sending us your pull request please run full build:
 
 ```bash
-$ npm install
-$ npm run gha
+npm install
+npm run gha
 ```
