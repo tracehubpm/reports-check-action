@@ -23,26 +23,28 @@
  */
 
 /**
- * Formatted summary, from JSON objects into GitHub Markdown.
+ * Prompt to format suggestions to JSON.
  */
-export class FormattedSummary implements Scalar<string> {
+export class MdSuggestions implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param problems Problems
    * @param suggestions Suggestions
    */
-  constructor(
-    private readonly problems: any,
-    private readonly suggestions: any
-  ) {
+  constructor(private readonly suggestions: any) {
   }
 
   value(): string {
     return `
-    Problems:
-${this.problems}
-
+    Please combine provided suggestions text into logical array of suggestions and format these response to Markdown array format. 
+    Each suggestion must be represented as an array member.
+    It's very important to split text into array members in a smart way using logic.
+    Please strictly adhere the provided example template.
+    Don't rephrase suggestions or generate any other info.
+    Example:
+    * ...
+    * ...
+    * ...
     Suggestions:
 ${this.suggestions}
     `;

@@ -23,28 +23,29 @@
  */
 
 /**
- * Formatted summary, from JSON objects into GitHub Markdown.
+ * Format to JSON prompt.
  */
-export class FormattedSummary implements Scalar<string> {
+export class MdProblems implements Scalar<string> {
 
   /**
    * Ctor.
    * @param problems Problems
-   * @param suggestions Suggestions
    */
-  constructor(
-    private readonly problems: any,
-    private readonly suggestions: any
-  ) {
+  constructor(private readonly problems: any) {
   }
 
   value(): string {
     return `
+    Please format these response to Markdown array format.
+    Each problem statement must be represented as a star(*) array member.
+    Please strictly adhere the provided example template.
+    Example:
+    * ...
+    * ...
+    * ...
+    
     Problems:
 ${this.problems}
-
-    Suggestions:
-${this.suggestions}
     `;
   }
 }

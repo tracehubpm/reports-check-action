@@ -50,29 +50,19 @@ export class TopGoal implements Goal {
     console.log(
       `Running top goal`
     );
-    const amount = JSON.parse(new MdUnbox(this.problems).value()).size;
-    let candidate;
-    if (amount > 3) {
-      console.log(
-        "Amount of problems is more than 3, capping problems..."
-      );
-      const top = await this.model.analyze(
-        new Default(),
-        new Top(this.problems, this.report)
-      );
-      console.log(
-        `Top problems:
+    const top = await this.model.analyze(
+      new Default(),
+      new Top(this.problems, this.report)
+    );
+    console.log(
+      `Top problems:
         ${top}`
-      );
-      candidate = await new NamedGoal(
-        "polish",
-        this.model,
-        new Default(),
-        new Polish(top)
-      ).exec();
-    } else {
-      candidate = this.problems;
-    }
-    return candidate;
+    );
+    return await new NamedGoal(
+      "polish",
+      this.model,
+      new Default(),
+      new Polish(top)
+    ).exec();
   }
 }

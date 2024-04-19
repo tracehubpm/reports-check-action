@@ -17,9 +17,9 @@ export class Top implements Scalar<string> {
   value(): string {
     return `
     Take a look at these quality problems that were identified during analysis of the outlined bug report.
-    Now, please copy the most important problems into new array.
+    Now, please copy the most important problems into new response.
     Max amount of problems must be 3.
-    Don't rephrase problems or generate any other info. 
+    Don't rephrase problems or generate any other info.
     Problems:
 ${this.problems}
 

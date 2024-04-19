@@ -35,11 +35,11 @@ import {QualityExpert} from "./prompts/quality-expert";
 import {Analyze} from "./prompts/analyze";
 import {Validate} from "./prompts/validate";
 import {Default} from "./prompts/default";
-import {JsonProblems} from "./prompts/json-problems";
+import {MdProblems} from "./prompts/md-problems";
 import {Top} from "./prompts/top";
 import {Polish} from "./prompts/polish";
 import {Suggestions} from "./prompts/suggestions";
-import {SuggestionsJson} from "./prompts/suggestions-json";
+import {MdSuggestions} from "./prompts/md-suggestions";
 import {FormattedSummary} from "./formatted-summary";
 import {MdObjects} from "./md-objects";
 import {MdUnbox} from "./md-unbox";
@@ -190,8 +190,10 @@ async function run() {
           ).compose(report);
           await new Feedback(
             new FormattedSummary(
-              new MdObjects(JSON.parse(new MdUnbox(composed.problems).value()).problems),
-              new MdObjects(JSON.parse(new MdUnbox(composed.suggestions).value()).suggestions)
+              composed.problems,
+              composed.suggestions
+              // new MdObjects(JSON.parse(new MdUnbox(composed.problems).value()).problems),
+              // new MdObjects(JSON.parse(new MdUnbox(composed.suggestions).value()).suggestions)
             ),
             octokit,
             issue,

@@ -23,22 +23,22 @@
  */
 
 /**
- * Prompt to polish JSON.
+ * Prompt to polish Markdown.
  */
 export class Polish implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param origin JSON to polish
+   * @param origin Response to polish
    */
   constructor(private readonly origin: any) {
   }
 
   value(): string {
     return `
-    Please polish this JSON and return polished JSON.
-    Polished JSON problems node must have only text without any numbering or other formatting.
-    Response must contain only JSON without any extra text or info.
+    Please polish this text and return polished one.
+    Polished problems must be represented as markdown star(*) array.
+    Response must contain only markdown star(*) array without any extra text or info.
     Don't rephrase problems or generate any other info.
 
     Problems:

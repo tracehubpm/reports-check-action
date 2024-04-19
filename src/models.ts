@@ -24,12 +24,14 @@
 import {TopGoal} from "./goals/top-goal";
 import {NamedGoal} from "./goals/named-goal";
 import {Default} from "./prompts/default";
-import {JsonProblems} from "./prompts/json-problems";
+import {MdProblems} from "./prompts/md-problems";
 import {Validate} from "./prompts/validate";
 import {QualityExpert} from "./prompts/quality-expert";
 import {Analyze} from "./prompts/analyze";
-import {SuggestionsJson} from "./prompts/suggestions-json";
+import {MdSuggestions} from "./prompts/md-suggestions";
 import {Suggestions} from "./prompts/suggestions";
+import {Polish} from "./prompts/polish";
+import {Top} from "./prompts/top";
 
 /**
  * Models.
@@ -48,49 +50,60 @@ export class Models {
   }
 
   async compose(report: string) {
-    const candidate = await new TopGoal(
-      this.def,
-      report,
-      await new NamedGoal(
-        "json-validate",
-        this.def,
-        new Default(),
-        new JsonProblems(
-          await new NamedGoal(
-            "validate",
-            this.validator,
-            new Default(),
-            new Validate(
-              report,
-              await new NamedGoal(
-                "analyze",
-                this.def,
-                new QualityExpert(),
-                new Analyze(report)
-              ).exec()
-            )
-          ).exec()
-        )
-      ).exec(),
-    ).exec();
-    const suggestions = await new NamedGoal(
-      "json-suggestions",
+    const problems = await new NamedGoal(
+      "polish",
       this.def,
       new Default(),
-      new SuggestionsJson(
+      new Polish(
+        await new NamedGoal(
+          "top",
+          this.def,
+          new Default(),
+          new Top(
+            await new NamedGoal(
+              "validated.md",
+              this.def,
+              new Default(),
+              new MdProblems(
+                await new NamedGoal(
+                  "validate",
+                  this.validator,
+                  new Default(),
+                  new Validate(
+                    report,
+                    await new NamedGoal(
+                      "analyze",
+                      this.def,
+                      new QualityExpert(),
+                      new Analyze(report)
+                    ).exec()
+                  )
+                ).exec()
+              )
+            ),
+            report
+          )
+        )
+      )
+    );
+    const suggestions = await new NamedGoal(
+      "suggestions.md",
+      this.def,
+      new Default(),
+      new MdSuggestions(
         await new NamedGoal(
           "suggestions",
           this.def,
           new Default(),
           new Suggestions(
             report,
-            candidate
+            problems
           )
         ).exec()
       )
     ).exec();
     return {
-      problems: candidate,
+      problems: problems,
       suggestions: suggestions
     }
   }
