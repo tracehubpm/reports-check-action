@@ -40,6 +40,7 @@ export class MdSuggestions implements Scalar<string> {
     Each suggestion must be represented as an array member.
     It's very important to split text into array members in a smart way using logic.
     Please strictly adhere the provided example template.
+    Response must contain only markdown star(*) array without any extra text or info.
     Don't rephrase suggestions or generate any other info.
     Example:
     * ...
