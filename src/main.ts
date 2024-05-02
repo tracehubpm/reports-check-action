@@ -178,7 +178,7 @@ async function run() {
           await new Feedback(
             new FormattedSummary(
               composed.problems,
-              composed.suggestions
+              composed.suggestion
             ),
             octokit,
             issue,

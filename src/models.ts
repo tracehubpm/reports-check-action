@@ -31,6 +31,7 @@ import {MdSuggestions} from "./prompts/md-suggestions";
 import {Suggestions} from "./prompts/suggestions";
 import {Polish} from "./prompts/polish";
 import {Top} from "./prompts/top";
+import {OneSuggestion} from "./prompts/one-suggestion";
 
 /**
  * Models.
@@ -85,25 +86,34 @@ export class Models {
         ).exec()
       )
     ).exec();
-    const suggestions = await new NamedGoal(
-      "suggestions.md",
+    const suggestion = await new NamedGoal(
+      "one",
       this.def,
       new Default(),
-      new MdSuggestions(
+      new OneSuggestion(
+        problems,
         await new NamedGoal(
-          "suggestions",
+          "suggestions.md",
           this.def,
           new Default(),
-          new Suggestions(
-            report,
-            problems
+          new MdSuggestions(
+            await new NamedGoal(
+              "suggestions",
+              this.def,
+              new Default(),
+              new Suggestions(
+                report,
+                problems
+              )
+            ).exec()
           )
-        ).exec()
+        ).exec(),
+        report
       )
     ).exec();
     return {
       problems: problems,
-      suggestions: suggestions
+      suggestion: suggestion
     }
   }
 }

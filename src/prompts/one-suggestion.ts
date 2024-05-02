@@ -23,28 +23,39 @@
  */
 
 /**
- * Formatted summary, from JSON objects into GitHub Markdown.
+ * One suggestion.
  */
-export class FormattedSummary implements Scalar<string> {
+export class OneSuggestion implements Scalar<string> {
 
   /**
    * Ctor.
-   * @param problems Problems
+   * @param probmels Problems
    * @param suggestions Suggestions
+   * @param report Report
    */
   constructor(
-    private readonly problems: any,
-    private readonly suggestions: any
+    private readonly probmels: any,
+    private readonly suggestions: any,
+    private readonly report: string
   ) {
   }
 
   value(): string {
     return `
-    ### Problems
-${this.problems}
-
-    ### Suggestion
+    Take a look at suggestions we propose for solving outlined problems with quality
+    of following bug report. Such long list of suggestions is absolutely useless.
+    Nobody reads it and nobody pays attention. In order to be useful,
+    please suggest only one specific improvement to be made.
+    The suggestion must be short, less than 30 words.
+    
+    Suggestions:
 ${this.suggestions}
-    `;
+
+    Problems:
+${this.probmels}
+
+    Report:
+${this.report}
+    `
   }
 }
