@@ -43,7 +43,6 @@ export class FormattedSummary implements Scalar<string> {
     ### Problems
 ${this.problems}
 
-    ### Suggestion
 ${this.suggestion}
     `;
   }

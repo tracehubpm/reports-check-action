@@ -47,6 +47,7 @@ export class OneSuggestion implements Scalar<string> {
     Nobody reads it and nobody pays attention. In order to be useful,
     please suggest only one specific improvement to be made.
     The suggestion must be short, less than 30 words.
+    Start suggestion with the text "I would recommend ...".
     
     Suggestions:
 ${this.suggestions}
