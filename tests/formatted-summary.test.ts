@@ -22,29 +22,24 @@
  * SOFTWARE.
  */
 
+import {FormattedSummary} from "../src/formatted-summary";
+
 /**
- * Formatted summary, from JSON objects into GitHub Markdown.
+ * Test cases for FormattedSummary.
  */
-export class FormattedSummary implements Scalar<string> {
-
-  /**
-   * Ctor.
-   * @param problems Problems
-   * @param suggestion Suggestion
-   */
-  constructor(
-    private readonly problems: any,
-    private readonly suggestion: any
-  ) {
-  }
-
-  value(): string {
-    return `
+describe('Test cases for FormattedSummary', () => {
+  test("returns formatted summary", () => {
+    const problems = "some problems";
+    const suggestion = "some suggestion";
+    const fmt = new FormattedSummary(problems, suggestion).value();
+    expect(fmt).toBe(
+`
     ### Problems
-${this.problems}
+${problems}
 
     ### Suggestion
-${this.suggestion}
-    `;
-  }
-}
+${suggestion}
+    `
+    )
+  });
+});
