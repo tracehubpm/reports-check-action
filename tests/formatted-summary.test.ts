@@ -37,7 +37,6 @@ describe('Test cases for FormattedSummary', () => {
     ### Problems
 ${problems}
 
-    ### Suggestion
 ${suggestion}
     `
     )
